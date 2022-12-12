@@ -3,7 +3,6 @@ import {
   UHashInputProvider,
   UMessage,
   UMessageProvider,
-  UContractInteraction,
   UUploadProvider,
   ULoadingBarProvider,
   ULoadingBar,
