@@ -1,20 +1,11 @@
-import { defineComponent, ref, computed, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'Builder',
   setup() {
-
-    return {
-
-    }
+    return {}
   },
   render() {
-
-    return (
-      <div class="flex gap-6 u-page-container relative">
-        Builder
-      </div>
-    )
+    return <div class="flex gap-6 u-page-container relative">Builder</div>
   }
 })

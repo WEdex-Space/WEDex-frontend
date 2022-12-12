@@ -1,5 +1,5 @@
 /* eslint-disable */
-import axios, { AxiosRequestHeaders } from 'axios'
+import axios from 'axios'
 import { message } from '@wedex/components'
 import { RequestFunctionArgs } from './a2s.types'
 
@@ -10,7 +10,7 @@ export interface BaseResponse<T = any> {
   data: T
 }
 
-function getHeaders(): AxiosRequestHeaders {
+function getHeaders(): any {
   const userStore = useUserStore()
   return userStore.token
     ? {
@@ -103,7 +103,7 @@ export async function upload(
       baseURL: '/api',
       responseType: 'json',
       headers: getHeaders(),
-      onUploadProgress: event => {
+      onUploadProgress: (event: any) => {
         const percent = Math.round((event.loaded / event.total) * 100) / 100
         onProgress(percent)
       }
