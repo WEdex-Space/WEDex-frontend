@@ -1,6 +1,5 @@
 import {
   UStyleProvider,
-  UHashInputProvider,
   UMessage,
   UMessageProvider,
   UUploadProvider,
@@ -27,19 +26,7 @@ export default defineComponent({
     userStore.init()
     // init wallet state
     walletStore.init()
-    const onSearchHash = async (value: string, category: string) => {
-      // TODO
-      console.warn('APP: onSearchHash', value, category)
-      return []
-      // const { error, data } = await services['meta@tag-list']({
-      //   isIndex: true,
-      //   limit: 10,
-      //   offset: 0,
-      //   keyword: value,
-      //   category
-      // })
-      // return error ? [] : data!.list.map(item => ({ label: item.name, value: item.id }))
-    }
+
     return () => (
       <UStyleProvider>
         <UMessageProvider>
@@ -48,11 +35,9 @@ export default defineComponent({
         <ULoadingBarProvider>
           <ULoadingBar />
           <UUploadProvider onUpload={onUpload}>
-            <UHashInputProvider onSearch={onSearchHash}>
-              <UModalProvider>
-                <RouterView />
-              </UModalProvider>
-            </UHashInputProvider>
+            <UModalProvider>
+              <RouterView />
+            </UModalProvider>
           </UUploadProvider>
         </ULoadingBarProvider>
         <WalletConnectBlock />

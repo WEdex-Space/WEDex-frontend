@@ -17,3 +17,16 @@ body {
 ::-webkit-scrollbar-track {
   background: none;
 }
+
+.homePage {
+  height: 100vh;
+}
+.homePage .leftPanelStatic {
+  width: 300px;
+}
+.homePage .rightPanelStatic {
+  width: 300px;
+}
+.homePage .rightPanelStaticClose {
+  width: 60px;
+}
