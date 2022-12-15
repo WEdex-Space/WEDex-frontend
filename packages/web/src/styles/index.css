@@ -1,7 +1,7 @@
 @import '@wedex/components/dist/es/index.css';
 
 body {
-  @apply font-primary text-color2 leading-5 break-words;
+  @apply bg-base font-primary text-color2 leading-5 break-words;
 }
 
 ::-webkit-scrollbar {

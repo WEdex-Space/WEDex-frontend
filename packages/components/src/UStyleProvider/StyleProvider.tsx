@@ -1,104 +1,14 @@
 import { hex2rgb } from '@wedex/utils'
 import type { GlobalThemeOverrides } from 'naive-ui'
-import { NConfigProvider } from 'naive-ui'
+import { NConfigProvider, darkTheme } from 'naive-ui'
 import { computed, defineComponent, watchEffect } from 'vue'
 import type { ExtractPropTypes } from 'vue'
 import '../UTypography/font.css'
 
 export const UStyleProviderProps = {
-  // ui 2.0
-  primaryColor: {
+  theme: {
     type: String,
-    default: '#5331F4'
-  },
-  color1: {
-    type: String,
-    default: '#000'
-  },
-  color2: {
-    type: String,
-    default: 'rgba(0,0,0,.5)'
-  },
-  color3: {
-    type: String,
-    default: 'rgba(0,0,0,.3)'
-  },
-  colorLine: {
-    type: String,
-    default: 'rgba(0,0,0,.1)'
-  },
-  colorBorder: {
-    type: String,
-    default: '#DADCE0'
-  },
-  colorHover: {
-    type: String,
-    default: '#F0F0F0'
-  },
-  // old
-  primary1Color: {
-    type: String,
-    default: '#3F2D99'
-  },
-  primary2Color: {
-    type: String,
-    default: '#211B42'
-  },
-  errorColor: {
-    type: String,
-    default: '#DF4F51'
-  },
-  successColor: {
-    type: String,
-    default: '#21B689'
-  },
-  warningColor: {
-    type: String,
-    default: '#F29F39'
-  },
-  infoColor: {
-    type: String,
-    default: '#6AE0CF'
-  },
-  grey1Color: {
-    type: String,
-    default: '#333333'
-  },
-  grey2Color: {
-    type: String,
-    default: '#636366'
-  },
-  grey3Color: {
-    type: String,
-    default: '#9F9F9F'
-  },
-  grey4Color: {
-    type: String,
-    default: '#C0C0C0'
-  },
-  grey5Color: {
-    type: String,
-    default: '#E0E0E0'
-  },
-  green1Color: {
-    type: String,
-    default: '#219653'
-  },
-  purpleBg: {
-    type: String,
-    default: '#F5F6FA'
-  },
-  purpleLightBg: {
-    type: String,
-    default: '#D5CFF4'
-  },
-  purpleGradientBg: {
-    type: String,
-    default: 'radial-gradient(117.14% 462.2% at 0% 100%, #5331F4 0%, #9783F8 71.69%, #B46AF9 100%)'
-  },
-  skipLinks: {
-    type: String,
-    default: '#1672f3'
+    default: 'dark'
   }
 } as const
 
@@ -112,6 +22,40 @@ const UStyleProvider = defineComponent({
 
     document.head.appendChild(style)
 
+    const ColorOverrides = computed(() => {
+      return props.theme === 'dark'
+        ? {
+            primaryColor: '#FF9D00',
+            baseColor: '#181a1f',
+            color1: '#fff',
+            color2: '#EAECEF',
+            color3: '#858E9B',
+            colorBorder: '#2C3138',
+            colorHover: '#F0F0F0',
+            colorUp: '#FF0015',
+            colorDown: '#00FF65',
+            errorColor: '#DF4F51',
+            successColor: '#21B689',
+            warningColor: '#F29F39',
+            infoColor: '#6AE0CF'
+          }
+        : {
+            primaryColor: '#5331F4',
+            baseColor: '#fff',
+            color1: '#000',
+            color2: 'rgba(0,0,0,.5)',
+            color3: 'rgba(0,0,0,.3)',
+            colorBorder: '#DADCE0',
+            colorHover: '#F0F0F0',
+            colorUp: '#3F2D99',
+            colorDown: '#211B42',
+            errorColor: '#DF4F51',
+            successColor: '#21B689',
+            warningColor: '#F29F39',
+            infoColor: '#6AE0CF'
+          }
+    })
+
     const naiveThemeOverrides = computed<GlobalThemeOverrides>(() => ({
       common: {
         heightLarge: '48px',
@@ -121,68 +65,67 @@ const UStyleProvider = defineComponent({
         borderRadiusLarge: '8px',
         borderRadiusMedium: '4px',
         borderRadiusSmall: '2px',
-        primaryColor: props.primaryColor,
-        infoColor: props.infoColor,
-        successColor: props.successColor,
-        warningColor: props.warningColor,
-        errorColor: props.errorColor,
-        primaryColorHover: props.primaryColor,
-        primaryColorPressed: props.primaryColor,
-        successColorHover: props.successColor,
-        successColorPressed: props.successColor,
-        textColor2: props.color1,
-        skipLinks: props.skipLinks
+        baseColor: ColorOverrides.value.baseColor,
+        primaryColor: ColorOverrides.value.primaryColor,
+        infoColor: ColorOverrides.value.infoColor,
+        successColor: ColorOverrides.value.successColor,
+        warningColor: ColorOverrides.value.warningColor,
+        errorColor: ColorOverrides.value.errorColor,
+        primaryColorHover: ColorOverrides.value.primaryColor,
+        primaryColorPressed: ColorOverrides.value.primaryColor,
+        successColorHover: ColorOverrides.value.successColor,
+        successColorPressed: ColorOverrides.value.successColor
       },
       Form: {
-        asteriskColor: props.errorColor
+        asteriskColor: ColorOverrides.value.errorColor
       },
       Button: {
-        colorHoverPrimary: props.primary1Color,
-        borderHoverPrimary: props.primary1Color,
-        textColorGhostHoverPrimary: props.primary1Color,
+        colorHoverPrimary: ColorOverrides.value.colorUp,
+        borderHoverPrimary: ColorOverrides.value.colorUp,
+        textColorGhostHoverPrimary: ColorOverrides.value.colorUp,
         fontWeight: 600
       },
       Pagination: {
-        itemBorderHover: props.primary1Color,
-        itemTextColorHover: props.primaryColor
+        itemBorderHover: ColorOverrides.value.colorUp,
+        itemTextColorHover: ColorOverrides.value.primaryColor
       },
       Input: {
-        border: `1px solid ${props.colorBorder}`,
-        borderFocus: `1px solid ${props.primaryColor}`,
+        border: `1px solid ${ColorOverrides.value.colorBorder}`,
+        borderFocus: `1px solid ${ColorOverrides.value.primaryColor}`,
         borderHover: `1px solid transparent`,
-        borderWarning: `1px solid ${props.warningColor}`,
-        borderError: `1px solid ${props.errorColor}`,
-        borderDisabled: `1px solid ${props.color3}`,
-        placeholderColor: props.color3,
+        borderWarning: `1px solid ${ColorOverrides.value.warningColor}`,
+        borderError: `1px solid ${ColorOverrides.value.errorColor}`,
+        borderDisabled: `1px solid ${ColorOverrides.value.color3}`,
+        placeholderColor: ColorOverrides.value.color3,
         fontSizeMedium: '14px',
         fontSizeLarge: '16px',
         paddingLarge: '16px',
         heightMedium: '36px',
-        suffixTextColor: props.color3
+        suffixTextColor: ColorOverrides.value.color3
       },
       Scrollbar: {
-        color: props.primaryColor,
-        colorHover: props.primaryColor
+        color: ColorOverrides.value.primaryColor,
+        colorHover: ColorOverrides.value.primaryColor
       },
       Checkbox: {
         borderRadius: '2px'
       },
       Card: {
         borderRadius: '2px',
-        borderColor: props.colorBorder,
+        borderColor: ColorOverrides.value.colorBorder,
         paddingMedium: '24px',
-        titleTextColor: props.color2,
+        titleTextColor: ColorOverrides.value.color2,
         titleFontSizeHuge: '16px',
         titleFontSizeMedium: '14px'
       },
       InternalSelection: {
         borderHover: `1px solid transparent`,
-        placeholderColor: props.color2,
+        placeholderColor: ColorOverrides.value.color2,
         heightMedium: '36px'
       },
       Tabs: {
-        tabTextColorActiveBar: props.primaryColor,
-        tabTextColorBar: props.primary1Color
+        tabTextColorActiveBar: ColorOverrides.value.primaryColor,
+        tabTextColorBar: ColorOverrides.value.colorUp
       },
       Tag: {
         heightLarge: '34px',
@@ -192,7 +135,7 @@ const UStyleProvider = defineComponent({
         closeIconSizeMedium: '12px'
       },
       Dropdown: {
-        optionColorActive: props.colorHover
+        optionColorActive: ColorOverrides.value.colorHover
       },
       Tooltip: {
         color: 'rgba(0,0,0,.8)'
@@ -200,41 +143,30 @@ const UStyleProvider = defineComponent({
     }))
 
     watchEffect(() => {
-      const { r, g, b } = hex2rgb(props.primaryColor)
-      const primary2Color = hex2rgb(props.primary2Color)
-      const warningColor = hex2rgb(props.warningColor)
+      const { r, g, b } = hex2rgb(ColorOverrides.value.primaryColor)
       style.innerHTML = `:root {
+        --u-base-color: ${ColorOverrides.value.baseColor};
         --u-primary-value: ${r}, ${g}, ${b};
-        --u-color-1: ${props.color1};
-        --u-color-2: ${props.color2};
-        --u-color-3: ${props.color3};
-        --u-color-line: ${props.colorLine};
-        --u-color-border: ${props.colorBorder};
-        --u-color-hover: ${props.colorHover};
-        --u-primary2-value: ${primary2Color.r},${primary2Color.g},${primary2Color.b};
-        --u-primary-color: ${props.primaryColor};
-        --u-primary-1-color: ${props.primary1Color};
-        --u-primary-2-color: ${props.primary2Color};
-        --u-error-color: ${props.errorColor};
-        --u-success-color: ${props.successColor};
-        --u-warning-color: ${props.warningColor};
-        --u-warning2-value: ${warningColor.r},${warningColor.g},${warningColor.b};
-        --u-info-color: ${props.infoColor};
-        --u-grey-1-color: ${props.grey1Color};
-        --u-grey-2-color: ${props.grey2Color};
-        --u-grey-3-color: ${props.grey3Color};
-        --u-grey-4-color: ${props.grey4Color};
-        --u-grey-5-color: ${props.grey5Color};
-        --u-green-1-color: ${props.green1Color};
-        --u-purple-color: ${props.purpleBg};
-        --u-purple-light-color: ${props.purpleLightBg};
-        --u-purple-gradient-color: ${props.purpleGradientBg};
-        --u-skip-links-color: ${props.skipLinks}
+        --u-color-1: ${ColorOverrides.value.color1};
+        --u-color-2: ${ColorOverrides.value.color2};
+        --u-color-3: ${ColorOverrides.value.color3};
+        --u-color-border: ${ColorOverrides.value.colorBorder};
+        --u-color-hover: ${ColorOverrides.value.colorHover};
+        --u-primary-color: ${ColorOverrides.value.primaryColor};
+        --u-up-color: ${ColorOverrides.value.colorUp};
+        --u-down-color: ${ColorOverrides.value.colorDown};
+        --u-error-color: ${ColorOverrides.value.errorColor};
+        --u-success-color: ${ColorOverrides.value.successColor};
+        --u-warning-color: ${ColorOverrides.value.warningColor};
+        --u-info-color: ${ColorOverrides.value.infoColor};
       }`
     })
 
     return () => (
-      <NConfigProvider themeOverrides={naiveThemeOverrides.value}>
+      <NConfigProvider
+        themeOverrides={naiveThemeOverrides.value}
+        theme={props.theme === 'dark' ? darkTheme : null}
+      >
         {ctx.slots.default?.()}
       </NConfigProvider>
     )

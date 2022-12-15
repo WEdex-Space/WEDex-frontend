@@ -12,7 +12,7 @@ import { RouterView } from 'vue-router'
 import WalletBindBlock from './blocks/WalletBind'
 import WalletConnectBlock from './blocks/WalletConnect'
 import { upload as onUpload } from './services/a2s.adapter'
-import { useUserStore, useWalletStore } from './stores'
+import { useUserStore, useWalletStore, useGlobalConfigStore } from './stores'
 import { comunionTimeAgo } from './utils/timeago'
 
 export default defineComponent({
@@ -20,6 +20,8 @@ export default defineComponent({
   setup() {
     const userStore = useUserStore()
     const walletStore = useWalletStore()
+    const globalConfigStore = useGlobalConfigStore()
+
     comunionTimeAgo()
 
     // init user state
@@ -28,7 +30,7 @@ export default defineComponent({
     walletStore.init()
 
     return () => (
-      <UStyleProvider>
+      <UStyleProvider theme={globalConfigStore.theme}>
         <UMessageProvider>
           <UMessage />
         </UMessageProvider>

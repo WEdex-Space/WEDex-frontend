@@ -1,4 +1,6 @@
 import { defineComponent, ref, watch, provide } from 'vue'
+import DataViewDetail from '@/components/DataViewDetail'
+import DataViewList from '@/components/DataViewList'
 import ExtentionBar from '@/components/ExtentionBar'
 
 const LandingPage = defineComponent({
@@ -11,42 +13,6 @@ const LandingPage = defineComponent({
     const currentExpand = ref<'left' | 'center' | 'right'>('left')
     const rightPanelState = ref<'static' | 'close'>('close')
     const prevExpand = ref<'left' | 'center' | 'right' | null>(null)
-
-    const expandLeft = () => {
-      if (currentExpand.value !== 'left') {
-        prevExpand.value = currentExpand.value
-        currentExpand.value = 'left'
-      }
-    }
-
-    const staticLeft = () => {
-      if (prevExpand.value && prevExpand.value !== 'left') {
-        currentExpand.value = prevExpand.value
-      }
-      prevExpand.value = null
-      leftClass.value = 'leftPanelStatic'
-    }
-
-    const expandRight = () => {
-      if (currentExpand.value !== 'right') {
-        prevExpand.value = currentExpand.value
-        currentExpand.value = 'right'
-      }
-    }
-
-    const openCenter = () => {
-      if (currentExpand.value !== 'center') {
-        prevExpand.value = currentExpand.value
-        currentExpand.value = 'center'
-      }
-    }
-
-    const closeCenter = () => {
-      if (currentExpand.value === 'center') {
-        currentExpand.value = prevExpand.value || 'left'
-        prevExpand.value = null
-      }
-    }
 
     watch(
       () => currentExpand.value,
@@ -109,11 +75,6 @@ const LandingPage = defineComponent({
       leftClass,
       centerClass,
       rightClass,
-      expandLeft,
-      staticLeft,
-      expandRight,
-      openCenter,
-      closeCenter,
       currentExpand,
       rightPanelState,
       prevExpand
@@ -124,24 +85,11 @@ const LandingPage = defineComponent({
 
     return (
       <div class="flex">
-        <div class={`${pannelClass} bg-yellow-500 ${this.leftClass}`}>
-          <div
-            class="cursor-pointer top-0 right-0 absolute"
-            onClick={() => (this.currentExpand === 'left' ? this.staticLeft() : this.expandLeft())}
-          >
-            {this.currentExpand === 'left' ? 'static' : 'expand'}
-          </div>
-          <div class="p-4">left</div>
-          <div class="cursor-pointer" onClick={() => this.openCenter()}>
-            list item
-          </div>
-        </div>
-        <div class={`${pannelClass} bg-green-200 ${this.centerClass}`}>
-          <div class="cursor-pointer" onClick={() => this.closeCenter()}>
-            close center
-          </div>
-        </div>
-        <ExtentionBar class={`${pannelClass} bg-indigo-500 ${this.rightClass}`} />
+        <DataViewList class={`${pannelClass} ${this.leftClass}`} />
+
+        <DataViewDetail class={`${pannelClass} ${this.centerClass}`} />
+
+        <ExtentionBar class={`${pannelClass} ${this.rightClass}`} />
       </div>
     )
   }
