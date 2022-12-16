@@ -39,7 +39,7 @@ export default defineComponent({
     }
 
     return (
-      <div class="flex">
+      <div class="border-color-border flex border-l-1">
         {showExtention && (
           <div class="flex-1">{this.currentExtention && componentsMap[this.currentExtention]}</div>
         )}

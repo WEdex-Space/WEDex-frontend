@@ -17,7 +17,7 @@ body {
 ::-webkit-scrollbar-track {
   background: none;
 }
-
+/* home page */
 .homePage {
   height: 100vh;
 }
@@ -29,4 +29,9 @@ body {
 }
 .homePage .rightPanelStaticClose {
   width: 60px;
+}
+/* custom */
+
+.selectTransparent .n-base-selection-label {
+  background-color: transparent;
 }

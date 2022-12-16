@@ -1,10 +1,10 @@
-import { NTable } from 'naive-ui'
+import { NDataTable } from 'naive-ui'
 import { defineComponent } from 'vue'
 
 export const UTable = defineComponent({
   name: 'UTable',
-  extends: NTable,
+  extends: NDataTable,
   setup(props, ctx) {
-    return () => <NTable {...props} v-slots={ctx.slots} />
+    return () => <NDataTable {...props} v-slots={ctx.slots} />
   }
 })
