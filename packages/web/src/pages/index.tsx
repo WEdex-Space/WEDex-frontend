@@ -1,6 +1,6 @@
 import { defineComponent, ref, watch, provide } from 'vue'
-import DataViewDetail from '@/components/DataViewDetail'
-import DataViewList from '@/components/DataViewList'
+import DataDetail from '@/components/DataDetail'
+import DataView from '@/components/DataView'
 import ExtentionBar from '@/components/ExtentionBar'
 
 const LandingPage = defineComponent({
@@ -85,9 +85,9 @@ const LandingPage = defineComponent({
 
     return (
       <div class="flex">
-        <DataViewList class={`${pannelClass} ${this.leftClass}`} />
+        <DataView class={`${pannelClass} ${this.leftClass}`} />
 
-        <DataViewDetail class={`${pannelClass} ${this.centerClass}`} />
+        <DataDetail class={`${pannelClass} ${this.centerClass}`} />
 
         <ExtentionBar class={`${pannelClass} ${this.rightClass}`} />
       </div>

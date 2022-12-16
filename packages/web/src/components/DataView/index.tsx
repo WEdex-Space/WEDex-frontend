@@ -2,7 +2,7 @@ import { defineComponent } from 'vue'
 import MainHeader from './MainHeader'
 
 export default defineComponent({
-  name: 'DataViewList',
+  name: 'DataView',
   setup() {
     return {}
   },

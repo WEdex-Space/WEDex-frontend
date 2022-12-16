@@ -3,7 +3,6 @@ import { WalletOutlined } from '@wedex/icons'
 import { defineComponent, watchEffect, ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import styles from './animate.module.css'
-import MoreNavigationPage from './components/More'
 import logo from '@/assets/colorful.png'
 import logo2 from '@/assets/colorful@2x.png'
 import logo3 from '@/assets/colorful@3x.png'
@@ -62,7 +61,6 @@ export default defineComponent({
     return (
       <>
         <div class="flex bg-[#EDEDF2] h-100vh w-100vw justify-center items-center">
-          <MoreNavigationPage />
           <div class="bg-white flex rounded-8px flex-1 h-542px max-w-1245px">
             <div
               class={`${styles.bgImage} bg-primary rounded-2px h-606px -mt-8 text-white ml-25 pt-212px pl-64px w-635px`}
