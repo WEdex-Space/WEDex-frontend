@@ -17,21 +17,47 @@ body {
 ::-webkit-scrollbar-track {
   background: none;
 }
+
 /* home page */
 .homePage {
   height: 100vh;
 }
+
 .homePage .leftPanelStatic {
   width: 300px;
 }
+
 .homePage .rightPanelStatic {
   width: 300px;
 }
+
 .homePage .rightPanelStaticClose {
   width: 60px;
 }
+
 /* custom */
 
 .selectTransparent .n-base-selection-label {
   background-color: transparent;
+}
+
+@keyframes NumberPulse {
+  0% {
+    width: 0;
+    opacity: 0.7;
+  }
+
+  60% {
+    width: 100%;
+    opacity: 0;
+  }
+
+  100% {
+    width: 100%;
+    opacity: 0;
+  }
+}
+
+.NumberPulse {
+  animation: NumberPulse 1s ease-out;
 }

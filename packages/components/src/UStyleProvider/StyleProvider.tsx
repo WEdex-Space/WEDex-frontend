@@ -27,6 +27,7 @@ const UStyleProvider = defineComponent({
         ? {
             primaryColor: '#FF9D00',
             baseColor: '#181a1f',
+            primaryBg: '#0C0E11',
             color1: '#fff',
             color2: '#EAECEF',
             color3: '#858E9B',
@@ -40,8 +41,9 @@ const UStyleProvider = defineComponent({
             infoColor: '#6AE0CF'
           }
         : {
-            primaryColor: '#5331F4',
+            primaryColor: '#FF9D00',
             baseColor: '#fff',
+            primaryBg: '#fafafc',
             color1: '#000',
             color2: 'rgba(0,0,0,.5)',
             color3: 'rgba(0,0,0,.3)',
@@ -84,10 +86,6 @@ const UStyleProvider = defineComponent({
         borderHoverPrimary: ColorOverrides.value.colorUp,
         textColorGhostHoverPrimary: ColorOverrides.value.colorUp,
         fontWeight: 600
-      },
-      Pagination: {
-        itemBorderHover: ColorOverrides.value.colorUp,
-        itemTextColorHover: ColorOverrides.value.primaryColor
       },
       Input: {
         border: `1px solid ${ColorOverrides.value.colorBorder}`,
@@ -139,6 +137,11 @@ const UStyleProvider = defineComponent({
       },
       Tooltip: {
         color: 'rgba(0,0,0,.8)'
+      },
+      DataTable: {
+        thColor: ColorOverrides.value.primaryBg,
+        thPaddingSmall: '4px 16px',
+        tdPaddingSmall: '8px 16px'
       }
     }))
 
@@ -153,8 +156,9 @@ const UStyleProvider = defineComponent({
         --u-color-border: ${ColorOverrides.value.colorBorder};
         --u-color-hover: ${ColorOverrides.value.colorHover};
         --u-primary-color: ${ColorOverrides.value.primaryColor};
-        --u-up-color: ${ColorOverrides.value.colorUp};
-        --u-down-color: ${ColorOverrides.value.colorDown};
+        --u-primary-bg: ${ColorOverrides.value.primaryBg};
+        --u-color-up: ${ColorOverrides.value.colorUp};
+        --u-color-down: ${ColorOverrides.value.colorDown};
         --u-error-color: ${ColorOverrides.value.errorColor};
         --u-success-color: ${ColorOverrides.value.successColor};
         --u-warning-color: ${ColorOverrides.value.warningColor};

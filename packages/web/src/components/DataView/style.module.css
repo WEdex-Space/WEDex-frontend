@@ -2,9 +2,11 @@
   overflow-x: auto;
   overflow-y: hidden;
 }
+
 .mainNav ul {
   @apply font-bold px-5 text-[14px];
 }
+
 .mainNav li {
   height: 50px;
   line-height: 50px;
@@ -14,31 +16,37 @@
 .mainNav li:hover {
   @apply text-primary;
 }
+
 .mainNavItemCur {
   @apply text-primary;
 }
+
 .mainNavItemCur::after {
-  content: '';
   height: 2px;
+  content: '';
   @apply bg-primary right-0 bottom-0 left-0 absolute;
 }
 
 .subNav {
   @apply flex h-9 px-5 text-color3 text-[14px] items-center;
 }
+
 .subNav .__list {
   overflow-x: auto;
   overflow-y: hidden;
 }
+
 .subNavItem {
   height: 20px;
   line-height: 20px;
   border-radius: 4px;
   @apply cursor-pointer mr-3 px-1 inline-block;
 }
+
 .subNavItem:hover {
   @apply text-color1;
 }
+
 .subNavItemCur {
-  @apply bg-[#2c3138] text-color1;
+  @apply bg-primary-bg text-color1;
 }

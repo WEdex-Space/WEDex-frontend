@@ -15,12 +15,15 @@ export default defineConfig({
         // ui 2.0
         primary: 'var(--u-primary-color)',
         base: 'var(--u-base-color)',
+        'primary-bg': 'var(--u-primary-bg)',
         color1: 'var(--u-color-1)',
         color2: 'var(--u-color-2)',
         color3: 'var(--u-color-3)',
         'color-line': 'var(--u-color-line)',
         'color-border': 'var(--u-color-border)',
         'color-hover': 'var(--u-color-hover)',
+        'color-up': 'var(--u-color-up)',
+        'color-down': 'var(--u-color-down)',
         // old
         error: 'var(--u-error-color)',
         success: 'var(--u-success-color)',
