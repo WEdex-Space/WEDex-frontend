@@ -10,7 +10,7 @@ const localData: GlobalConfigState = (storage('globalConfig') as GlobalConfigSta
 
 export const useGlobalConfigStore = defineStore('globalConfig', {
   state: (): GlobalConfigState => ({
-    theme: localData.theme || 'light'
+    theme: localData.theme || 'dark'
   }),
   actions: {
     switchTheme() {
