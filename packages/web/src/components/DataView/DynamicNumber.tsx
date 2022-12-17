@@ -1,4 +1,4 @@
-import { defineComponent, watch, ref, nextTick } from 'vue'
+import { defineComponent, watch, ref, nextTick, PropType } from 'vue'
 
 export type ControlSlotValueType = 'up' | 'down' | null
 
@@ -6,7 +6,7 @@ export default defineComponent({
   name: 'DynamicNumber',
   props: {
     value: {
-      type: String
+      type: String as PropType<string | number>
     },
     symbol: {
       type: Number,

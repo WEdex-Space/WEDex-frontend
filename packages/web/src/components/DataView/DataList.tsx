@@ -4,6 +4,24 @@ import { defineComponent, ref, onMounted } from 'vue'
 import { default as ControlSlot, ControlSlotValueType } from './ControlSlot'
 import DynamicNumber from './DynamicNumber'
 
+export type DataItem = {
+  index: number
+  token: string
+  price: number
+  '5m': number | string
+  '1h': number | string
+  '4h': number | string
+  '6h': number | string
+  '24h': number | string
+  Txns: number
+  Buys: number
+  Sells: number
+  Vol: number
+  Liquidity: number
+  FDV: number
+  MKTCap: number
+}
+
 export default defineComponent({
   name: 'DataList',
   setup() {
@@ -19,7 +37,7 @@ export default defineComponent({
       {
         title: '#',
         key: 'index',
-        render: (_, index: number) => {
+        render: (data: DataItem, index: number) => {
           return (
             <div class="flex text-color3 items-center">
               <StarOutlined class="cursor-pointer h-4 mr-2 w-4 hover:text-primary" />
@@ -62,7 +80,7 @@ export default defineComponent({
         title: '5m',
         key: '5m',
         align: 'right',
-        render: (data, index) => {
+        render: (data: DataItem, index: number) => {
           return <DynamicNumber value={data['5m']} symbol={index % 2 ? 1 : -1} />
         }
       },
@@ -70,7 +88,7 @@ export default defineComponent({
         title: '1h',
         key: '1h',
         align: 'right',
-        render: (data, index) => {
+        render: (data: DataItem, index: number) => {
           return <DynamicNumber value={data['1h']} symbol={index % 2 ? 1 : -1} />
         }
       },
@@ -78,7 +96,7 @@ export default defineComponent({
         title: '4h',
         key: '4h',
         align: 'right',
-        render: (data, index) => {
+        render: (data: DataItem, index: number) => {
           return <DynamicNumber value={data['4h']} symbol={index % 2 ? 1 : -1} />
         }
       },
@@ -86,7 +104,7 @@ export default defineComponent({
         title: '6h',
         key: '6h',
         align: 'right',
-        render: (data, index) => {
+        render: (data: DataItem, index: number) => {
           return <DynamicNumber value={data['6h']} symbol={index % 2 ? 1 : -1} />
         }
       },
@@ -94,7 +112,7 @@ export default defineComponent({
         title: '24h',
         key: '24h',
         align: 'right',
-        render: (data, index) => {
+        render: (data: DataItem, index: number) => {
           return <DynamicNumber value={data['24h']} symbol={index % 2 ? 1 : -1} />
         }
       },
