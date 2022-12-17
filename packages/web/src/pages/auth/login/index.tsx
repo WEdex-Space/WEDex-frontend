@@ -1,27 +1,19 @@
 import { UButton } from '@wedex/components'
 import { WalletOutlined } from '@wedex/icons'
-import { defineComponent, watchEffect, ref, onMounted, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { defineComponent, ref } from 'vue'
 import styles from './animate.module.css'
-import MoreNavigationPage from './components/More'
 import logo from '@/assets/colorful.png'
 import logo2 from '@/assets/colorful@2x.png'
 import logo3 from '@/assets/colorful@3x.png'
 import loginLogo from '@/assets/loginLogo.png'
-import { OAuthSignWidget } from '@/components/OAuth'
-import { useOnLoggedIn } from '@/hooks'
-import { useUserStore, useWalletStore } from '@/stores'
-import { UserResponse } from '@/types'
+import { useWalletStore } from '@/stores'
 
 export default defineComponent({
   setup() {
     const walletStore = useWalletStore()
-    const userStore = useUserStore()
-    const { path, query } = useRoute()
     const loading = ref(false)
 
     const { ensureWalletConnected } = walletStore
-    const inviteCode = computed(() => query.inviteCode)
     const walletLogin = async () => {
       loading.value = true
       try {
@@ -31,38 +23,17 @@ export default defineComponent({
       }
       loading.value = false
     }
-    const fromInvite = () => {
-      switch (path) {
-        case '/invite':
-          if (inviteCode.value) {
-            userStore.setInvitationCode(inviteCode.value as string)
-            walletLogin()
-          }
-          break
-        default:
-          break
-      }
-    }
-    watchEffect(() => {
-      if (userStore.profile) {
-        useOnLoggedIn({ token: userStore.token, ...userStore.profile } as UserResponse)
-      }
-    })
-    onMounted(() => {
-      fromInvite()
-    })
+
     return {
       loading,
       ensureWalletConnected,
-      walletLogin,
-      inviteCode
+      walletLogin
     }
   },
   render() {
     return (
       <>
         <div class="flex bg-[#EDEDF2] h-100vh w-100vw justify-center items-center">
-          <MoreNavigationPage />
           <div class="bg-white flex rounded-8px flex-1 h-542px max-w-1245px">
             <div
               class={`${styles.bgImage} bg-primary rounded-2px h-606px -mt-8 text-white ml-25 pt-212px pl-64px w-635px`}
@@ -115,7 +86,6 @@ export default defineComponent({
                   </div>
                   <div class="bg-[#666] h-[1px] w-[140px]" />
                 </div>
-                <OAuthSignWidget inviteCode={this.inviteCode as string} />
               </div>
             </div>
           </div>

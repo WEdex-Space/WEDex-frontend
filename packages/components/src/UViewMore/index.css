@@ -1,7 +1,0 @@
-.u-view-more {
-  @apply flex text-primary uppercase h-5 u-title2;
-
-  &__icon {
-    @apply h-5 ml-3;
-  }
-}

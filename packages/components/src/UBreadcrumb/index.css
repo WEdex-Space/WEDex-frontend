@@ -1,7 +1,0 @@
-.u-breadcrumb-item {
-  @apply uppercase text-primary1;
-
-  .n-breadcrumb-item__separator {
-    @apply !text-primary;
-  }
-}
