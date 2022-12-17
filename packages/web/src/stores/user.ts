@@ -2,7 +2,6 @@ import { message } from '@wedex/components'
 import { storage } from '@wedex/utils'
 import { defineStore } from 'pinia'
 import { STORE_KEY_TOKEN } from '@/constants'
-import router from '@/router'
 import { services } from '@/services'
 import { useWalletStore } from '@/stores'
 import type { UserProfileState, UserResponse, ComerProfileState } from '@/types'
@@ -31,40 +30,9 @@ export const useUserStore = defineStore('user', {
   }),
   getters: {
     logged: state => !!state.token,
-    is_seted: state => state.profile?.is_seted,
     is_connected_wallet: state => !!state.profile?.address
   },
   actions: {
-    async init(reload = false) {
-      if (!reload && this.profile) return this.profile
-      if (this.logged) {
-        const { error, data } = await services['Comer@get-comer']()
-        if (!error) {
-          this.profile = data as unknown as UserProfileState
-          return this.profile
-        } else {
-          // anything to do?
-          return console.warn(`request error`)
-        }
-      } else {
-        return console.warn(`user is unlogin`)
-      }
-    },
-    async getComerProfile(reload = false) {
-      if (!reload && this.comerProfile) return this.comerProfile
-      if (this.logged) {
-        const { error, data } = await services['Comer@get-comer-info-detail']()
-        if (!error) {
-          this.comerProfile = data as ComerProfileState
-          return this.comerProfile
-        } else {
-          // anything to do?
-          return null
-        }
-      } else {
-        return null
-      }
-    },
     refreshToken(token?: string) {
       this.token = token || storage('local').get<string>(STORE_KEY_TOKEN)
       storage('local').set(STORE_KEY_TOKEN, this.token as string)
@@ -77,10 +45,9 @@ export const useUserStore = defineStore('user', {
       }
     },
     async loginWithWalletAddress(wallet: AbstractWallet) {
-      const address = await wallet.getAddress()
-      const invitation_code = this.invitation_code
+      const wallet_address = await wallet.getAddress()
       const { error, data } = await services['Authorization@get-nonce-by-address']({
-        wallet_address: address
+        wallet_address
       })
       if (!error) {
         let signedMsg
@@ -93,22 +60,18 @@ export const useUserStore = defineStore('user', {
         const { error: tokenError, data: tokenData } = await services[
           'Authorization@login-by-wallet-address'
         ]({
-          address,
+          wallet_address,
           nonce: data.nonce!,
-          signature: signedMsg,
-          invitation_code: invitation_code ? invitation_code : undefined
+          signature: signedMsg
         })
         if (tokenError) {
-          console.error('get token fail')
+          console.error('login-by-wallet-address fail')
           return false
         }
-        this.setLocalToken(tokenData?.token || '')
-        const { error: error2, data: data2 } = await services['Comer@get-comer']()
-        if (!error2) {
-          this.onLogin(tokenData?.token, data2 as UserProfileState)
-          return true
+        if (tokenData?.token) {
+          return this.onLogin(tokenData?.token)
         } else {
-          console.error('Login failed when parse signature')
+          console.error('get token fail')
           return false
         }
       } else {
@@ -120,18 +83,12 @@ export const useUserStore = defineStore('user', {
       storage('local').set(STORE_KEY_TOKEN, token)
       this.token = token
     },
-    onLogin(token: string, profile: UserProfileState) {
+    onLogin(token: string) {
       this.setLocalToken(token)
-      this.profile = profile
-      this.userResponse = profile as UserResponse
-      storage('session').set('oauth:info', this.userResponse)
     },
     onLogout() {
       const walletStore = useWalletStore()
       this.token = ''
-      this.profile = null
-      this.userResponse = null
-      this.comerProfile = null
       storage('session').clear()
       storage('local').remove(STORE_KEY_TOKEN)
       walletStore.wallet && walletStore.disconnectWallet()
@@ -141,10 +98,6 @@ export const useUserStore = defineStore('user', {
       if (msg) {
         message.info(typeof msg === 'string' ? msg : 'You have been logged out')
       }
-      router.replace({ path: '/auth/login', query })
-    },
-    setInvitationCode(code: string) {
-      this.invitation_code = code
     }
   }
 })
