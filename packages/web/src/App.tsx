@@ -9,7 +9,6 @@ import {
 } from '@wedex/components'
 import { defineComponent } from 'vue'
 import { RouterView } from 'vue-router'
-import WalletBindBlock from './blocks/WalletBind'
 import WalletConnectBlock from './blocks/WalletConnect'
 import { upload as onUpload } from './services/a2s.adapter'
 import { useWalletStore, useGlobalConfigStore } from './stores'
@@ -40,7 +39,6 @@ export default defineComponent({
           </UUploadProvider>
         </ULoadingBarProvider>
         <WalletConnectBlock />
-        <WalletBindBlock />
       </UStyleProvider>
     )
   }

@@ -1,4 +1,4 @@
-import { UTable, DataTableColumnType } from '@wedex/components'
+import { UTable } from '@wedex/components'
 import { StarOutlined } from '@wedex/icons'
 import { defineComponent, ref, onMounted } from 'vue'
 import { default as ControlSlot, ControlSlotValueType } from './ControlSlot'
@@ -33,7 +33,7 @@ export default defineComponent({
       sortMethod: null
     })
 
-    const columns = ref<DataTableColumnType[]>([
+    const columns = ref<any[]>([
       {
         title: '#',
         key: 'index',

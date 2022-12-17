@@ -4,45 +4,27 @@ import { defineStore } from 'pinia'
 import { STORE_KEY_TOKEN } from '@/constants'
 import { services } from '@/services'
 import { useWalletStore } from '@/stores'
-import type { UserProfileState, UserResponse, ComerProfileState } from '@/types'
 import AbstractWallet from '@/wallets/AbstractWallet'
 
 export type UserState = {
   // user token
   token: string | undefined
-  // user profile
-  profile: UserProfileState | null
-  // user signin response
-  userResponse: UserResponse | null
-  // comer profile
-  comerProfile: ComerProfileState | null
-  // comer invite
-  invitation_code: string | null
+  address: string | undefined
 }
 
 export const useUserStore = defineStore('user', {
   state: (): UserState => ({
     token: storage('local').get<string>(STORE_KEY_TOKEN),
-    profile: null,
-    userResponse: null,
-    comerProfile: null,
-    invitation_code: null
+    address: undefined
   }),
   getters: {
     logged: state => !!state.token,
-    is_connected_wallet: state => !!state.profile?.address
+    is_connected_wallet: state => !!state.address
   },
   actions: {
     refreshToken(token?: string) {
       this.token = token || storage('local').get<string>(STORE_KEY_TOKEN)
       storage('local').set(STORE_KEY_TOKEN, this.token as string)
-    },
-    mergeProfile(profile: Partial<UserProfileState>) {
-      if (this.profile) {
-        Object.assign(this.profile, profile)
-      } else {
-        this.profile = profile as UserProfileState
-      }
     },
     async loginWithWalletAddress(wallet: AbstractWallet) {
       const wallet_address = await wallet.getAddress()
