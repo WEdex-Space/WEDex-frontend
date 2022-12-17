@@ -127,14 +127,14 @@ export const services = {
       ...extract('GET', args, [], [])
     })
   },
-  'Notebook@put@/notebooks'(args: ApiDocuments.proto_NotebookUpdateRequest) {
+  'Notebook@update-notebook-list'(args: ApiDocuments.proto_NotebookUpdateRequest) {
     return requestAdapter<ApiDocuments.proto_MessageResponse>({
       url: replacePath('/notebooks', args),
       method: 'PUT',
       ...extract('PUT', args, [], [])
     })
   },
-  'Notebook@post@/notebooks'(args: ApiDocuments.proto_NotebookCreateRequest) {
+  'Notebook@create-notebook-list'(args: ApiDocuments.proto_NotebookCreateRequest) {
     return requestAdapter<ApiDocuments.proto_MessageResponse>({
       url: replacePath('/notebooks', args),
       method: 'POST',
@@ -152,7 +152,7 @@ export const services = {
       ...extract('GET', args, [], [])
     })
   },
-  'Notification@post@/notifications'(args: ApiDocuments.proto_NotificationCreateRequest) {
+  'Notification@create-notification-list'(args: ApiDocuments.proto_NotificationCreateRequest) {
     return requestAdapter<ApiDocuments.proto_MessageResponse>({
       url: replacePath('/notifications', args),
       method: 'POST',
