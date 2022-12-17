@@ -27,7 +27,8 @@ const UStyleProvider = defineComponent({
         ? {
             primaryColor: '#FF9D00',
             baseColor: '#181a1f',
-            primaryBg: '#0C0E11',
+            bg1: '#0C0E11',
+            bg2: '#2C3138',
             color1: '#fff',
             color2: '#EAECEF',
             color3: '#858E9B',
@@ -43,7 +44,8 @@ const UStyleProvider = defineComponent({
         : {
             primaryColor: '#FF9D00',
             baseColor: '#fff',
-            primaryBg: '#fafafc',
+            bg1: '#fafafc',
+            bg2: '#fafafc',
             color1: '#000',
             color2: 'rgba(0,0,0,.5)',
             color3: 'rgba(0,0,0,.3)',
@@ -139,7 +141,7 @@ const UStyleProvider = defineComponent({
         color: 'rgba(0,0,0,.8)'
       },
       DataTable: {
-        thColor: ColorOverrides.value.primaryBg,
+        thColor: ColorOverrides.value.bg1,
         thPaddingSmall: '4px 16px',
         tdPaddingSmall: '8px 16px'
       }
@@ -156,7 +158,8 @@ const UStyleProvider = defineComponent({
         --u-color-border: ${ColorOverrides.value.colorBorder};
         --u-color-hover: ${ColorOverrides.value.colorHover};
         --u-primary-color: ${ColorOverrides.value.primaryColor};
-        --u-primary-bg: ${ColorOverrides.value.primaryBg};
+        --u-bg-1: ${ColorOverrides.value.bg1};
+        --u-bg-2: ${ColorOverrides.value.bg2};
         --u-color-up: ${ColorOverrides.value.colorUp};
         --u-color-down: ${ColorOverrides.value.colorDown};
         --u-error-color: ${ColorOverrides.value.errorColor};

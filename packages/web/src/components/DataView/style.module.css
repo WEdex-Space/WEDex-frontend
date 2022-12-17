@@ -48,5 +48,5 @@
 }
 
 .subNavItemCur {
-  @apply bg-primary-bg text-color1;
+  @apply bg-bg2 text-color1;
 }

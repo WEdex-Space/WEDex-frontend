@@ -1,5 +1,6 @@
 import { defineComponent } from 'vue'
 import DataList from './DataList'
+import MainFooter from './MainFooter'
 import MainHeader from './MainHeader'
 
 export default defineComponent({
@@ -12,7 +13,7 @@ export default defineComponent({
       <div class="flex flex-col">
         <MainHeader />
         <DataList class="flex-1" />
-        <div class="border-color-border border-t-1">foot filter</div>
+        <MainFooter />
       </div>
     )
   }
