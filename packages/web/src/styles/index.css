@@ -1,7 +1,7 @@
 @import '@wedex/components/dist/es/index.css';
 
 body {
-  @apply font-primary text-color2 leading-5 break-words;
+  @apply bg-base font-primary text-color2 leading-5 break-words;
 }
 
 ::-webkit-scrollbar {
@@ -16,4 +16,48 @@ body {
 
 ::-webkit-scrollbar-track {
   background: none;
+}
+
+/* home page */
+.homePage {
+  height: 100vh;
+}
+
+.homePage .leftPanelStatic {
+  width: 300px;
+}
+
+.homePage .rightPanelStatic {
+  width: 300px;
+}
+
+.homePage .rightPanelStaticClose {
+  width: 44px;
+}
+
+/* custom */
+
+.selectTransparent .n-base-selection-label {
+  background-color: transparent;
+}
+
+@keyframes number-pulse {
+  0% {
+    width: 0;
+    opacity: 0.7;
+  }
+
+  60% {
+    width: 100%;
+    opacity: 0;
+  }
+
+  100% {
+    width: 100%;
+    opacity: 0;
+  }
+}
+
+.NumberPulse {
+  animation: number-pulse 1s ease-out;
 }

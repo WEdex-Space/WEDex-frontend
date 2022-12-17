@@ -1,11 +1,7 @@
-import type {
-  UContractInteractionPropsType,
-  UContractInteractionStatus
-} from '@wedex/components'
+import type { UContractInteractionPropsType, UContractInteractionStatus } from '@wedex/components'
 
 import { defineStore } from 'pinia'
 import { reactive } from 'vue'
-import { services } from '@/services'
 import { DeepWriteable } from '@/utils/valid'
 export type TransacationType = {
   hash: string
@@ -80,42 +76,6 @@ export const useContractStore = defineStore('contract', {
       if (index > -1) {
         this.transacations.splice(index, 1)
       }
-    },
-    async createStartupSuccessAfter(options: optionsType & { txHash: string }) {
-      try {
-        const res = await services['Startup@create-startup']({
-          type: options.type,
-          name: options.name,
-          mission: options.mission,
-          overview: options.overview,
-          tx_hash: options.txHash,
-          chain_id: options.chain_id,
-          tags: options.tags
-        })
-        return res
-      } catch (error) {
-        console.error(error)
-        return {
-          data: null
-        }
-      }
-    },
-    async setStartupSuccessAfter(options: optionsSettingType) {
-      const res = await services['Startup@update-startup']({
-        startup_id: Number(options.startup_id),
-        type: options.type,
-        name: options.name,
-        mission: options.mission,
-        overview: options.overview,
-        tx_hash: options.txHash,
-        chain_id: options.chain_id,
-        tags: options.tags,
-        logo: options.logo,
-        banner: options.banner
-      }).catch(err => {
-        return null
-      })
-      return res ? res.data : null
     }
   }
 })

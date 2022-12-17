@@ -19,6 +19,7 @@ module.exports = {
     'font-family-no-missing-generic-family-keyword': null, // iconfont
     'plugin/declaration-block-no-ignored-properties': true,
     'unit-no-unknown': [true, { ignoreUnits: ['rpx'] }],
+    'keyframes-name-pattern': null,
     'selector-type-no-unknown': [
       true,
       {

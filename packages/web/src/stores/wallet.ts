@@ -36,7 +36,6 @@ export type WalletState = {
   // is wallet connect modal opened
   connectModalOpened: boolean
   // bind wallet modal opened
-  bindModalOpened: boolean
 }
 export type coinbaseWindowType = {
   providers: Array<{
@@ -60,8 +59,7 @@ export const useWalletStore = defineStore('wallet', {
     walletType: storage('local').get<NonNullable<WalletState['walletType']>>(STORE_KEY_WALLET_TYPE),
     connected: false,
     wallet: undefined,
-    connectModalOpened: false,
-    bindModalOpened: false
+    connectModalOpened: false
   }),
   getters: {
     isNetworkSupported: state => {
@@ -223,18 +221,6 @@ export const useWalletStore = defineStore('wallet', {
         }
       })
     },
-    openBindModal() {
-      this.bindModalOpened = true
-      return new Promise<ServiceReturn<'Authorization@login-by-wallet-address'> | null>(
-        (resolve, reject) => {
-          bindCbSuccess = resolve
-          bindCbFailed = reject
-        }
-      )
-    },
-    closeBindModal() {
-      this.bindModalOpened = false
-    },
     async bindWallet(wallet: AbstractWallet) {
       console.log(12313132)
       const address = await wallet.getAddress()
@@ -263,7 +249,6 @@ export const useWalletStore = defineStore('wallet', {
               if (bindCbSuccess && typeof bindCbSuccess === 'function') {
                 bindCbSuccess(response.data)
               }
-              this.closeBindModal()
             })
           })
         } catch (error) {
