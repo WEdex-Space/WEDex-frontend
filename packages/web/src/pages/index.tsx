@@ -1,17 +1,17 @@
 import { defineComponent, ref, watch, provide } from 'vue'
-import DataDetail from '@/components/DataDetail'
-import DataView from '@/components/DataView'
-import ExtentionBar from '@/components/ExtentionBar'
+import DataDetail from '@/blocks/DataDetail'
+import DataView from '@/blocks/DataView'
+import ExtentionBar from '@/blocks/ExtentionBar'
 
 const LandingPage = defineComponent({
   name: 'LandingPage',
   setup(props, ctx) {
     const leftClass = ref(`flex-1`)
     const centerClass = ref('w-0')
-    const rightClass = ref(`rightPanelStaticClose`)
+    const rightClass = ref(`rightPanelStatic`)
 
     const currentExpand = ref<'left' | 'center' | 'right'>('left')
-    const rightPanelState = ref<'static' | 'close'>('close')
+    const rightPanelState = ref<'static' | 'close'>('static')
     const prevExpand = ref<'left' | 'center' | 'right' | null>(null)
 
     watch(

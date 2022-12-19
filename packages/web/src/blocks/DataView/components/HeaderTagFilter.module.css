@@ -1,0 +1,14 @@
+.subNavItem {
+  height: 20px;
+  line-height: 20px;
+  border-radius: 4px;
+  @apply cursor-pointer mr-2 px-2 inline-block;
+}
+
+.subNavItem:hover {
+  @apply text-color1;
+}
+
+.subNavItemCur {
+  @apply bg-bg2 text-color1;
+}

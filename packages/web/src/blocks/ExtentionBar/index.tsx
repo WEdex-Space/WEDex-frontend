@@ -27,7 +27,7 @@ export default defineComponent({
     const globalConfigStore = useGlobalConfigStore()
     const currentExpand = inject<string>('currentExpand')
     const rightPanelState = inject<string>('rightPanelState')
-    const currentExtention = ref<string | null>(null)
+    const currentExtention = ref<string | null>('WatchList')
 
     return {
       currentExpand,
@@ -82,13 +82,17 @@ export default defineComponent({
     const showExtention = this.currentExpand === 'right' || this.rightPanelState === 'static'
 
     const toggleExtention = (name: string) => {
-      if (this.currentExtention === name) {
-        this.currentExtention = null
-        this.rightPanelState = 'close'
-      } else {
+      if (this.currentExtention !== name) {
         this.currentExtention = name
         this.rightPanelState = 'static'
       }
+      // if (this.currentExtention === name) {
+      //   this.currentExtention = null
+      //   this.rightPanelState = 'close'
+      // } else {
+      //   this.currentExtention = name
+      //   this.rightPanelState = 'static'
+      // }
     }
     // share
     const shareTypes = [
@@ -111,11 +115,14 @@ export default defineComponent({
         <div class="flex-1">
           {showExtention && this.currentExtention && componentsMap[this.currentExtention].component}
         </div>
-        <div class="flex flex-col w-11">
+        {/* icons */}
+        <div class="border-color-border flex flex-col border-l-1 w-11">
           <div class="flex-1">
             {Object.keys(componentsMap).map((key: string) => (
               <div
-                class="rounded-sm cursor-pointer mx-auto h-8 my-3 text-center text-color3 leading-8  w-8 hover:bg-bg2 hover:text-color1"
+                class={`rounded-sm cursor-pointer mx-auto h-8 my-3 text-center text-color3 leading-8  w-8 hover:bg-bg2 hover:text-color1 ${
+                  this.currentExtention === key ? 'bg-bg2 text-color1' : ''
+                }`}
                 onClick={() =>
                   typeof componentsMap[key].action === 'function'
                     ? componentsMap[key].action()
@@ -128,6 +135,7 @@ export default defineComponent({
               </div>
             ))}
           </div>
+
           {shareTypes.map(item => (
             <div class="rounded-sm cursor-pointer mx-auto h-8 my-3 text-center text-color3 leading-8  w-8 hover:bg-bg2 hover:text-color1">
               <div class={`h-4 w-4 inline-block align-middle -mt-[2px]`}>{item.icon}</div>
