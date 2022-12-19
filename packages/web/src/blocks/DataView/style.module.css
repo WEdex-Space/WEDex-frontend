@@ -4,13 +4,11 @@
 }
 
 .mainNav ul {
-  @apply font-bold px-5 text-[14px];
+  @apply py-3 px-5;
 }
 
 .mainNav li {
-  height: 50px;
-  line-height: 50px;
-  @apply cursor-pointer mr-5 relative inline-block;
+  @apply rounded-sm cursor-pointer h-7 mr-4 px-2 leading-7 relative inline-block;
 }
 
 .mainNav li:hover {
@@ -18,17 +16,12 @@
 }
 
 .mainNavItemCur {
-  @apply text-primary;
+  @apply bg-primary-bg text-primary;
 }
 
-.mainNavItemCur::after {
-  height: 2px;
-  content: '';
-  @apply bg-primary right-0 bottom-0 left-0 absolute;
-}
-
+/* sub nav */
 .subNav {
-  @apply flex h-9 px-5 text-color3 text-[14px] items-center;
+  @apply flex h-10 text-xs px-5 text-color3 items-center;
 }
 
 .subNav .__list {
@@ -40,7 +33,7 @@
   height: 20px;
   line-height: 20px;
   border-radius: 4px;
-  @apply cursor-pointer mr-3 px-1 inline-block;
+  @apply cursor-pointer mr-2 px-2 inline-block;
 }
 
 .subNavItem:hover {

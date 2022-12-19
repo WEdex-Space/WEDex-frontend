@@ -41,7 +41,7 @@ export default defineComponent({
     const symbolStr = this.symbol > 0 ? '+' : '-'
 
     return (
-      <div class={`relative p-1 overflow-hidden ${textColor}`}>
+      <div class={`relative overflow-hidden font-semibold text-right ${textColor}`}>
         {symbolStr}
         {this.value}
         {this.showShadow ? (

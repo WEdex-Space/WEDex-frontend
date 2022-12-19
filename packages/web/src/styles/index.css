@@ -1,7 +1,7 @@
 @import '@wedex/components/dist/es/index.css';
 
 body {
-  @apply bg-base font-primary text-color2 leading-5 break-words;
+  @apply bg-base font-primary text-sm text-color2 leading-5 break-words;
 }
 
 ::-webkit-scrollbar {
@@ -24,11 +24,11 @@ body {
 }
 
 .homePage .leftPanelStatic {
-  width: 300px;
+  width: 324px;
 }
 
 .homePage .rightPanelStatic {
-  width: 300px;
+  width: 324px;
 }
 
 .homePage .rightPanelStaticClose {
