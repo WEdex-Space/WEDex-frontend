@@ -44,7 +44,7 @@ export default defineComponent({
   },
   render() {
     return (
-      <div class="border-color-border flex border-t-1 h-10 text-color3 ">
+      <div class="border-color-border flex border-t-1 h-10 text-color3 text-[12px]">
         <ul class="flex flex-1 items-center">
           <li class={footerListCellClass}>
             Tokens:<span class="text-color1">1234</span>
@@ -68,6 +68,7 @@ export default defineComponent({
         <div class={`border-l-1 border-color-border w-40`}>
           <USelect
             class={`selectTransparent`}
+            size="small"
             placeholder="Networks"
             clearable
             v-model:value={this.formData.range}

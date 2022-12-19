@@ -26,6 +26,7 @@ const UStyleProvider = defineComponent({
       return props.theme === 'dark'
         ? {
             primaryColor: '#FF9D00',
+            primaryBg: 'rgba(255, 157, 0, 0.2)',
             baseColor: '#181a1f',
             bg1: '#0C0E11',
             bg2: '#2C3138',
@@ -43,6 +44,7 @@ const UStyleProvider = defineComponent({
           }
         : {
             primaryColor: '#FF9D00',
+            primaryBg: 'rgba(255, 157, 0, 0.2)',
             baseColor: '#fff',
             bg1: '#fafafc',
             bg2: '#fafafc',
@@ -65,7 +67,6 @@ const UStyleProvider = defineComponent({
         heightLarge: '48px',
         heightMedium: '40px',
         heightSmall: '36px',
-        borderRadius: '2px',
         borderRadiusLarge: '8px',
         borderRadiusMedium: '4px',
         borderRadiusSmall: '2px',
@@ -78,7 +79,8 @@ const UStyleProvider = defineComponent({
         primaryColorHover: ColorOverrides.value.primaryColor,
         primaryColorPressed: ColorOverrides.value.primaryColor,
         successColorHover: ColorOverrides.value.successColor,
-        successColorPressed: ColorOverrides.value.successColor
+        successColorPressed: ColorOverrides.value.successColor,
+        fontSizeSmall: '12px'
       },
       Form: {
         asteriskColor: ColorOverrides.value.errorColor
@@ -97,6 +99,7 @@ const UStyleProvider = defineComponent({
         borderError: `1px solid ${ColorOverrides.value.errorColor}`,
         borderDisabled: `1px solid ${ColorOverrides.value.color3}`,
         placeholderColor: ColorOverrides.value.color3,
+        fontSizeSmall: '12px',
         fontSizeMedium: '14px',
         fontSizeLarge: '16px',
         paddingLarge: '16px',
@@ -142,8 +145,9 @@ const UStyleProvider = defineComponent({
       },
       DataTable: {
         thColor: ColorOverrides.value.bg1,
-        thPaddingSmall: '4px 16px',
-        tdPaddingSmall: '8px 16px'
+        thPaddingSmall: '4px 12px',
+        tdPaddingSmall: '8px 12px',
+        fontSizeSmall: '12px'
       }
     }))
 
@@ -158,6 +162,7 @@ const UStyleProvider = defineComponent({
         --u-color-border: ${ColorOverrides.value.colorBorder};
         --u-color-hover: ${ColorOverrides.value.colorHover};
         --u-primary-color: ${ColorOverrides.value.primaryColor};
+        --u-primary-bg: ${ColorOverrides.value.primaryBg};
         --u-bg-1: ${ColorOverrides.value.bg1};
         --u-bg-2: ${ColorOverrides.value.bg2};
         --u-color-up: ${ColorOverrides.value.colorUp};

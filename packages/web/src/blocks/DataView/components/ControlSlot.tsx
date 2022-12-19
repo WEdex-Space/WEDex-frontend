@@ -54,28 +54,30 @@ export default defineComponent({
   render() {
     return (
       <div
-        class="bg-purple flex flex-col h-6 w-4.5 items-center justify-center"
+        class="bg-purple flex flex-col h-6 w-3 items-center justify-center"
         style={{ lineHeight: 0 }}
       >
         <div
-          class={`h-[10px] w-3 cursor-pointer hover:text-primary ${
+          class={`h-3 leading-3 w-3 cursor-pointer hover:text-primary ${
             this.value === 'up' ? 'text-primary' : 'text-color1'
           }`}
           onMousedown={() => this.longEnterStart('up')}
           onMouseup={this.longEnterEnd}
           onMouseleave={this.longEnterEnd}
+          onClick={this.triggerUp}
         >
-          <NumberUpFilled class="h-full w-full" onClick={this.triggerUp} />
+          <NumberUpFilled class="h-2 w-2 align-bottom" />
         </div>
         <div
-          class={`h-[10px] w-3 cursor-pointer hover:text-primary ${
+          class={`h-3 leading-3 w-3 cursor-pointer hover:text-primary ${
             this.value === 'down' ? 'text-primary' : 'text-color1'
           }`}
           onMousedown={() => this.longEnterStart('down')}
           onMouseup={this.longEnterEnd}
           onMouseleave={this.longEnterEnd}
+          onClick={this.triggerDown}
         >
-          <NumberDownFilled class="h-full w-full" onClick={this.triggerDown} />
+          <NumberDownFilled class="h-2 w-2 align-top" />
         </div>
       </div>
     )

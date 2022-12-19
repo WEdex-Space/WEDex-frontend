@@ -1,0 +1,18 @@
+.wrap {
+  line-height: 0;
+  white-space: nowrap;
+  @apply text-color3;
+}
+
+.icon {
+  position: relative;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-left: -6px;
+  vertical-align: middle;
+}
+
+.icon img {
+  @apply h-full w-full;
+}

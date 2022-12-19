@@ -12,7 +12,7 @@ import { RouterView } from 'vue-router'
 import WalletConnectBlock from './blocks/WalletConnect'
 import { upload as onUpload } from './services/a2s.adapter'
 import { useWalletStore, useGlobalConfigStore } from './stores'
-import { comunionTimeAgo } from './utils/timeago'
+import { customTimeAgo } from './utils/timeago'
 
 export default defineComponent({
   name: 'App',
@@ -20,7 +20,7 @@ export default defineComponent({
     const walletStore = useWalletStore()
     const globalConfigStore = useGlobalConfigStore()
 
-    comunionTimeAgo()
+    customTimeAgo()
 
     // init wallet state
     walletStore.init()
