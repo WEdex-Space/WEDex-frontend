@@ -45,7 +45,7 @@ export default defineComponent({
   },
   render() {
     return (
-      <div class="border-color-border flex border-t-1 h-10 text-color3 text-[12px]">
+      <div class="border-color-border flex border-t-1 h-10 text-xs text-color3 select-none">
         <ul class="flex flex-1 items-center">
           <li class={footerListCellClass}>
             Tokens:<span class="text-color1">1234</span>

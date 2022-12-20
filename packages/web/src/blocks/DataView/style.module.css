@@ -1,6 +1,7 @@
 .mainNav {
   overflow-x: auto;
   overflow-y: hidden;
+  @apply select-none;
 }
 
 .mainNav ul {
