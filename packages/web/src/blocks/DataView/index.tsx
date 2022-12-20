@@ -4,7 +4,7 @@ import MainFooter from './MainFooter'
 import MainHeader from './MainHeader'
 
 export type DataListParamsType = {
-  chainId: number | null
+  chainId: any[]
   type: number | null
   DEXe: number | null
   tag: string | null
@@ -22,7 +22,7 @@ export default defineComponent({
   name: 'DataView',
   setup(props, ctx) {
     const DataListParams = ref<DataListParamsType>({
-      chainId: null,
+      chainId: [],
       type: 2,
       DEXe: null,
       tag: null,

@@ -30,6 +30,7 @@ const UStyleProvider = defineComponent({
             baseColor: '#181a1f',
             bg1: '#0C0E11',
             bg2: '#2C3138',
+            bg3: '#202428',
             color1: '#fff',
             color2: '#EAECEF',
             color3: '#858E9B',
@@ -48,6 +49,7 @@ const UStyleProvider = defineComponent({
             baseColor: '#fff',
             bg1: '#fafafc',
             bg2: '#fafafc',
+            bg3: '#fafafc',
             color1: '#000',
             color2: 'rgba(0,0,0,.5)',
             color3: 'rgba(0,0,0,.3)',
@@ -64,12 +66,7 @@ const UStyleProvider = defineComponent({
 
     const naiveThemeOverrides = computed<GlobalThemeOverrides>(() => ({
       common: {
-        heightLarge: '48px',
-        heightMedium: '40px',
-        heightSmall: '36px',
-        borderRadiusLarge: '8px',
-        borderRadiusMedium: '4px',
-        borderRadiusSmall: '2px',
+        heightSmall: '24px',
         baseColor: ColorOverrides.value.baseColor,
         primaryColor: ColorOverrides.value.primaryColor,
         infoColor: ColorOverrides.value.infoColor,
@@ -86,10 +83,8 @@ const UStyleProvider = defineComponent({
         asteriskColor: ColorOverrides.value.errorColor
       },
       Button: {
-        colorHoverPrimary: ColorOverrides.value.colorUp,
-        borderHoverPrimary: ColorOverrides.value.colorUp,
-        textColorGhostHoverPrimary: ColorOverrides.value.colorUp,
-        fontWeight: 600
+        borderRadiusSmall: '2px',
+        borderRadiusTiny: '2px'
       },
       Input: {
         border: `1px solid ${ColorOverrides.value.colorBorder}`,
@@ -100,10 +95,6 @@ const UStyleProvider = defineComponent({
         borderDisabled: `1px solid ${ColorOverrides.value.color3}`,
         placeholderColor: ColorOverrides.value.color3,
         fontSizeSmall: '12px',
-        fontSizeMedium: '14px',
-        fontSizeLarge: '16px',
-        paddingLarge: '16px',
-        heightMedium: '36px',
         suffixTextColor: ColorOverrides.value.color3
       },
       Scrollbar: {
@@ -116,15 +107,12 @@ const UStyleProvider = defineComponent({
       Card: {
         borderRadius: '2px',
         borderColor: ColorOverrides.value.colorBorder,
-        paddingMedium: '24px',
         titleTextColor: ColorOverrides.value.color2,
-        titleFontSizeHuge: '16px',
         titleFontSizeMedium: '14px'
       },
       InternalSelection: {
         borderHover: `1px solid transparent`,
-        placeholderColor: ColorOverrides.value.color2,
-        heightMedium: '36px'
+        placeholderColor: ColorOverrides.value.color2
       },
       Tabs: {
         tabTextColorActiveBar: ColorOverrides.value.primaryColor,
@@ -165,6 +153,7 @@ const UStyleProvider = defineComponent({
         --u-primary-bg: ${ColorOverrides.value.primaryBg};
         --u-bg-1: ${ColorOverrides.value.bg1};
         --u-bg-2: ${ColorOverrides.value.bg2};
+        --u-bg-3: ${ColorOverrides.value.bg3};
         --u-color-up: ${ColorOverrides.value.colorUp};
         --u-color-down: ${ColorOverrides.value.colorDown};
         --u-error-color: ${ColorOverrides.value.errorColor};

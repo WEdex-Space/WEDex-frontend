@@ -18,6 +18,7 @@ export default defineConfig({
         base: 'var(--u-base-color)',
         bg1: 'var(--u-bg-1)',
         bg2: 'var(--u-bg-2)',
+        bg3: 'var(--u-bg-3)',
         color1: 'var(--u-color-1)',
         color2: 'var(--u-color-2)',
         color3: 'var(--u-color-3)',

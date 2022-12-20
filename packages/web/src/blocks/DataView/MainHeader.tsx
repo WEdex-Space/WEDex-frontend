@@ -17,6 +17,12 @@ import TrendTypeSelector from './components/TrendTypeSelector'
 
 import style from './style.module.css'
 import { DataListParamsKey } from './index'
+import {
+  default as MultiSelector,
+  MultiSelectorOptionType,
+  MultiSelectorValueType
+} from '@/components/MultiSelector'
+import Overlap from '@/components/Overlap'
 import { allNetworks } from '@/constants'
 
 export default defineComponent({
@@ -103,6 +109,22 @@ export default defineComponent({
       }
     }
 
+    const networksOptions: MultiSelectorOptionType[] = [
+      {
+        label: 'All Networks',
+        value: null
+      },
+      ...allNetworks
+        .filter(item => !!item.shortName)
+        .map(item => {
+          return {
+            label: item.shortName as string,
+            value: item.chainId,
+            icon: item.logo
+          }
+        })
+    ]
+
     return (
       <>
         <div class={style.mainNav}>
@@ -125,21 +147,40 @@ export default defineComponent({
           {this.DataListParams && this.DataListParams.type === 5 && (
             <HeaderGainerFilter class="mr-4" />
           )}
-
-          <USelect
+          <MultiSelector
             class={`mr-4 w-40 selectTransparent`}
-            size="small"
             placeholder="Networks"
-            clearable
             value={this.DataListParams?.chainId}
-            options={allNetworks.map(item => {
-              return {
-                label: item.shortName,
-                value: item.chainId
-              }
-            })}
-            onUpdate:value={value => this.DataListParams && (this.DataListParams.chainId = value)}
-          ></USelect>
+            options={networksOptions}
+            onChange={value => this.DataListParams && (this.DataListParams.chainId = value)}
+            customRender={(
+              values: MultiSelectorValueType[],
+              valueObjs: MultiSelectorOptionType[]
+            ) =>
+              valueObjs.length ? (
+                <div
+                  class="inline-block whitespace-nowrap"
+                  title={valueObjs.map(item => item.label).join('/')}
+                >
+                  <Overlap
+                    nodes={valueObjs.map(item => (
+                      <img src={item.icon} />
+                    ))}
+                  />
+                </div>
+              ) : (
+                'Networks'
+              )
+            }
+            v-slots={{
+              total: () => (
+                <>
+                  Networks: <span class="text-color1">{` ${networksOptions.length}`}</span>
+                </>
+              )
+            }}
+          />
+
           <USelect
             class={`mr-4 w-40 selectTransparent`}
             size="small"

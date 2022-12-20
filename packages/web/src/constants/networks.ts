@@ -112,7 +112,7 @@ export const allNetworks: ChainNetworkType[] = [
     nologo: nobinance,
     chainId: 97,
     name: 'BNB Chain Testnet',
-    shortName: 'BNB Chain Testnet',
+    shortName: 'BNB Testnet',
     currencySymbol: 'tBNB',
     rpcUrl: 'https://data-seed-prebsc-1-s1.binance.org:8545',
     explorerUrl: 'https://testnet.bscscan.com'
@@ -132,7 +132,7 @@ export const allNetworks: ChainNetworkType[] = [
     nologo: noavalanche,
     chainId: 43113,
     name: 'Avalanche Fuji Testnet',
-    shortName: 'Avalanche Fuji Testnet',
+    shortName: 'Avalanche Testnet',
     currencySymbol: 'AVAX',
     rpcUrl: 'https://api.avax-test.network/ext/bc/C/rpc',
     explorerUrl: 'https://cchain.explorer.avax-test.network'
@@ -152,7 +152,7 @@ export const allNetworks: ChainNetworkType[] = [
     nologo: nosyscoin,
     chainId: 2814,
     name: 'Rollux OPv1 Private',
-    shortName: 'Rollux OPv1 Private',
+    shortName: 'Rollux Private',
     currencySymbol: 'RSYS',
     rpcUrl: 'https://testnet.rollux.com:2814',
     explorerUrl: 'https://explorer.testnet.rollux.com'
