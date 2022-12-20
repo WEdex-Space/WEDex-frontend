@@ -39,33 +39,53 @@ export default defineComponent({
   setup() {
     const DataListParams = inject(DataListParamsKey)
 
+    const loopSwitchSortValue = (sortType: string) => {
+      if (DataListParams) {
+        const valueArray = ['down', 'up', null]
+        const currentValue = valueArray.indexOf(
+          getControlSlotFilterValue(DataListParams.sortMethod, sortType)
+        )
+        if (currentValue !== -1) {
+          const nextIndex =
+            currentValue + 1 >= valueArray.length
+              ? currentValue + 1 - valueArray.length
+              : currentValue + 1
+          const nextMethod = nextIndex === 2 ? null : `${sortType}-${valueArray[nextIndex]}`
+          DataListParams.sortMethod = nextMethod
+        }
+      }
+    }
+    const customRenderSortTitle = (sortTitle: string, sortType: string) => {
+      return (
+        <div class="flex justify-end items-center">
+          <div class="cursor-pointer" onClick={() => loopSwitchSortValue(sortType)}>
+            {sortTitle}
+          </div>
+          {DataListParams && (
+            <ControlSlot
+              value={getControlSlotFilterValue(DataListParams.sortMethod, sortType)}
+              onTriggerUp={() => {
+                DataListParams.sortMethod = `${sortType}-up`
+              }}
+              onTriggerDown={() => {
+                DataListParams.sortMethod = `${sortType}-down`
+              }}
+              onTriggerClear={() => {
+                DataListParams.sortMethod = null
+              }}
+            />
+          )}
+        </div>
+      )
+    }
+
     const columns = computed<any[]>(() => {
       const extendColumns: any[] = []
       switch (DataListParams?.type) {
         case 1:
           // Hot pairs
           extendColumns.push({
-            title() {
-              return (
-                <div class="flex justify-end items-center">
-                  <div>Views</div>
-                  {DataListParams && (
-                    <ControlSlot
-                      value={getControlSlotFilterValue(DataListParams.sortMethod, 'views')}
-                      onTriggerUp={() => {
-                        DataListParams.sortMethod = 'views-up'
-                      }}
-                      onTriggerDown={() => {
-                        DataListParams.sortMethod = 'views-down'
-                      }}
-                      onTriggerClear={() => {
-                        DataListParams.sortMethod = null
-                      }}
-                    />
-                  )}
-                </div>
-              )
-            },
+            title: customRenderSortTitle('Views', 'views'),
             key: 'views',
             align: 'right',
             render: (data: DataItem, index: number) => {
@@ -79,27 +99,7 @@ export default defineComponent({
         case 3:
           // New pairs
           extendColumns.push({
-            title() {
-              return (
-                <div class="flex justify-end items-center">
-                  <div>Age</div>
-                  {DataListParams && (
-                    <ControlSlot
-                      value={getControlSlotFilterValue(DataListParams.sortMethod, 'age')}
-                      onTriggerUp={() => {
-                        DataListParams.sortMethod = 'age-up'
-                      }}
-                      onTriggerDown={() => {
-                        DataListParams.sortMethod = 'age-down'
-                      }}
-                      onTriggerClear={() => {
-                        DataListParams.sortMethod = null
-                      }}
-                    />
-                  )}
-                </div>
-              )
-            },
+            title: customRenderSortTitle('Age', 'age'),
             key: 'age',
             align: 'right',
             render: (data: DataItem, index: number) => {
@@ -178,52 +178,12 @@ export default defineComponent({
         },
         ...extendColumns,
         {
-          title() {
-            return (
-              <div class="flex justify-end items-center">
-                <div>Price</div>
-                {DataListParams && (
-                  <ControlSlot
-                    value={getControlSlotFilterValue(DataListParams.sortMethod, 'price')}
-                    onTriggerUp={() => {
-                      DataListParams.sortMethod = 'price-up'
-                    }}
-                    onTriggerDown={() => {
-                      DataListParams.sortMethod = 'price-down'
-                    }}
-                    onTriggerClear={() => {
-                      DataListParams.sortMethod = null
-                    }}
-                  />
-                )}
-              </div>
-            )
-          },
+          title: customRenderSortTitle('Price', 'price'),
           key: 'price',
           align: 'right'
         },
         {
-          title() {
-            return (
-              <div class="flex justify-end items-center">
-                <div>5m</div>
-                {DataListParams && (
-                  <ControlSlot
-                    value={getControlSlotFilterValue(DataListParams.sortMethod, '5m')}
-                    onTriggerUp={() => {
-                      DataListParams.sortMethod = '5m-up'
-                    }}
-                    onTriggerDown={() => {
-                      DataListParams.sortMethod = '5m-down'
-                    }}
-                    onTriggerClear={() => {
-                      DataListParams.sortMethod = null
-                    }}
-                  />
-                )}
-              </div>
-            )
-          },
+          title: customRenderSortTitle('5m', '5m'),
           key: '5m',
           align: 'right',
           render: (data: DataItem, index: number) => {
@@ -231,27 +191,7 @@ export default defineComponent({
           }
         },
         {
-          title() {
-            return (
-              <div class="flex justify-end items-center">
-                <div>1h</div>
-                {DataListParams && (
-                  <ControlSlot
-                    value={getControlSlotFilterValue(DataListParams.sortMethod, '1h')}
-                    onTriggerUp={() => {
-                      DataListParams.sortMethod = '1h-up'
-                    }}
-                    onTriggerDown={() => {
-                      DataListParams.sortMethod = '1h-down'
-                    }}
-                    onTriggerClear={() => {
-                      DataListParams.sortMethod = null
-                    }}
-                  />
-                )}
-              </div>
-            )
-          },
+          title: customRenderSortTitle('1h', '1h'),
           key: '1h',
           align: 'right',
           render: (data: DataItem, index: number) => {
@@ -259,27 +199,7 @@ export default defineComponent({
           }
         },
         {
-          title() {
-            return (
-              <div class="flex justify-end items-center">
-                <div>4h</div>
-                {DataListParams && (
-                  <ControlSlot
-                    value={getControlSlotFilterValue(DataListParams.sortMethod, '4h')}
-                    onTriggerUp={() => {
-                      DataListParams.sortMethod = '4h-up'
-                    }}
-                    onTriggerDown={() => {
-                      DataListParams.sortMethod = '4h-down'
-                    }}
-                    onTriggerClear={() => {
-                      DataListParams.sortMethod = null
-                    }}
-                  />
-                )}
-              </div>
-            )
-          },
+          title: customRenderSortTitle('4h', '4h'),
           key: '4h',
           align: 'right',
           render: (data: DataItem, index: number) => {
@@ -287,27 +207,7 @@ export default defineComponent({
           }
         },
         {
-          title() {
-            return (
-              <div class="flex justify-end items-center">
-                <div>6h</div>
-                {DataListParams && (
-                  <ControlSlot
-                    value={getControlSlotFilterValue(DataListParams.sortMethod, '6h')}
-                    onTriggerUp={() => {
-                      DataListParams.sortMethod = '6h-up'
-                    }}
-                    onTriggerDown={() => {
-                      DataListParams.sortMethod = '6h-down'
-                    }}
-                    onTriggerClear={() => {
-                      DataListParams.sortMethod = null
-                    }}
-                  />
-                )}
-              </div>
-            )
-          },
+          title: customRenderSortTitle('6h', '6h'),
           key: '6h',
           align: 'right',
           render: (data: DataItem, index: number) => {
@@ -315,27 +215,7 @@ export default defineComponent({
           }
         },
         {
-          title() {
-            return (
-              <div class="flex justify-end items-center">
-                <div>24h</div>
-                {DataListParams && (
-                  <ControlSlot
-                    value={getControlSlotFilterValue(DataListParams.sortMethod, '24h')}
-                    onTriggerUp={() => {
-                      DataListParams.sortMethod = '24h-up'
-                    }}
-                    onTriggerDown={() => {
-                      DataListParams.sortMethod = '24h-down'
-                    }}
-                    onTriggerClear={() => {
-                      DataListParams.sortMethod = null
-                    }}
-                  />
-                )}
-              </div>
-            )
-          },
+          title: customRenderSortTitle('24h', '24h'),
           key: '24h',
           align: 'right',
           render: (data: DataItem, index: number) => {
@@ -343,27 +223,7 @@ export default defineComponent({
           }
         },
         {
-          title() {
-            return (
-              <div class="flex justify-end items-center">
-                <div>Txns</div>
-                {DataListParams && (
-                  <ControlSlot
-                    value={getControlSlotFilterValue(DataListParams.sortMethod, 'Txns')}
-                    onTriggerUp={() => {
-                      DataListParams.sortMethod = 'Txns-up'
-                    }}
-                    onTriggerDown={() => {
-                      DataListParams.sortMethod = 'Txns-down'
-                    }}
-                    onTriggerClear={() => {
-                      DataListParams.sortMethod = null
-                    }}
-                  />
-                )}
-              </div>
-            )
-          },
+          title: customRenderSortTitle('Txns', 'Txns'),
           key: 'Txns',
           align: 'right',
           render: (data: DataItem, index: number) => {
@@ -371,102 +231,22 @@ export default defineComponent({
           }
         },
         {
-          title() {
-            return (
-              <div class="flex justify-end items-center">
-                <div>Buys</div>
-                {DataListParams && (
-                  <ControlSlot
-                    value={getControlSlotFilterValue(DataListParams.sortMethod, 'Buys')}
-                    onTriggerUp={() => {
-                      DataListParams.sortMethod = 'Buys-up'
-                    }}
-                    onTriggerDown={() => {
-                      DataListParams.sortMethod = 'Buys-down'
-                    }}
-                    onTriggerClear={() => {
-                      DataListParams.sortMethod = null
-                    }}
-                  />
-                )}
-              </div>
-            )
-          },
+          title: customRenderSortTitle('Buys', 'Buys'),
           key: 'Buys',
           align: 'right'
         },
         {
-          title() {
-            return (
-              <div class="flex justify-end items-center">
-                <div>Sells</div>
-                {DataListParams && (
-                  <ControlSlot
-                    value={getControlSlotFilterValue(DataListParams.sortMethod, 'Sells')}
-                    onTriggerUp={() => {
-                      DataListParams.sortMethod = 'Sells-up'
-                    }}
-                    onTriggerDown={() => {
-                      DataListParams.sortMethod = 'Sells-down'
-                    }}
-                    onTriggerClear={() => {
-                      DataListParams.sortMethod = null
-                    }}
-                  />
-                )}
-              </div>
-            )
-          },
+          title: customRenderSortTitle('Sells', 'Sells'),
           key: 'Sells',
           align: 'right'
         },
         {
-          title() {
-            return (
-              <div class="flex justify-end items-center">
-                <div>Vol</div>
-                {DataListParams && (
-                  <ControlSlot
-                    value={getControlSlotFilterValue(DataListParams.sortMethod, 'Vol')}
-                    onTriggerUp={() => {
-                      DataListParams.sortMethod = 'Vol-up'
-                    }}
-                    onTriggerDown={() => {
-                      DataListParams.sortMethod = 'Vol-down'
-                    }}
-                    onTriggerClear={() => {
-                      DataListParams.sortMethod = null
-                    }}
-                  />
-                )}
-              </div>
-            )
-          },
+          title: customRenderSortTitle('Vol', 'Vol'),
           key: 'Vol',
           align: 'right'
         },
         {
-          title() {
-            return (
-              <div class="flex justify-end items-center">
-                <div>Liquidity</div>
-                {DataListParams && (
-                  <ControlSlot
-                    value={getControlSlotFilterValue(DataListParams.sortMethod, 'Liquidity')}
-                    onTriggerUp={() => {
-                      DataListParams.sortMethod = 'Liquidity-up'
-                    }}
-                    onTriggerDown={() => {
-                      DataListParams.sortMethod = 'Liquidity-down'
-                    }}
-                    onTriggerClear={() => {
-                      DataListParams.sortMethod = null
-                    }}
-                  />
-                )}
-              </div>
-            )
-          },
+          title: customRenderSortTitle('Liquidity', 'Liquidity'),
           key: 'Liquidity',
           align: 'right',
           render: (data: DataItem, index: number) => {
@@ -474,52 +254,12 @@ export default defineComponent({
           }
         },
         {
-          title() {
-            return (
-              <div class="flex justify-end items-center">
-                <div>FDV</div>
-                {DataListParams && (
-                  <ControlSlot
-                    value={getControlSlotFilterValue(DataListParams.sortMethod, 'FDV')}
-                    onTriggerUp={() => {
-                      DataListParams.sortMethod = 'FDV-up'
-                    }}
-                    onTriggerDown={() => {
-                      DataListParams.sortMethod = 'FDV-down'
-                    }}
-                    onTriggerClear={() => {
-                      DataListParams.sortMethod = null
-                    }}
-                  />
-                )}
-              </div>
-            )
-          },
+          title: customRenderSortTitle('FDV', 'FDV'),
           key: 'FDV',
           align: 'right'
         },
         {
-          title() {
-            return (
-              <div class="flex justify-end items-center">
-                <div>MKT Cap</div>
-                {DataListParams && (
-                  <ControlSlot
-                    value={getControlSlotFilterValue(DataListParams.sortMethod, 'MKTCap')}
-                    onTriggerUp={() => {
-                      DataListParams.sortMethod = 'MKTCap-up'
-                    }}
-                    onTriggerDown={() => {
-                      DataListParams.sortMethod = 'MKTCap-down'
-                    }}
-                    onTriggerClear={() => {
-                      DataListParams.sortMethod = null
-                    }}
-                  />
-                )}
-              </div>
-            )
-          },
+          title: customRenderSortTitle('MKT Cap', 'MKTCap'),
           key: 'MKTCap',
           align: 'right'
         }

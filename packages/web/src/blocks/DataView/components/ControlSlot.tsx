@@ -1,5 +1,5 @@
 import { NumberDownFilled, NumberUpFilled } from '@wedex/icons'
-import { defineComponent, ref, PropType } from 'vue'
+import { defineComponent, PropType } from 'vue'
 
 export type ControlSlotValueType = 'up' | 'down' | null
 
@@ -12,8 +12,6 @@ export default defineComponent({
   },
   emits: ['triggerUp', 'triggerDown', 'triggerClear'],
   setup(props, ctx) {
-    const longEnterEventRef = ref()
-
     const triggerUp = () => {
       if (props.value === 'up') {
         ctx.emit('triggerClear')
@@ -30,25 +28,9 @@ export default defineComponent({
       }
     }
 
-    const longEnterStart = (type: 'up' | 'down') => {
-      longEnterEnd()
-      longEnterEventRef.value = setInterval(() => {
-        if (type === 'up') {
-          triggerUp()
-        } else {
-          triggerDown()
-        }
-      }, 100)
-    }
-    const longEnterEnd = () => {
-      clearInterval(longEnterEventRef.value)
-    }
-
     return {
       triggerUp,
-      triggerDown,
-      longEnterStart,
-      longEnterEnd
+      triggerDown
     }
   },
   render() {
@@ -61,9 +43,6 @@ export default defineComponent({
           class={`h-3 leading-3 w-3 cursor-pointer hover:text-primary ${
             this.value === 'up' ? 'text-primary' : 'text-color1'
           }`}
-          onMousedown={() => this.longEnterStart('up')}
-          onMouseup={this.longEnterEnd}
-          onMouseleave={this.longEnterEnd}
           onClick={this.triggerUp}
         >
           <NumberUpFilled class="h-2 w-2 align-bottom" />
@@ -72,9 +51,6 @@ export default defineComponent({
           class={`h-3 leading-3 w-3 cursor-pointer hover:text-primary ${
             this.value === 'down' ? 'text-primary' : 'text-color1'
           }`}
-          onMousedown={() => this.longEnterStart('down')}
-          onMouseup={this.longEnterEnd}
-          onMouseleave={this.longEnterEnd}
           onClick={this.triggerDown}
         >
           <NumberDownFilled class="h-2 w-2 align-top" />

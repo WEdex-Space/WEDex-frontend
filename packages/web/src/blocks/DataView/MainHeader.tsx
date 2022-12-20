@@ -9,9 +9,12 @@ import {
   ShareOutlined
 } from '@wedex/icons'
 import { defineComponent, ref, inject } from 'vue'
+import HeaderGainerFilter from './components/HeaderGainerFilter'
+import HeaderRankFilter from './components/HeaderRankFilter'
 import HeaderTagFilter from './components/HeaderTagFilter'
 import HeaderTopFilter from './components/HeaderTopFilter'
 import TrendTypeSelector from './components/TrendTypeSelector'
+
 import style from './style.module.css'
 import { DataListParamsKey } from './index'
 import { allNetworks } from '@/constants'
@@ -92,10 +95,6 @@ export default defineComponent({
     }
   },
   render() {
-    if (!this.DataListParams) {
-      return null
-    }
-
     const handleMainNavClick = (item: any) => {
       if (item.link) {
         window.open(item.link)
@@ -123,6 +122,10 @@ export default defineComponent({
           {this.DataListParams && this.DataListParams.type === 4 && (
             <TrendTypeSelector class="mr-4" />
           )}
+          {this.DataListParams && this.DataListParams.type === 5 && (
+            <HeaderGainerFilter class="mr-4" />
+          )}
+
           <USelect
             class={`mr-4 w-40 selectTransparent`}
             size="small"
@@ -154,7 +157,13 @@ export default defineComponent({
           {this.DataListParams && this.DataListParams.type === 1 && (
             <HeaderTopFilter class="mr-4" />
           )}
-          <HeaderTagFilter class="flex-1  __list " />
+          <HeaderTagFilter class="mr-4 __list" />
+          {this.DataListParams && this.DataListParams.type === 6 && (
+            <div class="flex items-center">
+              <span class="text-color3">Rank By:</span>
+              <HeaderRankFilter class="mr-4" />
+            </div>
+          )}
         </div>
       </>
     )

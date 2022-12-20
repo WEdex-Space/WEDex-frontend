@@ -13,6 +13,7 @@ export type DataListParamsType = {
   size: number
   disablePaginate: boolean
   trendType: number | null
+  rankBy: number | null
 }
 
 export const DataListParamsKey = Symbol() as InjectionKey<DataListParamsType>
@@ -29,7 +30,8 @@ export default defineComponent({
       page: 1,
       size: 20,
       disablePaginate: false,
-      trendType: 0
+      trendType: 0,
+      rankBy: null
     })
 
     provide(DataListParamsKey, DataListParams.value)
