@@ -12,6 +12,9 @@ export type MultiSelectorOptionType = {
 export default defineComponent({
   name: 'MultiSelector',
   props: {
+    class: {
+      type: String
+    },
     value: {
       type: Array as PropType<MultiSelectorValueType[]>
     },
@@ -104,7 +107,7 @@ export default defineComponent({
         on-update:show={(show: boolean) => !show && this.handleClose()}
         v-slots={{
           trigger: () => (
-            <div class="cursor-pointer flex items-center hover:text-primary">
+            <div class={`cursor-pointer flex items-center hover:text-primary ${this.class}`}>
               <div class="px-1">
                 {typeof this.customRender === 'function'
                   ? this.customRender(

@@ -1,4 +1,3 @@
-import { USelect } from '@wedex/components'
 import {
   HotOutlined,
   PairOutlined,
@@ -148,7 +147,7 @@ export default defineComponent({
             <HeaderGainerFilter class="mr-4" />
           )}
           <MultiSelector
-            class={`mr-4 w-40 selectTransparent`}
+            class="mr-4"
             placeholder="Networks"
             value={this.DataListParams?.chainId}
             options={networksOptions}
@@ -181,20 +180,40 @@ export default defineComponent({
             }}
           />
 
-          <USelect
-            class={`mr-4 w-40 selectTransparent`}
-            size="small"
+          <MultiSelector
+            class="mr-4"
             placeholder="DEXes"
-            clearable
             value={this.DataListParams?.DEXe}
-            options={this.DEXesData.map(item => {
-              return {
-                label: item.name,
-                value: item.id
-              }
-            })}
-            onUpdate:value={value => this.DataListParams && (this.DataListParams.DEXe = value)}
-          ></USelect>
+            options={networksOptions}
+            onChange={value => this.DataListParams && (this.DataListParams.DEXe = value)}
+            customRender={(
+              values: MultiSelectorValueType[],
+              valueObjs: MultiSelectorOptionType[]
+            ) =>
+              valueObjs.length ? (
+                <div
+                  class="inline-block whitespace-nowrap"
+                  title={valueObjs.map(item => item.label).join('/')}
+                >
+                  <Overlap
+                    nodes={valueObjs.map(item => (
+                      <img src={item.icon} />
+                    ))}
+                  />
+                </div>
+              ) : (
+                'DEXe'
+              )
+            }
+            v-slots={{
+              total: () => (
+                <>
+                  DEXe: <span class="text-color1">{` ${networksOptions.length}`}</span>
+                </>
+              )
+            }}
+          />
+
           {this.DataListParams && this.DataListParams.type === 1 && (
             <HeaderTopFilter class="mr-4" />
           )}

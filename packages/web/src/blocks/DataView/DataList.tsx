@@ -7,6 +7,7 @@ import { DataListParamsKey } from './index'
 import DynamicNumber from '@/components/DynamicNumber'
 import Overlap from '@/components/Overlap'
 import { allNetworks } from '@/constants'
+import { formatMoney, formatBigNumber } from '@/utils/numberFormat'
 
 export type DataItem = {
   index: number
@@ -273,20 +274,20 @@ export default defineComponent({
         return {
           index: i,
           token: `token_${i}`,
-          price: `$${(Math.random() * 10).toFixed(2)}`,
-          views: Math.floor(Math.random() * 1000),
+          price: `$${formatMoney(Math.random() * 1e3)}`,
+          views: formatBigNumber((Math.random() * 1e7).toFixed(0)),
           '5m': (Math.random() * 10).toFixed(2),
           '1h': (Math.random() * 10).toFixed(2),
           '4h': (Math.random() * 10).toFixed(2),
           '6h': (Math.random() * 10).toFixed(2),
           '24h': (Math.random() * 10).toFixed(2),
-          Txns: Math.floor(Math.random() * 1000),
-          Buys: Math.floor(Math.random() * 1000),
-          Sells: Math.floor(Math.random() * 1000),
-          Vol: `$${(Math.random() * 1e5).toFixed(2)}`,
-          Liquidity: `$${(Math.random() * 1e5).toFixed(2)}`,
-          FDV: `$${(Math.random() * 1e5).toFixed(2)}`,
-          MKTCap: `$${(Math.random() * 1e5).toFixed(2)}`,
+          Txns: formatBigNumber((Math.random() * 1e7).toFixed(0)),
+          Buys: formatBigNumber((Math.random() * 1e7).toFixed(0)),
+          Sells: formatBigNumber((Math.random() * 1e7).toFixed(0)),
+          Vol: `$${formatMoney(Math.random() * Math.random() * 1e7)}`,
+          Liquidity: `$${formatMoney(Math.random() * Math.random() * 1e7)}`,
+          FDV: `$${formatMoney(Math.random() * Math.random() * 1e7)}`,
+          MKTCap: `$${formatMoney(Math.random() * Math.random() * 1e7)}`,
           createAt: Math.floor(Math.random() * Math.random() * 1e7),
           TrendsUp: !!(Math.floor(Math.random() * 10) % 2 > 0)
         }

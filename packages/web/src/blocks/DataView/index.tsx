@@ -6,7 +6,7 @@ import MainHeader from './MainHeader'
 export type DataListParamsType = {
   chainId: any[]
   type: number | null
-  DEXe: number | null
+  DEXe: any[]
   tag: string | null
   sortMethod: string | null
   page: number
@@ -24,7 +24,7 @@ export default defineComponent({
     const DataListParams = ref<DataListParamsType>({
       chainId: [],
       type: 2,
-      DEXe: null,
+      DEXe: [],
       tag: null,
       sortMethod: null,
       page: 1,

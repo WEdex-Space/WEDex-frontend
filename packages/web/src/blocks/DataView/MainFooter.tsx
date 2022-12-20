@@ -1,6 +1,7 @@
 import { USelect } from '@wedex/components'
 import { CustomOutlined, ExportOutlined } from '@wedex/icons'
 import { defineComponent, ref } from 'vue'
+import CustomizeFilter from './components/CustomizeFilter'
 
 const footerCellClass =
   'border-l-1 border-color-border 2xl:px-7 px-3 leading-10 cursor-pointer hover:text-color2'
@@ -65,21 +66,21 @@ export default defineComponent({
             24h Volumn:<span class="text-color1">1234</span>
           </li>
         </ul>
-        <div class={`border-l-1 border-color-border w-40`}>
+        <div class={`border-l-1 border-color-border w-40 flex items-center`}>
           <USelect
             class={`selectTransparent`}
             size="small"
-            placeholder="Networks"
-            clearable
             v-model:value={this.formData.range}
             options={this.rangeData}
             onUpdate:value={value => (this.formData.range = value)}
           ></USelect>
         </div>
-        <div class={footerCellClass}>
-          <CustomOutlined class={footerCellIconClass} />
-          Customize
-        </div>
+        <CustomizeFilter>
+          <div class={footerCellClass}>
+            <CustomOutlined class={footerCellIconClass} />
+            Customize
+          </div>
+        </CustomizeFilter>
         <div class={footerCellClass}>
           <ExportOutlined class={footerCellIconClass} />
           Export
