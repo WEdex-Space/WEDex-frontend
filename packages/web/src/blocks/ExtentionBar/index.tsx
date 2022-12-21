@@ -10,7 +10,7 @@ import {
   TelegramFilled,
   DiscordFilled,
   TwitterFilled
-} from '@wedex/icons'
+} from '@WEDex/icons'
 import { defineComponent, inject, ref } from 'vue'
 import MultiChart from '@/blocks/MultiChart'
 import Notebook from '@/blocks/Notebook'
@@ -141,7 +141,7 @@ export default defineComponent({
               <div class={`h-4 w-4 inline-block align-middle -mt-[2px]`}>{item.icon}</div>
             </div>
           ))}
-          <div class="bg-[#262626] h-10 text-center text-[12px] leading-10">WEdex</div>
+          <div class="bg-[#262626] h-10 text-center text-[12px] leading-10">WEDex</div>
         </div>
       </div>
     )

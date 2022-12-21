@@ -1,4 +1,4 @@
-import { UWalletConnect, UWalletConnectPropsType } from '@wedex/components'
+import { UWalletConnect, UWalletConnectPropsType } from '@WEDex/components'
 import { defineComponent } from 'vue'
 import { useUserStore, useWalletStore } from '@/stores'
 const WalletConnectBlock = defineComponent({

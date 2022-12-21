@@ -1,4 +1,4 @@
-import { copyToClipboard } from '@wedex/components'
+import { copyToClipboard } from '@WEDex/components'
 // import { services } from '@/services'
 
 type shareToTwitterProp = {

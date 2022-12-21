@@ -1,4 +1,4 @@
-import { shortenAddress } from '@wedex/utils'
+import { shortenAddress } from '@WEDex/utils'
 import { defineComponent } from 'vue'
 import styles from './index.module.css'
 import { useWalletStore } from '@/stores'

@@ -1,6 +1,6 @@
-import { UPopover, UInput, UButton } from '@wedex/components'
-import { ArrowDownOutlined } from '@wedex/icons'
-import { defineComponent, PropType, ref, computed } from 'vue'
+import { UPopover, UInput, UButton } from '@WEDex/components'
+import { ArrowDownOutlined } from '@WEDex/icons'
+import { defineComponent, PropType, ref, computed, watch } from 'vue'
 
 export type MultiSelectorValueType = string | number | null
 export type MultiSelectorOptionType = {
@@ -63,7 +63,7 @@ export default defineComponent({
       tipRef.value && tipRef.value.setShow?.(false)
     }
 
-    const handleClose = () => {
+    const syncPropValue = () => {
       if (props.value?.length) {
         const result: { [key: string | number]: any } = {}
         props.value.map(key => {
@@ -77,6 +77,14 @@ export default defineComponent({
         optionSelectedMap.value = {}
       }
     }
+
+    const handleClose = () => {
+      syncPropValue()
+    }
+
+    watch(() => props.value, syncPropValue, {
+      immediate: true
+    })
 
     return {
       tipRef,

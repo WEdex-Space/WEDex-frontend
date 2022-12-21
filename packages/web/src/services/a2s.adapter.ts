@@ -1,6 +1,6 @@
 /* eslint-disable */
 import axios from 'axios'
-import { message } from '@wedex/components'
+import { message } from '@WEDex/components'
 import { RequestFunctionArgs } from './a2s.types'
 
 import { useUserStore } from '@/stores'

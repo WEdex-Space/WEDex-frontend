@@ -1,5 +1,5 @@
-import { message } from '@wedex/components'
-import { storage } from '@wedex/utils'
+import { message } from '@WEDex/components'
+import { storage } from '@WEDex/utils'
 import { defineStore } from 'pinia'
 import { STORE_KEY_TOKEN } from '@/constants'
 import { services } from '@/services'

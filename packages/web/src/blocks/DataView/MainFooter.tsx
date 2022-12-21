@@ -1,11 +1,11 @@
-import { USelect } from '@wedex/components'
-import { CustomOutlined, ExportOutlined } from '@wedex/icons'
+import { USelect } from '@WEDex/components'
+import { CustomOutlined, ExportOutlined } from '@WEDex/icons'
 import { defineComponent, ref } from 'vue'
 import CustomizeFilter from './components/CustomizeFilter'
 
 const footerCellClass =
   'border-l-1 border-color-border 2xl:px-7 px-3 leading-10 cursor-pointer hover:text-color2'
-const footerCellIconClass = 'w-4 h-4 align-middle mx-1 -mt-[2px]'
+const footerCellIconClass = 'w-3 h-3 align-middle mx-1 -mt-[2px]'
 const footerListCellClass = '2xl:px-7 px-3 border-r-1 border-color-border cursor-default'
 
 export default defineComponent({
@@ -75,12 +75,19 @@ export default defineComponent({
             onUpdate:value={value => (this.formData.range = value)}
           ></USelect>
         </div>
-        <CustomizeFilter>
-          <div class={footerCellClass}>
-            <CustomOutlined class={footerCellIconClass} />
-            Customize
-          </div>
-        </CustomizeFilter>
+        <CustomizeFilter
+          v-slots={{
+            default: (isVisible: boolean) => (
+              <div class={footerCellClass}>
+                <CustomOutlined
+                  class={`${footerCellIconClass} ${isVisible ? 'text-primary' : ''}`}
+                />
+                Customize
+              </div>
+            )
+          }}
+        />
+
         <div class={footerCellClass}>
           <ExportOutlined class={footerCellIconClass} />
           Export

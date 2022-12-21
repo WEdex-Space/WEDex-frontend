@@ -6,7 +6,7 @@ import {
   ULoadingBarProvider,
   ULoadingBar,
   UModalProvider
-} from '@wedex/components'
+} from '@WEDex/components'
 import { defineComponent } from 'vue'
 import { RouterView } from 'vue-router'
 import WalletConnectBlock from './blocks/WalletConnect'

@@ -1,5 +1,5 @@
-import { UTable } from '@wedex/components'
-import { StarOutlined } from '@wedex/icons'
+import { UTable } from '@WEDex/components'
+import { StarOutlined } from '@WEDex/icons'
 import { format } from 'timeago.js'
 import { defineComponent, ref, onMounted, inject, computed } from 'vue'
 import { default as ControlSlot, ControlSlotValueType } from './components/ControlSlot'
@@ -7,7 +7,7 @@ import { DataListParamsKey } from './index'
 import DynamicNumber from '@/components/DynamicNumber'
 import Overlap from '@/components/Overlap'
 import { allNetworks } from '@/constants'
-import { formatMoney, formatBigNumber } from '@/utils/numberFormat'
+import { formatBigNumber, formatCurrency } from '@/utils/numberFormat'
 
 export type DataItem = {
   index: number
@@ -274,20 +274,20 @@ export default defineComponent({
         return {
           index: i,
           token: `token_${i}`,
-          price: `$${formatMoney(Math.random() * 1e3)}`,
-          views: formatBigNumber((Math.random() * 1e7).toFixed(0)),
+          price: `$${formatBigNumber(Math.random() * 1e3)}`,
+          views: formatCurrency((Math.random() * 1e7).toFixed(0)),
           '5m': (Math.random() * 10).toFixed(2),
           '1h': (Math.random() * 10).toFixed(2),
           '4h': (Math.random() * 10).toFixed(2),
           '6h': (Math.random() * 10).toFixed(2),
           '24h': (Math.random() * 10).toFixed(2),
-          Txns: formatBigNumber((Math.random() * 1e7).toFixed(0)),
-          Buys: formatBigNumber((Math.random() * 1e7).toFixed(0)),
-          Sells: formatBigNumber((Math.random() * 1e7).toFixed(0)),
-          Vol: `$${formatMoney(Math.random() * Math.random() * 1e7)}`,
-          Liquidity: `$${formatMoney(Math.random() * Math.random() * 1e7)}`,
-          FDV: `$${formatMoney(Math.random() * Math.random() * 1e7)}`,
-          MKTCap: `$${formatMoney(Math.random() * Math.random() * 1e7)}`,
+          Txns: formatCurrency((Math.random() * 1e7).toFixed(0)),
+          Buys: formatCurrency((Math.random() * 1e7).toFixed(0)),
+          Sells: formatCurrency((Math.random() * 1e7).toFixed(0)),
+          Vol: `$${formatBigNumber(Math.random() * Math.random() * 1e7)}`,
+          Liquidity: `$${formatBigNumber(Math.random() * Math.random() * 1e7)}`,
+          FDV: `$${formatBigNumber(Math.random() * Math.random() * 1e7)}`,
+          MKTCap: `$${formatBigNumber(Math.random() * Math.random() * 1e7)}`,
           createAt: Math.floor(Math.random() * Math.random() * 1e7),
           TrendsUp: !!(Math.floor(Math.random() * 10) % 2 > 0)
         }

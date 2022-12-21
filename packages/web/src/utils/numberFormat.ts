@@ -18,7 +18,7 @@ export function formatToFixed(value: number | string, precision: number) {
     .replace(/(?:\.0*|(\.\d+?)0+)$/, '$1')
 }
 
-export const formatMoney = (value: number | string) => {
+export const formatBigNumber = (value: number | string) => {
   const data = Number(value)
   if (isNaN(data)) {
     return 'parse error'
@@ -30,7 +30,24 @@ export const formatMoney = (value: number | string) => {
     : `${data.toFixed(2).replace(/\.00$/, '')}`
 }
 
-export const formatBigNumber = (value: number | string) => {
-  const reg = /(\d)(?=(?:\d{3})+$)/g
-  return value.toString().replace(reg, '$1,')
+export const parseCurrency = (input: string) => {
+  const nums = input.replace(/,/g, '').trim()
+  if (/^\d+(\.(\d+)?)?$/.test(nums)) return Number(nums)
+  return nums === '' ? null : Number.NaN
+}
+
+export const formatCurrency = (value: number | string | null) => {
+  if (value === null || isNaN(Number(value))) return ''
+  return Number(value).toLocaleString('en-US')
+}
+
+export const parseCurrencyWithUnit = (input: string) => {
+  const nums = input.replace(/(,|\$|\s)/g, '').trim()
+  if (/^\d+(\.(\d+)?)?$/.test(nums)) return Number(nums)
+  return nums === '' ? null : Number.NaN
+}
+
+export const formatCurrencyWithUnit = (value: number | string | null) => {
+  if (value === null) return ''
+  return `$${value.toLocaleString('en-US')}`
 }

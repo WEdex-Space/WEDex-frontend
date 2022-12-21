@@ -29,8 +29,8 @@ const UStyleProvider = defineComponent({
             primaryBg: 'rgba(255, 157, 0, 0.2)',
             baseColor: '#181a1f',
             bg1: '#0C0E11',
-            bg2: '#2C3138',
-            bg3: '#202428',
+            bg2: '#202428',
+            bg3: '#282D32',
             color1: '#fff',
             color2: '#EAECEF',
             color3: '#858E9B',
@@ -66,8 +66,7 @@ const UStyleProvider = defineComponent({
 
     const naiveThemeOverrides = computed<GlobalThemeOverrides>(() => ({
       common: {
-        heightSmall: '24px',
-        baseColor: ColorOverrides.value.baseColor,
+        bodyColor: ColorOverrides.value.baseColor,
         primaryColor: ColorOverrides.value.primaryColor,
         infoColor: ColorOverrides.value.infoColor,
         successColor: ColorOverrides.value.successColor,
@@ -77,10 +76,14 @@ const UStyleProvider = defineComponent({
         primaryColorPressed: ColorOverrides.value.primaryColor,
         successColorHover: ColorOverrides.value.successColor,
         successColorPressed: ColorOverrides.value.successColor,
-        fontSizeSmall: '12px'
+        fontSizeSmall: '12px',
+        heightSmall: '24px'
       },
       Form: {
-        asteriskColor: ColorOverrides.value.errorColor
+        asteriskColor: ColorOverrides.value.errorColor,
+        labelFontSizeLeftSmall: '12px',
+        feedbackFontSizeSmall: '12px',
+        feedbackHeightSmall: '18px'
       },
       Button: {
         borderRadiusSmall: '2px',
@@ -101,15 +104,6 @@ const UStyleProvider = defineComponent({
         color: ColorOverrides.value.primaryColor,
         colorHover: ColorOverrides.value.primaryColor
       },
-      Checkbox: {
-        borderRadius: '2px'
-      },
-      Card: {
-        borderRadius: '2px',
-        borderColor: ColorOverrides.value.colorBorder,
-        titleTextColor: ColorOverrides.value.color2,
-        titleFontSizeMedium: '14px'
-      },
       InternalSelection: {
         borderHover: `1px solid transparent`,
         placeholderColor: ColorOverrides.value.color2
@@ -127,9 +121,6 @@ const UStyleProvider = defineComponent({
       },
       Dropdown: {
         optionColorActive: ColorOverrides.value.colorHover
-      },
-      Tooltip: {
-        color: 'rgba(0,0,0,.8)'
       },
       DataTable: {
         thColor: ColorOverrides.value.bg1,

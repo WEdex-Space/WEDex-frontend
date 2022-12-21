@@ -1,4 +1,4 @@
-import { loadingBar } from '@wedex/components'
+import { loadingBar } from '@WEDex/components'
 import { setupLayouts } from 'virtual:generated-layouts'
 import generatedRoutes from 'virtual:generated-pages'
 import { createRouter, createWebHistory } from 'vue-router'

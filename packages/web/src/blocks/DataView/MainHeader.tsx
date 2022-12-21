@@ -6,29 +6,26 @@ import {
   VictorOutlined,
   RankOutlined,
   ShareOutlined
-} from '@wedex/icons'
-import { defineComponent, ref, inject } from 'vue'
+} from '@WEDex/icons'
+import { defineComponent, ref, inject, onMounted } from 'vue'
+import DexSelector from './components/DexSelector'
 import HeaderGainerFilter from './components/HeaderGainerFilter'
 import HeaderRankFilter from './components/HeaderRankFilter'
 import HeaderTagFilter from './components/HeaderTagFilter'
 import HeaderTopFilter from './components/HeaderTopFilter'
+import NetworkSelector from './components/NetworkSelector'
 import TrendTypeSelector from './components/TrendTypeSelector'
 
 import style from './style.module.css'
 import { DataListParamsKey } from './index'
-import {
-  default as MultiSelector,
-  MultiSelectorOptionType,
-  MultiSelectorValueType
-} from '@/components/MultiSelector'
-import Overlap from '@/components/Overlap'
+import { MultiSelectorOptionType } from '@/components/MultiSelector'
 import { allNetworks } from '@/constants'
 
 export default defineComponent({
   name: 'MainHeader',
   setup(props, ctx) {
     const DataListParams = inject(DataListParamsKey)
-
+    const networksOptions = ref<MultiSelectorOptionType[]>([])
     const navIconClass = 'h-4 mr-1 w-4 align-middle -mt-[3px]'
 
     const mainNavs = ref([
@@ -93,7 +90,27 @@ export default defineComponent({
       }
     ])
 
+    onMounted(() => {
+      // get networks
+      networksOptions.value = [
+        {
+          label: 'All Networks',
+          value: null
+        },
+        ...allNetworks
+          .filter(item => !!item.shortName)
+          .map(item => {
+            return {
+              label: item.shortName as string,
+              value: item.chainId,
+              icon: item.logo
+            }
+          })
+      ]
+    })
+
     return {
+      networksOptions,
       mainNavs,
       DEXesData,
       DataListParams
@@ -107,22 +124,6 @@ export default defineComponent({
         this.DataListParams.type = item.value
       }
     }
-
-    const networksOptions: MultiSelectorOptionType[] = [
-      {
-        label: 'All Networks',
-        value: null
-      },
-      ...allNetworks
-        .filter(item => !!item.shortName)
-        .map(item => {
-          return {
-            label: item.shortName as string,
-            value: item.chainId,
-            icon: item.logo
-          }
-        })
-    ]
 
     return (
       <>
@@ -146,78 +147,27 @@ export default defineComponent({
           {this.DataListParams && this.DataListParams.type === 5 && (
             <HeaderGainerFilter class="mr-4" />
           )}
-          <MultiSelector
+          {/* Networks selector */}
+          <NetworkSelector
             class="mr-4"
-            placeholder="Networks"
             value={this.DataListParams?.chainId}
-            options={networksOptions}
+            options={this.networksOptions}
             onChange={value => this.DataListParams && (this.DataListParams.chainId = value)}
-            customRender={(
-              values: MultiSelectorValueType[],
-              valueObjs: MultiSelectorOptionType[]
-            ) =>
-              valueObjs.length ? (
-                <div
-                  class="inline-block whitespace-nowrap"
-                  title={valueObjs.map(item => item.label).join('/')}
-                >
-                  <Overlap
-                    nodes={valueObjs.map(item => (
-                      <img src={item.icon} />
-                    ))}
-                  />
-                </div>
-              ) : (
-                'Networks'
-              )
-            }
-            v-slots={{
-              total: () => (
-                <>
-                  Networks: <span class="text-color1">{` ${networksOptions.length}`}</span>
-                </>
-              )
-            }}
           />
-
-          <MultiSelector
+          {/* DEXes selector */}
+          <DexSelector
             class="mr-4"
-            placeholder="DEXes"
             value={this.DataListParams?.DEXe}
-            options={networksOptions}
+            options={this.networksOptions}
             onChange={value => this.DataListParams && (this.DataListParams.DEXe = value)}
-            customRender={(
-              values: MultiSelectorValueType[],
-              valueObjs: MultiSelectorOptionType[]
-            ) =>
-              valueObjs.length ? (
-                <div
-                  class="inline-block whitespace-nowrap"
-                  title={valueObjs.map(item => item.label).join('/')}
-                >
-                  <Overlap
-                    nodes={valueObjs.map(item => (
-                      <img src={item.icon} />
-                    ))}
-                  />
-                </div>
-              ) : (
-                'DEXe'
-              )
-            }
-            v-slots={{
-              total: () => (
-                <>
-                  DEXe: <span class="text-color1">{` ${networksOptions.length}`}</span>
-                </>
-              )
-            }}
           />
 
           {this.DataListParams && this.DataListParams.type === 1 && (
             <HeaderTopFilter class="mr-4" />
           )}
+
           <HeaderTagFilter class="mr-4 __list" />
+
           {this.DataListParams && this.DataListParams.type === 6 && (
             <div class="flex items-center">
               <span class="text-color3">Rank By:</span>

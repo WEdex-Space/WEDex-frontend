@@ -1,4 +1,4 @@
-import { message } from '@wedex/components'
+import { message } from '@WEDex/components'
 import { useWalletStore } from '@/stores'
 import { getChainInfoByChainId } from '@/utils/etherscan'
 

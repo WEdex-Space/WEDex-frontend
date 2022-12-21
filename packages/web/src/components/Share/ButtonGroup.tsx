@@ -1,5 +1,5 @@
-import { useUpload, message, UTooltip } from '@wedex/components'
-import { TwitterFilled, CopyOutlined } from '@wedex/icons'
+import { useUpload, message, UTooltip } from '@WEDex/components'
+import { TwitterFilled, CopyOutlined } from '@WEDex/icons'
 import { defineComponent, ref, PropType } from 'vue'
 import { GenerateShareImage, infoItem } from './'
 import { useShare } from '@/hooks'

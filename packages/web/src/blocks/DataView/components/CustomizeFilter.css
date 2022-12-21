@@ -1,0 +1,7 @@
+.CustomizeFilter .n-form-item-label__text {
+  @apply text-color3;
+}
+
+.CustomizeFilter .n-form-item-blank {
+  @apply text-color2;
+}
