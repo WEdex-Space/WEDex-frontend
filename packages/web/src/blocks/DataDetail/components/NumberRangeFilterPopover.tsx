@@ -7,7 +7,7 @@ type RangeType = {
 }
 
 export default defineComponent({
-  name: 'RangeFilterPopover',
+  name: 'NumberRangeFilterPopover',
   emits: ['change'],
   props: {
     value: {

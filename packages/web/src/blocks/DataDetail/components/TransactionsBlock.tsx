@@ -1,7 +1,8 @@
 import { UTable } from '@wedex/components'
 import { FilterOutlined } from '@wedex/icons'
 import { defineComponent, ref, onMounted, h, Component, computed } from 'vue'
-import RangeFilterPopover from './RangeFilterPopover'
+import DateRangeFilterPopover from './DateRangeFilterPopover'
+import NumberRangeFilterPopover from './NumberRangeFilterPopover'
 import TrendTypeFilterPopover from './TrendTypeFilterPopover'
 import DynamicNumber from '@/components/DynamicNumber'
 import { formatCurrency, formatCurrencyWithUnit } from '@/utils/numberFormat'
@@ -20,11 +21,12 @@ type TransactionsDataType = {
 const FilterComponentMap: {
   [key: string]: Component
 } = {
+  date: DateRangeFilterPopover,
   type: TrendTypeFilterPopover,
-  usd: RangeFilterPopover,
-  price: RangeFilterPopover,
-  token0: RangeFilterPopover,
-  token1: RangeFilterPopover
+  usd: NumberRangeFilterPopover,
+  price: NumberRangeFilterPopover,
+  token0: NumberRangeFilterPopover,
+  token1: NumberRangeFilterPopover
 }
 
 export default defineComponent({
@@ -75,7 +77,10 @@ export default defineComponent({
 
     const columns = computed<any[]>(() => [
       {
-        title: customRenderSortTitle('Date', 'date'),
+        title: customRenderSortTitle('Date', 'date', {
+          value: filterData.value.date,
+          onChange: (value: any) => (filterData.value.date = value)
+        }),
         key: 'date',
         align: 'right',
         render: (data: TransactionsDataType, index: number) => {
