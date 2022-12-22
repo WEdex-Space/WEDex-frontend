@@ -68,7 +68,7 @@ export default defineComponent({
           {this.dataList.map(item => (
             <div class="flex items-center">
               <div class="mr-1 text-color3">{item.label}:</div>
-              <div class="flex flex-1 items-center">{item.content}</div>
+              <div class=" flex-1 truncate">{item.content}</div>
             </div>
           ))}
         </div>
