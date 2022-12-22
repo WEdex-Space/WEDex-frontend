@@ -1,4 +1,4 @@
-import { storage } from '@WEDex/utils'
+import { storage } from '@wedex/utils'
 
 export default (key: string, value?: any) => {
   if (value) {
