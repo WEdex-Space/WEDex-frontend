@@ -18,9 +18,7 @@ const LandingPage = defineComponent({
         switch (current) {
           case 'left':
             leftClass.value = 'panelExpand'
-            setTimeout(() => {
-              centerClass.value = 'w-0'
-            }, 300)
+            centerClass.value = 'w-0'
             rightClass.value = 'rightPanelStatic'
             break
           case 'center':
