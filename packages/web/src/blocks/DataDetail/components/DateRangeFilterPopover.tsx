@@ -10,7 +10,7 @@ export default defineComponent({
   name: 'DateRangeFilterPopover',
   emits: ['change'],
   props: {
-    value: {
+    values: {
       type: Object as PropType<RangeType>,
       default() {
         return {
@@ -24,7 +24,7 @@ export default defineComponent({
     }
   },
   setup(props, ctx) {
-    const formData = ref<RangeType>(Object.assign({}, props.value))
+    const formData = ref<RangeType>(Object.assign({}, props.values) as RangeType)
     const tipRef = ref()
 
     const closeSelfModal = () => {
@@ -48,7 +48,7 @@ export default defineComponent({
     // when open, sync props value
     const handleVisibleUpdate = (show: boolean) => {
       if (show) {
-        formData.value = Object.assign({}, props.value)
+        formData.value = Object.assign({}, props.values) as RangeType
       }
     }
 
@@ -85,7 +85,7 @@ export default defineComponent({
         v-slots={{
           trigger: () =>
             this.$slots.default
-              ? this.$slots.default(this.value.from || this.value.to)
+              ? this.$slots.default(this.values?.from || this.values?.to)
               : 'Customize',
           default: () => (
             <div class="border border-color-border rounded bg-bg2 p-4 text-color3 ">

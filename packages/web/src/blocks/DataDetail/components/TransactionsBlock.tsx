@@ -78,7 +78,7 @@ export default defineComponent({
     const columns = computed<any[]>(() => [
       {
         title: customRenderSortTitle('Date', 'date', {
-          value: filterData.value.date,
+          values: filterData.value.date,
           onChange: (value: any) => (filterData.value.date = value)
         }),
         key: 'date',
@@ -103,7 +103,7 @@ export default defineComponent({
           inputProps: {
             prefix: '$'
           },
-          value: filterData.value.usd,
+          values: filterData.value.usd,
           onChange: (value: any) => (filterData.value.usd = value)
         }),
         key: 'usd',
@@ -117,7 +117,7 @@ export default defineComponent({
           inputProps: {
             prefix: '$'
           },
-          value: filterData.value.price,
+          values: filterData.value.price,
           onChange: (value: any) => (filterData.value.price = value)
         }),
         key: 'price',
@@ -131,7 +131,7 @@ export default defineComponent({
           inputProps: {
             suffix: 'Token0'
           },
-          value: filterData.value.token0,
+          values: filterData.value.token0,
           onChange: (value: any) => (filterData.value.token0 = value)
         }),
         key: 'token0',
@@ -145,7 +145,7 @@ export default defineComponent({
           inputProps: {
             suffix: 'Token1'
           },
-          value: filterData.value.token1,
+          values: filterData.value.token1,
           onChange: (value: any) => (filterData.value.token1 = value)
         }),
         key: 'token1',
