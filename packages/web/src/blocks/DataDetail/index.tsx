@@ -1,30 +1,58 @@
-import { UTabs, UTabPane } from '@wedex/components'
-import { defineComponent, inject, Ref } from 'vue'
+import { UTabs, UTabPane, USpin } from '@wedex/components'
+import { SwapOutlined, ShareOutlined } from '@wedex/icons'
+import { defineComponent, inject, Ref, watch, ref } from 'vue'
 import DetailHeader from './DetailHeader'
+import PoolBlock from './PoolBlock'
+import TradeBlock from './TradeBlock'
+import TransactionsBlock from './TransactionsBlock'
 
 export default defineComponent({
   name: 'DataDetail',
   setup() {
     const currentExpand = inject<Ref<'left' | 'center' | 'right'>>('currentExpand')
+    const widgetLoaded = ref(false)
+    const timer = ref()
+
+    watch(
+      () => currentExpand?.value,
+      () => {
+        timer.value && clearTimeout(timer.value)
+        if (currentExpand?.value === 'center') {
+          timer.value = setTimeout(() => {
+            widgetLoaded.value = true
+          }, 300)
+        } else {
+          timer.value = setTimeout(() => {
+            widgetLoaded.value = false
+          }, 300)
+        }
+      }
+    )
 
     return {
-      currentExpand
+      currentExpand,
+      widgetLoaded
     }
   },
   render() {
-    return this.currentExpand === 'center' ? (
+    return this.widgetLoaded ? (
       <div
         class={`flex flex-col ${
           this.currentExpand === 'center' ? 'border-l-1 border-color-border' : ''
         }`}
       >
         <DetailHeader />
-        <div class="bg-bg1 h-92">TradingView</div>
-        <div class="border-color-border flex border-t-1 flex-1">
+        <div class="bg-bg1 h-91.5">TradingView</div>
+        <div class="border-color-border flex border-t-1 flex-1 overflow-hidden">
           <div style={{ flex: 2 }} class="border-color-border border-r-1">
-            <UTabs animated bar-width={0} tabs-padding={10}>
+            <UTabs
+              bar-width={0}
+              tabs-padding={10}
+              pane-style={{ padding: 0, flex: 1 }}
+              class="flex flex-col h-full"
+            >
               <UTabPane name="Transactions" tab="Transactions">
-                Transactions
+                <TransactionsBlock />
               </UTabPane>
               <UTabPane name="ProjectInfo" tab="Project Info">
                 ProjectInfo
@@ -34,14 +62,24 @@ export default defineComponent({
               </UTabPane>
             </UTabs>
           </div>
-          <div style={{ flex: 1 }}>
-            <div class="flex h-8 px-3 items-center">
-              <div class="flex-1 font-700 text-primary">Trade</div>
-              <div class="text-xs text-color3">BSC/pancakeSwap</div>
+          <div style={{ flex: 1 }} class="overflow-y-scroll">
+            <TradeBlock />
+            <PoolBlock />
+            <div class="border-color-border cursor-pointer flex border-t-1 text-xs p-2.5 text-color3 items-center hover:text-primary">
+              <SwapOutlined class="h-4 w-4" />
+              <div class="flex-1">Trade on PancakeSwap</div>
+              <ShareOutlined class="h-4 w-4" />
+            </div>
+            <div class="border-color-border cursor-pointer flex border-t-1 text-xs p-2.5 text-color3 items-center hover:text-primary">
+              <SwapOutlined class="h-4 w-4" />
+              <div class="flex-1">Trade on BogSwap</div>
+              <ShareOutlined class="h-4 w-4" />
             </div>
           </div>
         </div>
       </div>
-    ) : null
+    ) : (
+      <USpin show={true} />
+    )
   }
 })

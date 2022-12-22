@@ -109,22 +109,16 @@ const UStyleProvider = defineComponent({
         placeholderColor: ColorOverrides.value.color2
       },
       Tabs: {
-        tabFontWeightActive: 700
-      },
-      Tag: {
-        heightLarge: '34px',
-        heightMedium: '22px',
-        heightSmall: '22px',
-        heightTiny: '20px',
-        closeIconSizeMedium: '12px'
+        tabFontWeightActive: 700,
+        tabPaddingMediumBar: '7px 0'
       },
       Dropdown: {
         optionColorActive: ColorOverrides.value.colorHover
       },
       DataTable: {
         thColor: ColorOverrides.value.bg1,
-        thPaddingSmall: '4px 12px',
-        tdPaddingSmall: '8px 12px',
+        thPaddingSmall: '4px 8px',
+        tdPaddingSmall: '8px',
         fontSizeSmall: '12px'
       }
     }))

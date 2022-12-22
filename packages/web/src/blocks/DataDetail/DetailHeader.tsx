@@ -75,7 +75,7 @@ export default defineComponent({
           <div class="font-700 text-base text-color1">Token1/Token2</div>
           <div class="text-color3">Token name</div>
         </div>
-        <div class="flex flex-1 mx-7 text-right overflow-x-scroll items-center">
+        <div class="flex h-full flex-1 mx-6 text-right text-xs overflow-x-scroll items-center">
           {this.headerCellData.map(item => (
             <div class="px-3">
               <div class="text-color3">{item.label}</div>

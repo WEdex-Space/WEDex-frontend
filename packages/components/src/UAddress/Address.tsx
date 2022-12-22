@@ -1,4 +1,4 @@
-import { CopyOutlined } from '@wedex/icons'
+import { CopyOutlined, ShareOutlined } from '@wedex/icons'
 import { shortenAddress } from '@wedex/utils/src'
 import copy from 'copy-to-clipboard'
 import { defineComponent, toRefs, ref } from 'vue'
@@ -62,20 +62,10 @@ const UAddress = defineComponent({
 
       return (
         <div class="u-address">
-          {!props.blockchainExplorerUrl ? (
-            <span class="u-address__text">{addressVal}</span>
-          ) : (
-            <a
-              class="u-address__link"
-              target="_blank"
-              href={`${props.blockchainExplorerUrl}${address.value}`}
-            >
-              {addressVal}
-            </a>
-          )}
+          <span class="u-address__text">{addressVal}</span>
 
           <span
-            class="u-address__copy"
+            class="u-address__icon"
             onClick={e => {
               e.stopPropagation()
               showTooltipRef.value = copy(address.value)
@@ -87,11 +77,21 @@ const UAddress = defineComponent({
           >
             <UTooltip show={showTooltipRef.value}>
               {{
-                trigger: () => <CopyOutlined class="u-address__icon" />,
+                trigger: () => <CopyOutlined class="h-4 w-4" />,
                 default: () => 'Copied!'
               }}
             </UTooltip>
           </span>
+
+          {props.blockchainExplorerUrl && (
+            <a
+              class="u-address__icon"
+              target="_blank"
+              href={`${props.blockchainExplorerUrl.replace(/\/$/, '')}/${address.value}`}
+            >
+              <ShareOutlined class="h-4 w-4" />
+            </a>
+          )}
         </div>
       )
     }

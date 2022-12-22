@@ -41,12 +41,12 @@ export default defineComponent({
     const symbolStr = this.symbol > 0 ? '+' : '-'
 
     return (
-      <div class={`relative overflow-hidden font-semibold text-right ${textColor}`}>
+      <div class={`relative overflow-hidden text-right ${textColor}`}>
         {symbolStr}
         {this.value}
         {this.showShadow ? (
           <span
-            class={`NumberPulse absolute top-0 right-0 bottom-0 bg-color-up ${shadowColor}`}
+            class={`numberPulse absolute top-0 right-0 bottom-0 bg-color-up ${shadowColor}`}
           ></span>
         ) : null}
       </div>

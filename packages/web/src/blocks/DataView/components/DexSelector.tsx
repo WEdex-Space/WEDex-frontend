@@ -47,13 +47,13 @@ export default defineComponent({
               />
             </div>
           ) : (
-            'DEXe'
+            'DEXes'
           )
         }
         v-slots={{
           total: () => (
             <>
-              DEXe: <span class="text-color1">{` ${this.options.length}`}</span>
+              DEXes: <span class="text-color1">{` ${this.options.length}`}</span>
             </>
           )
         }}

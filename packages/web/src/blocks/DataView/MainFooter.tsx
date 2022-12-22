@@ -1,6 +1,6 @@
 import { USelect } from '@wedex/components'
 import { CustomOutlined, ExportOutlined } from '@wedex/icons'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, inject, Ref } from 'vue'
 import CustomizeFilter from './components/CustomizeFilter'
 
 const footerCellClass =
@@ -11,6 +11,8 @@ const footerListCellClass = '2xl:px-7 px-3 border-r-1 border-color-border cursor
 export default defineComponent({
   name: 'MainFooter',
   setup() {
+    const currentExpand = inject<Ref<'left' | 'center' | 'right'>>('currentExpand')
+
     const formData = ref({
       range: 5
     })
@@ -39,12 +41,13 @@ export default defineComponent({
     ])
 
     return {
+      currentExpand,
       formData,
       rangeData
     }
   },
   render() {
-    return (
+    return this.currentExpand === 'left' ? (
       <div class="border-color-border flex border-t-1 h-10 text-xs text-color3 select-none">
         <ul class="flex flex-1 items-center">
           <li class={footerListCellClass}>
@@ -93,6 +96,6 @@ export default defineComponent({
           Export
         </div>
       </div>
-    )
+    ) : null
   }
 })

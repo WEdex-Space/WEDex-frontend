@@ -160,19 +160,21 @@ export default defineComponent({
           title: 'Token',
           key: 'token',
           fixed: 'left',
-          width: 150,
+          width: currentExpand?.value === 'left' ? 140 : 60,
           render: (data: DataItem, index: number) => {
             return (
               <div class="flex flex-nowrap items-center">
-                <Overlap
-                  class="mr-2"
-                  nodes={[0, 1].map(index => (
-                    <img src={allNetworks[index].logo} />
-                  ))}
-                />
+                {currentExpand?.value === 'left' && (
+                  <Overlap
+                    class="mr-2"
+                    nodes={[0, 1].map(index => (
+                      <img src={allNetworks[index].logo} />
+                    ))}
+                  />
+                )}
                 <div class="flex-1 truncate" title={`Token1/Token2`}>
                   <strong class="text-color1 ">Token1</strong>
-                  <strong class="text-color3">/ Token2</strong>
+                  {currentExpand?.value === 'left' && <strong class="text-color3">/ Token2</strong>}
                 </div>
               </div>
             )
@@ -189,7 +191,13 @@ export default defineComponent({
           key: '5m',
           align: 'right',
           render: (data: DataItem, index: number) => {
-            return <DynamicNumber value={data['5m'] + '%'} symbol={index % 2 ? 1 : -1} />
+            return (
+              <DynamicNumber
+                class="font-semibold"
+                value={data['5m'] + '%'}
+                symbol={index % 2 ? 1 : -1}
+              />
+            )
           }
         },
         {
@@ -197,7 +205,13 @@ export default defineComponent({
           key: '1h',
           align: 'right',
           render: (data: DataItem, index: number) => {
-            return <DynamicNumber value={data['1h'] + '%'} symbol={index % 2 ? 1 : -1} />
+            return (
+              <DynamicNumber
+                class="font-semibold"
+                value={data['1h'] + '%'}
+                symbol={index % 2 ? 1 : -1}
+              />
+            )
           }
         },
         {
@@ -205,7 +219,13 @@ export default defineComponent({
           key: '4h',
           align: 'right',
           render: (data: DataItem, index: number) => {
-            return <DynamicNumber value={data['4h'] + '%'} symbol={index % 2 ? 1 : -1} />
+            return (
+              <DynamicNumber
+                class="font-semibold"
+                value={data['4h'] + '%'}
+                symbol={index % 2 ? 1 : -1}
+              />
+            )
           }
         },
         {
@@ -213,7 +233,13 @@ export default defineComponent({
           key: '6h',
           align: 'right',
           render: (data: DataItem, index: number) => {
-            return <DynamicNumber value={data['6h'] + '%'} symbol={index % 2 ? 1 : -1} />
+            return (
+              <DynamicNumber
+                class="font-semibold"
+                value={data['6h'] + '%'}
+                symbol={index % 2 ? 1 : -1}
+              />
+            )
           }
         },
         {
@@ -221,7 +247,13 @@ export default defineComponent({
           key: '24h',
           align: 'right',
           render: (data: DataItem, index: number) => {
-            return <DynamicNumber value={data['24h'] + '%'} symbol={index % 2 ? 1 : -1} />
+            return (
+              <DynamicNumber
+                class="font-semibold"
+                value={data['24h'] + '%'}
+                symbol={index % 2 ? 1 : -1}
+              />
+            )
           }
         },
         {
@@ -318,7 +350,7 @@ export default defineComponent({
     return (
       <UTable
         columns={this.columns}
-        scroll-x={1500}
+        scroll-x={1300}
         data={this.dataList}
         flex-height
         size="small"
