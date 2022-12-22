@@ -1,7 +1,7 @@
 import { UTable } from '@WEDex/components'
 import { StarOutlined } from '@WEDex/icons'
 import { format } from 'timeago.js'
-import { defineComponent, ref, onMounted, inject, computed } from 'vue'
+import { defineComponent, ref, onMounted, inject, computed, Ref } from 'vue'
 import { default as ControlSlot, ControlSlotValueType } from './components/ControlSlot'
 import { DataListParamsKey } from './index'
 import DynamicNumber from '@/components/DynamicNumber'
@@ -39,6 +39,7 @@ export default defineComponent({
   name: 'DataList',
   setup() {
     const DataListParams = inject(DataListParamsKey)
+    const currentExpand = inject<Ref<'left' | 'center' | 'right'>>('currentExpand')
 
     const loopSwitchSortValue = (sortType: string) => {
       if (DataListParams) {
@@ -301,10 +302,16 @@ export default defineComponent({
       fetchData()
     })
 
+    const handleRowClick = (row: any) => {
+      console.log('handleRowClick', row, currentExpand)
+      currentExpand && (currentExpand.value = 'center')
+    }
+
     return {
       columns,
       dataList,
-      DataListParams
+      DataListParams,
+      handleRowClick
     }
   },
   render() {
@@ -316,6 +323,14 @@ export default defineComponent({
         flex-height
         size="small"
         bordered={false}
+        row-class-name="cursor-pointer"
+        rowProps={(row: any) => {
+          return {
+            onClick: () => {
+              this.handleRowClick(row)
+            }
+          }
+        }}
       />
     )
   }

@@ -54,6 +54,7 @@ export default defineComponent({
 
     const closeSelfModal = () => {
       tipRef.value && tipRef.value.setShow?.(false)
+      isVisible.value = false
     }
 
     const handleSave = () => {
@@ -267,7 +268,7 @@ export default defineComponent({
                       min={0}
                       v-slots={{
                         prefix: () => 'Min',
-                        suffix: () => 'Hours'
+                        suffix: () => 'H'
                       }}
                       onUpdate:value={value => (this.formData.AgeMin = value || 0)}
                     />
@@ -277,7 +278,7 @@ export default defineComponent({
                       min={0}
                       v-slots={{
                         prefix: () => 'Max',
-                        suffix: () => 'Hours'
+                        suffix: () => 'H'
                       }}
                       onUpdate:value={value => (this.formData.AgeMax = value || 0)}
                     />

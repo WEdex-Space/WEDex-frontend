@@ -1,11 +1,5 @@
 .mainNav {
-  overflow-x: auto;
-  overflow-y: hidden;
-  @apply select-none;
-}
-
-.mainNav ul {
-  @apply py-3 px-5;
+  @apply border-color-border border-b-1 px-5 select-none;
 }
 
 .mainNav li {

@@ -26,12 +26,10 @@ export default defineComponent({
   setup() {
     const globalConfigStore = useGlobalConfigStore()
     const currentExpand = inject<string>('currentExpand')
-    const rightPanelState = inject<string>('rightPanelState')
     const currentExtention = ref<string | null>('WatchList')
 
     return {
       currentExpand,
-      rightPanelState,
       currentExtention,
       globalConfigStore
     }
@@ -79,20 +77,10 @@ export default defineComponent({
       }
     }
 
-    const showExtention = this.currentExpand === 'right' || this.rightPanelState === 'static'
-
     const toggleExtention = (name: string) => {
       if (this.currentExtention !== name) {
         this.currentExtention = name
-        this.rightPanelState = 'static'
       }
-      // if (this.currentExtention === name) {
-      //   this.currentExtention = null
-      //   this.rightPanelState = 'close'
-      // } else {
-      //   this.currentExtention = name
-      //   this.rightPanelState = 'static'
-      // }
     }
     // share
     const shareTypes = [
@@ -113,11 +101,11 @@ export default defineComponent({
     return (
       <div class="border-color-border flex border-l-1">
         <div class="flex-1">
-          {showExtention && this.currentExtention && componentsMap[this.currentExtention].component}
+          {this.currentExtention && componentsMap[this.currentExtention].component}
         </div>
         {/* icons */}
         <div class="border-color-border flex flex-col border-l-1 w-11">
-          <div class="flex-1">
+          <div class="flex-1 overflow-hidden">
             {Object.keys(componentsMap).map((key: string) => (
               <div
                 class={`rounded-sm cursor-pointer mx-auto h-8 my-3 text-center text-color3 leading-8  w-8 hover:bg-bg2 hover:text-color1 ${

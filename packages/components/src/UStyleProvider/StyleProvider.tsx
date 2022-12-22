@@ -27,7 +27,7 @@ const UStyleProvider = defineComponent({
         ? {
             primaryColor: '#FF9D00',
             primaryBg: 'rgba(255, 157, 0, 0.2)',
-            baseColor: '#181a1f',
+            bodyColor: '#181a1f',
             bg1: '#0C0E11',
             bg2: '#202428',
             bg3: '#282D32',
@@ -46,7 +46,7 @@ const UStyleProvider = defineComponent({
         : {
             primaryColor: '#FF9D00',
             primaryBg: 'rgba(255, 157, 0, 0.2)',
-            baseColor: '#fff',
+            bodyColor: '#fff',
             bg1: '#fafafc',
             bg2: '#fafafc',
             bg3: '#fafafc',
@@ -66,7 +66,7 @@ const UStyleProvider = defineComponent({
 
     const naiveThemeOverrides = computed<GlobalThemeOverrides>(() => ({
       common: {
-        bodyColor: ColorOverrides.value.baseColor,
+        bodyColor: ColorOverrides.value.bodyColor,
         primaryColor: ColorOverrides.value.primaryColor,
         infoColor: ColorOverrides.value.infoColor,
         successColor: ColorOverrides.value.successColor,
@@ -109,8 +109,7 @@ const UStyleProvider = defineComponent({
         placeholderColor: ColorOverrides.value.color2
       },
       Tabs: {
-        tabTextColorActiveBar: ColorOverrides.value.primaryColor,
-        tabTextColorBar: ColorOverrides.value.colorUp
+        tabFontWeightActive: 700
       },
       Tag: {
         heightLarge: '34px',
@@ -133,7 +132,7 @@ const UStyleProvider = defineComponent({
     watchEffect(() => {
       const { r, g, b } = hex2rgb(ColorOverrides.value.primaryColor)
       style.innerHTML = `:root {
-        --u-base-color: ${ColorOverrides.value.baseColor};
+        --u-body-color: ${ColorOverrides.value.bodyColor};
         --u-primary-value: ${r}, ${g}, ${b};
         --u-color-1: ${ColorOverrides.value.color1};
         --u-color-2: ${ColorOverrides.value.color2};

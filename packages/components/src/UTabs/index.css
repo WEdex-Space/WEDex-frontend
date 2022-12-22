@@ -1,17 +1,3 @@
-.u-tabs {
-  .n-tabs-nav {
-    @apply border-b border-color-border;
-
-    .n-tabs-tab {
-      @apply py-4 px-8;
-
-      & > .n-tabs-tab__label {
-        @apply u-h4;
-      }
-    }
-  }
-}
-
 .u-tabs.no-border {
   .n-tabs-nav {
     @apply !border-0;

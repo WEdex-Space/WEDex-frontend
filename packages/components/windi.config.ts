@@ -15,7 +15,7 @@ export default defineConfig({
         // ui 2.0
         primary: 'var(--u-primary-color)',
         'primary-bg': 'var(--u-primary-bg)',
-        base: 'var(--u-base-color)',
+        'color-body': 'var(--u-body-color)',
         bg1: 'var(--u-bg-1)',
         bg2: 'var(--u-bg-2)',
         bg3: 'var(--u-bg-3)',

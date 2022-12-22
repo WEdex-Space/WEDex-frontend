@@ -1,7 +1,7 @@
 @import '@WEDex/components/dist/es/index.css';
 
 body {
-  @apply bg-base font-primary text-sm text-color2 leading-5 break-words;
+  @apply bg-color-body font-primary text-sm text-color2 leading-5 break-words;
 }
 
 ::-webkit-scrollbar {
@@ -33,6 +33,10 @@ body {
 
 .homePage .rightPanelStaticClose {
   width: 44px;
+}
+
+.homePage .panelExpand {
+  width: calc(100vw - 324px);
 }
 
 /* custom */

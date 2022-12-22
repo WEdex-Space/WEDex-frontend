@@ -5,9 +5,10 @@ import {
   ChartOutlined,
   VictorOutlined,
   RankOutlined,
-  ShareOutlined
+  ShareOutlined,
+  ExpandRightOutlined
 } from '@WEDex/icons'
-import { defineComponent, ref, inject, onMounted } from 'vue'
+import { defineComponent, ref, inject, onMounted, Ref } from 'vue'
 import DexSelector from './components/DexSelector'
 import HeaderGainerFilter from './components/HeaderGainerFilter'
 import HeaderRankFilter from './components/HeaderRankFilter'
@@ -25,6 +26,7 @@ export default defineComponent({
   name: 'MainHeader',
   setup(props, ctx) {
     const DataListParams = inject(DataListParamsKey)
+    const currentExpand = inject<Ref<'left' | 'center' | 'right'>>('currentExpand')
     const networksOptions = ref<MultiSelectorOptionType[]>([])
     const navIconClass = 'h-4 mr-1 w-4 align-middle -mt-[3px]'
 
@@ -113,7 +115,8 @@ export default defineComponent({
       networksOptions,
       mainNavs,
       DEXesData,
-      DataListParams
+      DataListParams,
+      currentExpand
     }
   },
   render() {
@@ -127,8 +130,15 @@ export default defineComponent({
 
     return (
       <>
-        <div class={style.mainNav}>
-          <ul class="border-color-border border-b-1 whitespace-nowrap">
+        {/* expand btn */}
+        {this.currentExpand !== 'left' && (
+          <ExpandRightOutlined
+            class="cursor-pointer h-5 p-0.5 top-0 right-0 w-5 absolute hover:text-primary"
+            onClick={() => (this.currentExpand = 'left')}
+          />
+        )}
+        <div class={`${style.mainNav} `}>
+          <ul class="py-3 whitespace-nowrap overflow-x-scroll overflow-y-hidden">
             {this.mainNavs.map(item => (
               <li
                 class={`${this.DataListParams?.type === item.value ? style.mainNavItemCur : ''}`}
