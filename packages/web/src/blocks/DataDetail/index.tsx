@@ -2,9 +2,9 @@ import { UTabs, UTabPane } from '@wedex/components'
 import { SwapOutlined, ShareOutlined } from '@wedex/icons'
 import { defineComponent, inject, Ref, watch, ref } from 'vue'
 import DetailHeader from './DetailHeader'
-import PoolBlock from './PoolBlock'
-import TradeBlock from './TradeBlock'
-import TransactionsBlock from './TransactionsBlock'
+import PoolBlock from './components/PoolBlock'
+import TradeBlock from './components/TradeBlock'
+import TransactionsBlock from './components/TransactionsBlock'
 
 export default defineComponent({
   name: 'DataDetail',
