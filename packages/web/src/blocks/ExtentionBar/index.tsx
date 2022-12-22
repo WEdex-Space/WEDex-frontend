@@ -10,7 +10,7 @@ import {
   TelegramFilled,
   DiscordFilled,
   TwitterFilled
-} from '@WEDex/icons'
+} from '@wedex/icons'
 import { defineComponent, inject, ref } from 'vue'
 import MultiChart from '@/blocks/MultiChart'
 import Notebook from '@/blocks/Notebook'

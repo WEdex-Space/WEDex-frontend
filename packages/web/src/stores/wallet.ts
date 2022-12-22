@@ -1,5 +1,5 @@
-import { message } from '@WEDex/components'
 import { storage } from '@WEDex/utils'
+import { message } from '@wedex/components'
 import { ethers, getDefaultProvider, providers } from 'ethers'
 import { defineStore } from 'pinia'
 import { markRaw } from 'vue'

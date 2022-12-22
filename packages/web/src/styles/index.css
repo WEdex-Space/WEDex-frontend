@@ -1,4 +1,4 @@
-@import '@WEDex/components/dist/es/index.css';
+@import '@wedex/components/dist/es/index.css';
 
 body {
   @apply bg-color-body font-primary text-sm text-color2 leading-5 break-words;

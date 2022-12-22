@@ -1,5 +1,5 @@
-import { UPopover, UInput, UButton } from '@WEDex/components'
-import { ArrowDownOutlined } from '@WEDex/icons'
+import { UPopover, UInput, UButton } from '@wedex/components'
+import { ArrowDownOutlined } from '@wedex/icons'
 import { defineComponent, PropType, ref, computed, watch } from 'vue'
 
 export type MultiSelectorValueType = string | number | null

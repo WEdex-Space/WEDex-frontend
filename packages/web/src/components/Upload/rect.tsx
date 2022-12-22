@@ -1,5 +1,5 @@
-import { message, UTooltip, UUpload, UUploadDragger, USpin } from '@WEDex/components'
-import { QuestionCircleOutlined, RefreshOutlined, UploadFilled } from '@WEDex/icons'
+import { message, UTooltip, UUpload, UUploadDragger, USpin } from '@wedex/components'
+import { QuestionCircleOutlined, RefreshOutlined, UploadFilled } from '@wedex/icons'
 import { CustomRequest } from 'naive-ui/lib/upload/src/interface'
 import { defineComponent, ref } from 'vue'
 import type { PropType } from 'vue'

@@ -1,4 +1,4 @@
-import { message } from '@WEDex/components'
+import { message } from '@wedex/components'
 import { Contract } from 'ethers'
 import { useContractStore } from '@/stores/contract'
 import AbstractWallet from '@/wallets/AbstractWallet'

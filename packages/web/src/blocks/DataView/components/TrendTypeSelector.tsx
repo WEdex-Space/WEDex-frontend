@@ -1,4 +1,4 @@
-import { USelect } from '@WEDex/components'
+import { USelect } from '@wedex/components'
 import { defineComponent, ref, inject } from 'vue'
 import { DataListParamsKey } from '../index'
 

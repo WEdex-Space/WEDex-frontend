@@ -7,7 +7,7 @@ import {
   RankOutlined,
   ShareOutlined,
   ExpandRightOutlined
-} from '@WEDex/icons'
+} from '@wedex/icons'
 import { defineComponent, ref, inject, onMounted, Ref } from 'vue'
 import DexSelector from './components/DexSelector'
 import HeaderGainerFilter from './components/HeaderGainerFilter'

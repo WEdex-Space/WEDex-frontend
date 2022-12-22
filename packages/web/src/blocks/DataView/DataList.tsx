@@ -1,5 +1,5 @@
-import { UTable } from '@WEDex/components'
-import { StarOutlined } from '@WEDex/icons'
+import { UTable } from '@wedex/components'
+import { StarOutlined } from '@wedex/icons'
 import { format } from 'timeago.js'
 import { defineComponent, ref, onMounted, inject, computed, Ref } from 'vue'
 import { default as ControlSlot, ControlSlotValueType } from './components/ControlSlot'

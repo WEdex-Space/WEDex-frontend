@@ -1,4 +1,4 @@
-import { ExpandOutlined, ReduceRightOutlined } from '@WEDex/icons'
+import { ExpandOutlined, ReduceRightOutlined } from '@wedex/icons'
 import { defineComponent, inject, Ref, computed } from 'vue'
 
 export default defineComponent({

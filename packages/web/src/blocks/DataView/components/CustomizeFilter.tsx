@@ -1,4 +1,4 @@
-import { UPopover, UForm, UFormItem, UButton, UInputNumber, USelect } from '@WEDex/components'
+import { UPopover, UForm, UFormItem, UButton, UInputNumber, USelect } from '@wedex/components'
 import { defineComponent, ref, inject, onMounted } from 'vue'
 import { DataListParamsKey } from '../index'
 import './CustomizeFilter.css'

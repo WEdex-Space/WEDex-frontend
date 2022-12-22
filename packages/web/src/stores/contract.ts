@@ -1,4 +1,4 @@
-import type { UContractInteractionPropsType, UContractInteractionStatus } from '@WEDex/components'
+import type { UContractInteractionPropsType, UContractInteractionStatus } from '@wedex/components'
 
 import { defineStore } from 'pinia'
 import { reactive } from 'vue'

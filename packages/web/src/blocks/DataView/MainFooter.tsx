@@ -1,5 +1,5 @@
-import { USelect } from '@WEDex/components'
-import { CustomOutlined, ExportOutlined } from '@WEDex/icons'
+import { USelect } from '@wedex/components'
+import { CustomOutlined, ExportOutlined } from '@wedex/icons'
 import { defineComponent, ref } from 'vue'
 import CustomizeFilter from './components/CustomizeFilter'
 

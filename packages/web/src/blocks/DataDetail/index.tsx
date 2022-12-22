@@ -1,4 +1,4 @@
-import { UTabs, UTabPane } from '@WEDex/components'
+import { UTabs, UTabPane } from '@wedex/components'
 import { defineComponent, inject, Ref } from 'vue'
 import DetailHeader from './DetailHeader'
 

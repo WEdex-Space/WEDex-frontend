@@ -1,5 +1,5 @@
-import { UTooltip } from '@WEDex/components'
-import { CopyOutlined } from '@WEDex/icons'
+import { UTooltip } from '@wedex/components'
+import { CopyOutlined } from '@wedex/icons'
 import copy from 'copy-to-clipboard'
 import { defineComponent, ref } from 'vue'
 

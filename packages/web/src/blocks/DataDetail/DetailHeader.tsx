@@ -1,5 +1,5 @@
-import { UPopover } from '@WEDex/components'
-import { StarOutlined, StarFilled } from '@WEDex/icons'
+import { UPopover } from '@wedex/components'
+import { StarOutlined, StarFilled } from '@wedex/icons'
 import { defineComponent, ref, inject, Ref } from 'vue'
 import DynamicNumber from '@/components/DynamicNumber'
 

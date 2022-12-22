@@ -1,4 +1,4 @@
-import { NumberDownFilled, NumberUpFilled } from '@WEDex/icons'
+import { NumberDownFilled, NumberUpFilled } from '@wedex/icons'
 import { defineComponent, PropType } from 'vue'
 
 export type ControlSlotValueType = 'up' | 'down' | null

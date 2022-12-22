@@ -1,5 +1,5 @@
-import { UNoContent } from '@WEDex/components'
-import { EmptyFilled } from '@WEDex/icons'
+import { UNoContent } from '@wedex/components'
+import { EmptyFilled } from '@wedex/icons'
 import { defineComponent, computed } from 'vue'
 
 export default defineComponent({

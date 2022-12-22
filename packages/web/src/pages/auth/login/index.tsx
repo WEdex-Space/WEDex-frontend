@@ -1,5 +1,5 @@
-import { UButton } from '@WEDex/components'
-import { WalletOutlined } from '@WEDex/icons'
+import { UButton } from '@wedex/components'
+import { WalletOutlined } from '@wedex/icons'
 import { defineComponent, ref } from 'vue'
 import styles from './animate.module.css'
 import logo from '@/assets/colorful.png'
