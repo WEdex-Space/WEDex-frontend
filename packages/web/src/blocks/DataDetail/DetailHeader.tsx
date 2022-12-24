@@ -70,7 +70,7 @@ export default defineComponent({
   },
   render() {
     return (
-      <div class="border-color-border flex border-b-1 h-13.25 px-2.5 items-center">
+      <div class="border-color-border flex border-b-1 h-14 px-2.5 items-center">
         <div>
           <div class="font-700 text-base text-color1">Token1/Token2</div>
           <div class="text-color3">Token name</div>

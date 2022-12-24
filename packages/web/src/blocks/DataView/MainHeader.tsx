@@ -137,8 +137,8 @@ export default defineComponent({
             onClick={() => (this.currentExpand = 'left')}
           />
         )}
-        <div class={`${style.mainNav} `}>
-          <ul class="py-3 whitespace-nowrap overflow-x-scroll overflow-y-hidden">
+        <div class={`${style.mainNav} h-14`}>
+          <ul class="h-full py-3 whitespace-nowrap overflow-x-scroll overflow-y-hidden ">
             {this.mainNavs.map(item => (
               <li
                 class={`${this.DataListParams?.type === item.value ? style.mainNavItemCur : ''}`}

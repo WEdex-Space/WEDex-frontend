@@ -22,7 +22,9 @@ export default defineComponent({
             widgetLoaded.value = true
           }, 300)
         } else {
-          widgetLoaded.value = false
+          setTimeout(() => {
+            widgetLoaded.value = false
+          }, 0)
         }
       }
     )
@@ -34,13 +36,9 @@ export default defineComponent({
   },
   render() {
     return (
-      <div
-        class={`flex flex-col ${
-          this.currentExpand === 'center' ? 'border-l-1 border-color-border' : ''
-        }`}
-      >
+      <div class={`flex flex-col ${this.currentExpand ? 'border-l-1 border-color-border' : ''}`}>
         <DetailHeader />
-        {this.widgetLoaded ? <div class="bg-bg1 h-91.5">TradingView</div> : null}
+        {this.widgetLoaded ? <div class="bg-bg1 h-91">TradingView</div> : null}
         {this.widgetLoaded ? (
           <div class="border-color-border flex border-t-1 flex-1 overflow-hidden">
             <div style={{ flex: 2 }} class="border-color-border border-r-1">
