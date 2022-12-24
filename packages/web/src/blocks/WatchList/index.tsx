@@ -1,5 +1,7 @@
 import { ExpandOutlined, ReduceRightOutlined, SettingOutlined } from '@wedex/icons'
-import { defineComponent, inject, Ref, computed } from 'vue'
+import { defineComponent, inject, Ref, computed, ref } from 'vue'
+import Empty from './components/Empty'
+import ListBar from './components/ListBar'
 
 export default defineComponent({
   name: 'WatchList',
@@ -7,9 +9,12 @@ export default defineComponent({
     const currentExpand = inject<Ref<'left' | 'center' | 'right'>>('currentExpand')
     const isExpand = computed(() => currentExpand?.value === 'right')
 
+    const listData = ref([])
+
     return {
       isExpand,
-      currentExpand
+      currentExpand,
+      listData
     }
   },
   render() {
@@ -38,6 +43,10 @@ export default defineComponent({
             <SettingOutlined class="h-4 w-4" />
           </span>
         </div>
+        {/* ListBar */}
+        <ListBar onChange={value => null} />
+        {/* list */}
+        {this.listData.length ? <ul></ul> : <Empty />}
       </div>
     )
   }

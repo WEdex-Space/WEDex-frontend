@@ -100,7 +100,7 @@ export default defineComponent({
 
     return (
       <div class="border-color-border flex border-l-1">
-        <div class="flex-1">
+        <div class="flex-1 overflow-hidden">
           {this.currentExtention && componentsMap[this.currentExtention].component}
         </div>
         {/* icons */}
