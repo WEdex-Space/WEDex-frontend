@@ -60,7 +60,7 @@ export default defineComponent({
     const customRenderSortTitle = (sortTitle: string, sortType: string) => {
       return (
         <div class="flex justify-end items-center">
-          <div class="cursor-pointer" onClick={() => loopSwitchSortValue(sortType)}>
+          <div class="cursor-pointer select-none" onClick={() => loopSwitchSortValue(sortType)}>
             {sortTitle}
           </div>
           {DataListParams && (

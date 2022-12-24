@@ -144,7 +144,7 @@ export default defineComponent({
               <ul class="mb-6 grid gap-2.5 grid-cols-3">
                 {this.finnalOptions.map(option => (
                   <li
-                    class={`flex items-center justify-center cursor-pointer bg-bg3 rounded-sm text-color1 hover:bg-primary-bg px-1 h-6 ${
+                    class={`flex items-center justify-center cursor-pointer select-none bg-bg3 rounded-sm text-color1 hover:bg-primary-bg px-1 h-6 ${
                       (option.value !== null && this.optionSelectedMap[option.value]) ||
                       (!this.optionSelect.length && option.value === null)
                         ? 'bg-primary-bg text-primary'

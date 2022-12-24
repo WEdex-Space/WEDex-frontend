@@ -4,7 +4,7 @@ import { defineComponent, ref, inject, Ref } from 'vue'
 import CustomizeFilter from './components/CustomizeFilter'
 
 const footerCellClass =
-  'border-l-1 border-color-border 2xl:px-7 px-3 leading-10 cursor-pointer hover:text-color2'
+  'border-l-1 border-color-border 2xl:px-7 px-3 leading-10 cursor-pointer hover:text-color2 select-none'
 const footerCellIconClass = 'w-3 h-3 align-middle mx-1 -mt-[2px]'
 const footerListCellClass = '2xl:px-7 px-3 border-r-1 border-color-border cursor-default'
 
@@ -48,7 +48,7 @@ export default defineComponent({
   },
   render() {
     return this.currentExpand === 'left' ? (
-      <div class="border-color-border flex border-t-1 h-10 text-xs text-color3 select-none">
+      <div class="border-color-border flex border-t-1 h-10 text-xs text-color3 ">
         <ul class="flex flex-1 items-center">
           <li class={footerListCellClass}>
             Tokens:<span class="text-color1">1234</span>
