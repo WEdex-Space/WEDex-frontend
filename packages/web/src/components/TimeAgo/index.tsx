@@ -1,3 +1,4 @@
+import { useNow, useDateFormat } from '@vueuse/core'
 import { defineComponent, ref, PropType, onMounted, onBeforeUnmount } from 'vue'
 import { customTimeAgo } from '@/utils/timeago'
 
@@ -9,8 +10,9 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const agoTime = ref(isNaN(Number(props.value)) ? 0 : Number(props.value))
+    const agoTime = ref(isNaN(Number(props.value)) ? useNow() : Number(props.value))
     const timer = ref()
+    const formatted = useDateFormat(agoTime.value, 'YYYY-MM-DD HH:mm:ss')
 
     const result = ref(customTimeAgo(agoTime.value))
 
@@ -25,10 +27,11 @@ export default defineComponent({
     })
 
     return {
-      result
+      result,
+      formatted
     }
   },
   render() {
-    return <div>{this.result}</div>
+    return <div title={this.formatted}>{this.result}</div>
   }
 })

@@ -1,6 +1,6 @@
 import { formatTimeAgo } from '@vueuse/core'
 
-export function customTimeAgo(agoTime: number) {
+export function customTimeAgo(agoTime: number | Date) {
   return formatTimeAgo(new Date(agoTime), {
     showSecond: true,
     messages: {
