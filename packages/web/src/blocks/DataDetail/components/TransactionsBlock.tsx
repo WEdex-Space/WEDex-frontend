@@ -5,6 +5,7 @@ import DateRangeFilterPopover from './DateRangeFilterPopover'
 import NumberRangeFilterPopover from './NumberRangeFilterPopover'
 import TrendTypeFilterPopover from './TrendTypeFilterPopover'
 import DynamicNumber from '@/components/DynamicNumber'
+import TimeAgo from '@/components/TimeAgo'
 import { formatCurrency, formatCurrencyWithUnit } from '@/utils/numberFormat'
 
 type TransactionsDataType = {
@@ -84,7 +85,7 @@ export default defineComponent({
         key: 'date',
         align: 'right',
         render: (data: TransactionsDataType, index: number) => {
-          return <div>2 secs</div>
+          return <TimeAgo value={data.date} />
         }
       },
       {
