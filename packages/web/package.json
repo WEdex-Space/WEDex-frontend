@@ -34,11 +34,9 @@
     "@vueuse/core": "^9.9.0",
     "axios": "^1.2.1",
     "big.js": "^6.2.1",
-    "dayjs": "^1.11.1",
     "ethers": "^5.5.4",
     "inflected": "^2.1.0",
     "pinia": "^2.0.28",
-    "timeago.js": "^4.0.2",
     "vue": "^3.2.45",
     "vue-request": "^2.0.0-rc.2",
     "vue-router": "^4.1.6"

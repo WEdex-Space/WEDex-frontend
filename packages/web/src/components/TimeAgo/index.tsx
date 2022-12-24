@@ -1,5 +1,5 @@
-import { format } from 'timeago.js'
 import { defineComponent, ref, PropType, onMounted, onBeforeUnmount } from 'vue'
+import { customTimeAgo } from '@/utils/timeago'
 
 export default defineComponent({
   name: 'TimeAgo',
@@ -12,11 +12,11 @@ export default defineComponent({
     const agoTime = ref(isNaN(Number(props.value)) ? 0 : Number(props.value))
     const timer = ref()
 
-    const result = ref(format(agoTime.value, 'customTimeAgo'))
+    const result = ref(customTimeAgo(agoTime.value))
 
     onMounted(() => {
       setInterval(() => {
-        result.value = format(agoTime.value, 'customTimeAgo')
+        result.value = customTimeAgo(agoTime.value)
       }, 1000)
     })
 

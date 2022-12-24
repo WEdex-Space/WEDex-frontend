@@ -1,6 +1,5 @@
 import { UTable } from '@wedex/components'
 import { StarOutlined } from '@wedex/icons'
-import { format } from 'timeago.js'
 import { defineComponent, ref, onMounted, inject, computed, Ref } from 'vue'
 import { default as ControlSlot, ControlSlotValueType } from './components/ControlSlot'
 import { DataListParamsKey } from './index'
@@ -8,6 +7,7 @@ import DynamicNumber from '@/components/DynamicNumber'
 import Overlap from '@/components/Overlap'
 import { allNetworks } from '@/constants'
 import { formatBigNumber, formatCurrency } from '@/utils/numberFormat'
+import { customTimeAgo } from '@/utils/timeago'
 
 export type DataItem = {
   index: number
@@ -107,7 +107,7 @@ export default defineComponent({
             render: (data: DataItem, index: number) => {
               return (
                 <strong class="text-color1">
-                  {format(new Date(new Date().getTime() - data.createAt), 'customTimeAgo')}
+                  {customTimeAgo(new Date().getTime() - data.createAt)}
                 </strong>
               )
             }
