@@ -1,6 +1,7 @@
+import { useMouse } from '@vueuse/core'
 import { UTabs, UTabPane } from '@wedex/components'
 import { SwapOutlined, ShareOutlined } from '@wedex/icons'
-import { defineComponent, inject, Ref, watch, ref } from 'vue'
+import { defineComponent, inject, Ref, watch, ref, onMounted } from 'vue'
 import DetailHeader from './DetailHeader'
 import PoolBlock from './components/PoolBlock'
 import TradeBlock from './components/TradeBlock'
@@ -12,6 +13,51 @@ export default defineComponent({
     const currentExpand = inject<Ref<'left' | 'center' | 'right'>>('currentExpand')
     const widgetLoaded = ref(false)
     const timer = ref()
+    const { x, y } = useMouse()
+
+    const tradingViewHeight = ref(360)
+
+    const targetMouseCache = ref({
+      x: 0,
+      y: 0
+    })
+
+    const targetActive = ref(false)
+    const targetEventProp = {
+      onMousedown: () => {
+        console.log('handleTargetMouseDown', x, y)
+        targetMouseCache.value = {
+          x: x.value,
+          y: y.value
+        }
+        targetActive.value = true
+      },
+      onMouseup: () => {
+        targetMouseCache.value = {
+          x: 0,
+          y: 0
+        }
+        targetActive.value = false
+      },
+      onMouseleave: () => {
+        targetMouseCache.value = {
+          x: 0,
+          y: 0
+        }
+        targetActive.value = false
+      },
+      onMousemove: () => {
+        setTimeout(() => {
+          if (targetMouseCache.value.y) {
+            tradingViewHeight.value += y.value - targetMouseCache.value.y
+            targetMouseCache.value = {
+              x: x.value,
+              y: y.value
+            }
+          }
+        }, 0)
+      }
+    }
 
     watch(
       () => currentExpand?.value,
@@ -29,22 +75,44 @@ export default defineComponent({
       }
     )
 
+    onMounted(() => {
+      tradingViewHeight.value = Math.floor(window.innerHeight * 0.45)
+    })
+
     return {
+      tradingViewHeight,
+      targetActive,
       currentExpand,
-      widgetLoaded
+      widgetLoaded,
+      targetEventProp
     }
   },
   render() {
     return (
-      <div class={`flex flex-col ${this.currentExpand ? 'border-l-1 border-color-border' : ''}`}>
+      <div
+        class={`flex flex-col ${this.currentExpand ? 'border-l-1 border-color-border' : ''}`}
+        {...this.targetEventProp}
+      >
         <DetailHeader />
-        {this.widgetLoaded ? <div class="bg-bg1 h-91">TradingView</div> : null}
         {this.widgetLoaded ? (
-          <div class="border-color-border flex border-t-1 flex-1 overflow-hidden">
+          <div class={`bg-bg1`} style={{ height: this.tradingViewHeight + 'px' }}>
+            TradingView
+          </div>
+        ) : null}
+        {this.widgetLoaded ? (
+          <div class="border-color-border flex border-t-1 flex-1 overflow-hidden relative">
+            {/* resize handler */}
+            <div
+              class={`h-1 w-full top-0 z-50 absolute hover:bg-bg3 ${
+                this.targetActive ? '!bg-primary-bg' : ''
+              }`}
+              style={{ cursor: 'n-resize' }}
+            ></div>
             <div style={{ flex: 2 }} class="border-color-border border-r-1">
               <UTabs
                 bar-width={0}
                 tabs-padding={10}
+                tab-style={{ userSelect: 'none' }}
                 pane-style={{ padding: 0, flex: 1 }}
                 class="flex flex-col h-full"
               >
