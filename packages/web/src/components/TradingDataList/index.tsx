@@ -1,6 +1,6 @@
 import { UTable } from '@wedex/components'
 import { StarOutlined } from '@wedex/icons'
-import { defineComponent, inject, computed, Ref, PropType } from 'vue'
+import { defineComponent, inject, computed, PropType } from 'vue'
 import ControlSlot from './ControlSlot'
 import type { ControlSlotValueType } from './ControlSlot'
 import DynamicNumber from '@/components/DynamicNumber'
@@ -54,7 +54,6 @@ export default defineComponent({
   },
   setup(props, ctx) {
     const DataListParams = inject(DataListParamsKey)
-    const currentExpand = inject<Ref<'left' | 'center' | 'right'>>('currentExpand')
 
     const customRenderSortTitle = (sortTitle: string, sortType: string) => {
       const disableFilter = props.mode === 'watchlist'

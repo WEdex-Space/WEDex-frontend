@@ -12,9 +12,9 @@ import {
   TwitterFilled
 } from '@wedex/icons'
 import { defineComponent, inject, ref } from 'vue'
+import Alerts from '@/blocks/Alerts'
 import MultiChart from '@/blocks/MultiChart'
 import Notebook from '@/blocks/Notebook'
-import Notificate from '@/blocks/Notificate'
 import Portfolio from '@/blocks/Portfolio'
 import Search from '@/blocks/Search'
 import WatchList from '@/blocks/WatchList'
@@ -60,8 +60,8 @@ export default defineComponent({
         component: <MultiChart />,
         icon: <MultiOutlined class={iconClass} />
       },
-      Notificate: {
-        component: <Notificate />,
+      Alerts: {
+        component: <Alerts />,
         icon: <NotificationOutlined class={iconClass} />
       },
       Theme: {
