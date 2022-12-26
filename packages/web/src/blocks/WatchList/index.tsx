@@ -5,6 +5,11 @@ import ListBar from './components/ListBar'
 import ListEdit from './components/ListEdit'
 import { default as TradingDataList, TradingDataItem } from '@/components/TradingDataList'
 
+export type watchListType = {
+  name: string
+  value: string
+}
+
 export default defineComponent({
   name: 'WatchList',
   setup() {
@@ -52,7 +57,7 @@ export default defineComponent({
       currentExpand && (currentExpand.value = 'center')
     }
 
-    const watchLists = ref([
+    const watchLists = ref<watchListType[]>([
       {
         name: 'Mainlist',
         value: '0'
@@ -60,6 +65,10 @@ export default defineComponent({
       {
         name: 'list 1',
         value: '1'
+      },
+      {
+        name: 'list 2',
+        value: '2'
       }
     ])
 
@@ -115,6 +124,7 @@ export default defineComponent({
               <TradingDataList
                 class="flex-1"
                 mode="watchlist"
+                isStretch={this.currentExpand === 'right'}
                 dataList={this.dataList}
                 onRowClick={row => {
                   this.handleRowClick(row)

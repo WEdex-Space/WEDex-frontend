@@ -117,7 +117,7 @@ const UStyleProvider = defineComponent({
       },
       DataTable: {
         thColor: ColorOverrides.value.bg1,
-        thPaddingSmall: '5px 8px',
+        thPaddingSmall: '4px 8px',
         tdPaddingSmall: '8px',
         fontSizeSmall: '12px'
       }

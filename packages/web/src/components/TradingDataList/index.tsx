@@ -46,6 +46,10 @@ export default defineComponent({
     mode: {
       type: String as PropType<'datalist' | 'watchlist'>,
       default: 'datalist'
+    },
+    isStretch: {
+      type: Boolean,
+      default: true
     }
   },
   setup(props, ctx) {
@@ -80,6 +84,23 @@ export default defineComponent({
         </div>
       )
     }
+
+    const TokenColProp = computed(() => {
+      let align = 'left'
+      let width = 0
+
+      if (props.mode === 'watchlist') {
+        align = props.isStretch ? 'left' : 'center'
+        width = props.isStretch ? 140 : 80
+      } else {
+        width = props.isStretch ? 140 : 60
+      }
+
+      return {
+        align,
+        width
+      }
+    })
 
     const columns = computed<any[]>(() => {
       const indexColumns: any[] = []
@@ -168,7 +189,8 @@ export default defineComponent({
           title: 'Token',
           key: 'token',
           fixed: 'left',
-          width: props.mode === 'watchlist' ? 60 : currentExpand?.value === 'left' ? 140 : 60,
+          align: TokenColProp.value.align,
+          width: TokenColProp.value.width,
           render: (data: TradingDataItem, index: number) => {
             return (
               <div class="flex flex-nowrap items-center">
@@ -178,7 +200,7 @@ export default defineComponent({
                     <DragOutlined class="h-3 " />
                   </span>
                 )} */}
-                {currentExpand?.value === 'left' && props.mode !== 'watchlist' && (
+                {props.isStretch && (
                   <Overlap
                     class="mr-2"
                     nodes={[0, 1].map(index => (
@@ -188,9 +210,7 @@ export default defineComponent({
                 )}
                 <div class="flex-1 truncate" title={`Token1/Token2`}>
                   <strong class="text-color1 ">Token1</strong>
-                  {currentExpand?.value === 'left' && props.mode !== 'watchlist' && (
-                    <strong class="text-color3">/ Token2</strong>
-                  )}
+                  {props.isStretch && <strong class="text-color3">/ Token2</strong>}
                 </div>
               </div>
             )
