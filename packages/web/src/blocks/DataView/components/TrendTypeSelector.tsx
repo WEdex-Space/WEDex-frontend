@@ -1,6 +1,6 @@
 import { USelect } from '@wedex/components'
 import { defineComponent, ref, inject } from 'vue'
-import { DataListParamsKey } from '../index'
+import { DataListParamsKey } from '@/pages/index'
 
 export default defineComponent({
   name: 'TrendTypeSelector',

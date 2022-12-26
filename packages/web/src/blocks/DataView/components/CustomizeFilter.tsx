@@ -1,6 +1,7 @@
 import { UPopover, UForm, UFormItem, UButton, UInputNumber, USelect } from '@wedex/components'
 import { defineComponent, ref, inject, onMounted } from 'vue'
-import { DataListParamsKey } from '../index'
+// eslint-disable-next-line import/order
+import { DataListParamsKey } from '@/pages/index'
 import './CustomizeFilter.css'
 import CustomizeTimeRadio from './CustomizeTimeRadio'
 import DexSelector from './DexSelector'

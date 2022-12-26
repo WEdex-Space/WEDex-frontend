@@ -18,9 +18,9 @@ import NetworkSelector from './components/NetworkSelector'
 import TrendTypeSelector from './components/TrendTypeSelector'
 
 import style from './style.module.css'
-import { DataListParamsKey } from './index'
 import { MultiSelectorOptionType } from '@/components/MultiSelector'
 import { allNetworks } from '@/constants'
+import { DataListParamsKey } from '@/pages/index'
 
 export default defineComponent({
   name: 'MainHeader',

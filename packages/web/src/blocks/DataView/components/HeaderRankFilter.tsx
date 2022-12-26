@@ -1,6 +1,6 @@
 import { defineComponent, ref, inject } from 'vue'
-import { DataListParamsKey } from '../index'
 import style from './HeaderTagFilter.module.css'
+import { DataListParamsKey } from '@/pages/index'
 
 export default defineComponent({
   name: 'HeaderRankFilter',

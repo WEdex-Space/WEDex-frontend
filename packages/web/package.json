@@ -25,13 +25,13 @@
   "homepage": "https://github.com/comunion-io/front-next#readme",
   "dependencies": {
     "@coinbase/wallet-sdk": "^3.5.2",
+    "@sentry/browser": "^7.13.0",
+    "@sentry/tracing": "^7.13.0",
+    "@vueuse/core": "^9.9.0",
+    "@walletconnect/web3-provider": "^1.8.0",
     "@wedex/components": "^0.0.1",
     "@wedex/icons": "^0.0.1",
     "@wedex/utils": "^0.0.1",
-    "@sentry/browser": "^7.13.0",
-    "@sentry/tracing": "^7.13.0",
-    "@walletconnect/web3-provider": "^1.8.0",
-    "@vueuse/core": "^9.9.0",
     "axios": "^1.2.1",
     "big.js": "^6.2.1",
     "ethers": "^5.5.4",
@@ -39,7 +39,8 @@
     "pinia": "^2.0.28",
     "vue": "^3.2.45",
     "vue-request": "^2.0.0-rc.2",
-    "vue-router": "^4.1.6"
+    "vue-router": "^4.1.6",
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@doremijs/a2s": "^0.0.19",

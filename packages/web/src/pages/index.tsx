@@ -1,7 +1,21 @@
-import { defineComponent, ref, watch, provide } from 'vue'
+import { defineComponent, ref, watch, provide, InjectionKey } from 'vue'
 import DataDetail from '@/blocks/DataDetail'
 import DataView from '@/blocks/DataView'
 import ExtentionBar from '@/blocks/ExtentionBar'
+
+export type DataListParamsType = {
+  chainId: any[]
+  type: number | null
+  DEXe: any[]
+  tag: string | null
+  sortMethod: string | null
+  page: number
+  size: number
+  disablePaginate: boolean
+  trendType: number | null
+  rankBy: number | null
+}
+export const DataListParamsKey = Symbol() as InjectionKey<DataListParamsType>
 
 const LandingPage = defineComponent({
   name: 'LandingPage',
@@ -45,6 +59,20 @@ const LandingPage = defineComponent({
         immediate: true
       }
     )
+    const DataListParams = ref<DataListParamsType>({
+      chainId: [],
+      type: 2,
+      DEXe: [],
+      tag: null,
+      sortMethod: null,
+      page: 1,
+      size: 20,
+      disablePaginate: false,
+      trendType: 0,
+      rankBy: null
+    })
+
+    provide(DataListParamsKey, DataListParams.value)
 
     provide('currentExpand', currentExpand)
 

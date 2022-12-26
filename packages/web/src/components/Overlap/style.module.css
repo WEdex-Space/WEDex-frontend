@@ -9,8 +9,11 @@
   display: inline-block;
   width: 16px;
   height: 16px;
-  margin-left: -6px;
   vertical-align: middle;
+}
+
+.icon:not(:first-child) {
+  margin-left: -6px;
 }
 
 .icon img {

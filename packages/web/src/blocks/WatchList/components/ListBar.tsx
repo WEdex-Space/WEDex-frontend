@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@wedex/icons'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, PropType } from 'vue'
 import style from '@/blocks/DataView/components/HeaderTagFilter.module.css'
 
 export default defineComponent({
@@ -8,22 +8,22 @@ export default defineComponent({
     value: {
       type: String,
       default: ''
+    },
+    list: {
+      type: Array as PropType<any[]>,
+      default() {
+        return [
+          {
+            name: 'Mainlist',
+            value: ''
+          }
+        ]
+      }
     }
   },
   emits: ['change'],
   setup(props, ctx) {
-    const tagData = ref([
-      {
-        name: 'Mainlist',
-        value: ''
-      },
-      {
-        name: 'list 1',
-        value: '1'
-      }
-    ])
-
-    const currentValue = ref(tagData.value[0].value)
+    const currentValue = ref(props.list[0].value)
 
     const handleClick = (value: any) => {
       currentValue.value = value
@@ -31,7 +31,6 @@ export default defineComponent({
     }
 
     return {
-      tagData,
       currentValue,
       handleClick
     }
@@ -41,7 +40,7 @@ export default defineComponent({
       <div class="flex py-2 px-1 items-center">
         <div class="flex-1 overflow-hidden">
           <ul class=" whitespace-nowrap overflow-x-scroll overflow-y-hidden">
-            {this.tagData.map(item => (
+            {this.list.map(item => (
               <li
                 class={[
                   style.subNavItem,
