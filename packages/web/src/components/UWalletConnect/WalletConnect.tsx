@@ -1,5 +1,5 @@
+import { UModal } from '@wedex/components'
 import { CloseOutlined } from '@wedex/icons'
-import { NModal } from 'naive-ui'
 import type { ExtractPropTypes, PropType } from 'vue'
 import { defineComponent, ref } from 'vue'
 import './WalletConnect.css'
@@ -88,7 +88,7 @@ const UWalletConnect = defineComponent({
     ])
 
     return () => (
-      <NModal
+      <UModal
         show={props.show}
         onUpdateShow={props.onUpdateShow}
         maskClosable
@@ -100,7 +100,7 @@ const UWalletConnect = defineComponent({
           <div class="flex flex-wrap m-auto u-wallet-connect__wrap">
             {items.value.map(item => (
               <div
-                class={`u-wallet-connect__item  p-1rem mt-10px border border-[#EDEDF2] text-center${
+                class={`u-wallet-connect__item ${
                   item.allowed ? ' cursor-pointer' : ' cursor-not-allowed'
                 } `}
                 onClick={() => {
@@ -115,7 +115,7 @@ const UWalletConnect = defineComponent({
             ))}
           </div>
         </div>
-      </NModal>
+      </UModal>
     )
   }
 })

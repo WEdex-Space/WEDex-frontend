@@ -3,6 +3,7 @@ import { defineComponent, inject, Ref, computed, ref, onMounted } from 'vue'
 import Empty from './components/Empty'
 import ListBar from './components/ListBar'
 import ListEdit from './components/ListEdit'
+import SyncLink from '@/components/SyncLink'
 import { default as TradingDataList, TradingDataItem } from '@/components/TradingDataList'
 
 export type watchListType = {
@@ -122,8 +123,10 @@ export default defineComponent({
             <ListBar list={this.watchLists} onChange={value => null} />
             {this.dataList.length ? (
               <TradingDataList
-                class="flex-1"
                 mode="watchlist"
+                tableProps={{
+                  flexHeight: false
+                }}
                 isStretch={this.currentExpand === 'right'}
                 dataList={this.dataList}
                 onRowClick={row => {
@@ -133,6 +136,7 @@ export default defineComponent({
             ) : (
               <Empty />
             )}
+            <SyncLink />
           </>
         )}
       </div>

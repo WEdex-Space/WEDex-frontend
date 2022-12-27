@@ -9,9 +9,9 @@ import {
 } from '@wedex/components'
 import { defineComponent } from 'vue'
 import { RouterView } from 'vue-router'
-import WalletConnectBlock from './blocks/WalletConnect'
 import { upload as onUpload } from './services/a2s.adapter'
 import { useWalletStore, useGlobalConfigStore } from './stores'
+import WalletConnectBlock from '@/components/UWalletConnect'
 
 export default defineComponent({
   name: 'App',

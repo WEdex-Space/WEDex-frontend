@@ -1,6 +1,7 @@
-import { UWalletConnect, UWalletConnectPropsType } from '@wedex/components'
 import { defineComponent } from 'vue'
+import { default as UWalletConnect, UWalletConnectPropsType } from './WalletConnect'
 import { useUserStore, useWalletStore } from '@/stores'
+
 const WalletConnectBlock = defineComponent({
   name: 'WalletConnectBlock',
   setup() {
@@ -27,16 +28,14 @@ const WalletConnectBlock = defineComponent({
       walletStore.connectModalOpened = value
     }
 
-    const onWalletCancel = () => {
-      walletStore.closeConnectModal()
-    }
-
     return () => (
       <UWalletConnect
         show={walletStore.connectModalOpened}
         onUpdateShow={updateModalOpened}
         onClick={onWalletClick}
-        onClose={onWalletCancel}
+        onClose={() => {
+          walletStore.closeConnectModal()
+        }}
       />
     )
   }

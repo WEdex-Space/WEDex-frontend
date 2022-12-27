@@ -50,6 +50,14 @@ export default defineComponent({
     isStretch: {
       type: Boolean,
       default: true
+    },
+    tableProps: {
+      type: Object,
+      default() {
+        return {
+          flexHeight: true
+        }
+      }
     }
   },
   setup(props, ctx) {
@@ -364,7 +372,7 @@ export default defineComponent({
         columns={this.columns}
         scroll-x={1300}
         data={this.dataList}
-        flex-height
+        {...this.tableProps}
         size="small"
         bordered={false}
         row-class-name="cursor-pointer"

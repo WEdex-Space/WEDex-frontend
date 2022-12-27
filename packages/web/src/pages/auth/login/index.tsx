@@ -26,7 +26,6 @@ export default defineComponent({
 
     return {
       loading,
-      ensureWalletConnected,
       walletLogin
     }
   },

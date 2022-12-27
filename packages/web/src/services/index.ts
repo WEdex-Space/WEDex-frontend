@@ -56,18 +56,25 @@ export const services = {
       ...extract('GET', args, [], [])
     })
   },
-  'MultiChart@update-multi-chart'(args: ApiDocuments.proto_MultiChartTabUpdateRequest) {
-    return requestAdapter<ApiDocuments.proto_MessageResponse>({
-      url: replacePath('/multi-chart-tabs', args),
-      method: 'PUT',
-      ...extract('PUT', args, [], [])
-    })
-  },
   'MultiChart@create-multi-chart-tab'(args: ApiDocuments.proto_MultiChartTabCreateRequest) {
     return requestAdapter<ApiDocuments.proto_MessageResponse>({
       url: replacePath('/multi-chart-tabs', args),
       method: 'POST',
       ...extract('POST', args, [], [])
+    })
+  },
+  'MultiChart@update-multi-chart'(
+    args: {
+      /**
+       * @description watch id
+       */
+      tab_id: string
+    } & ApiDocuments.proto_MultiChartTabUpdateRequest
+  ) {
+    return requestAdapter<ApiDocuments.proto_MessageResponse>({
+      url: replacePath('/multi-chart-tabs/{tab_id}', args),
+      method: 'PUT',
+      ...extract('PUT', args, [], ['tab_id'])
     })
   },
   'MultiChart@get-multi-chart-list'(args: {
@@ -127,18 +134,25 @@ export const services = {
       ...extract('GET', args, [], [])
     })
   },
-  'Notebook@update-notebook-list'(args: ApiDocuments.proto_NotebookUpdateRequest) {
-    return requestAdapter<ApiDocuments.proto_MessageResponse>({
-      url: replacePath('/notebooks', args),
-      method: 'PUT',
-      ...extract('PUT', args, [], [])
-    })
-  },
   'Notebook@create-notebook-list'(args: ApiDocuments.proto_NotebookCreateRequest) {
     return requestAdapter<ApiDocuments.proto_MessageResponse>({
       url: replacePath('/notebooks', args),
       method: 'POST',
       ...extract('POST', args, [], [])
+    })
+  },
+  'Notebook@update-notebook-list'(
+    args: {
+      /**
+       * @description watch id
+       */
+      tab_id: string
+    } & ApiDocuments.proto_NotebookUpdateRequest
+  ) {
+    return requestAdapter<ApiDocuments.proto_MessageResponse>({
+      url: replacePath('/notebooks/{notebook_id}', args),
+      method: 'PUT',
+      ...extract('PUT', args, [], ['tab_id'])
     })
   },
   'Notification@get-notification-list'(args?: any) {
@@ -157,6 +171,80 @@ export const services = {
       url: replacePath('/notifications', args),
       method: 'POST',
       ...extract('POST', args, [], [])
+    })
+  },
+  'Pair@get-pair-list'(args?: any) {
+    return requestAdapter<
+      ApiDocuments.proto_ListData & {
+        list?: ApiDocuments.proto_PairBasicResponse[]
+      }
+    >({
+      url: replacePath('/pairs', args),
+      method: 'GET',
+      ...extract('GET', args, [], [])
+    })
+  },
+  'Pair@get-pair-info'(args: {
+    /**
+     * @description pair id
+     */
+    pair_id: string
+  }) {
+    return requestAdapter<ApiDocuments.proto_PairResponse>({
+      url: replacePath('/pairs/{pair_id}', args),
+      method: 'GET',
+      ...extract('GET', args, [], ['pair_id'])
+    })
+  },
+  'Pair@get-kline-list'(args: {
+    /**
+     * @description pair id
+     */
+    pair_id: string
+  }) {
+    return requestAdapter<
+      ApiDocuments.proto_ListData & {
+        list?: ApiDocuments.proto_PairTickResponse[]
+      }
+    >({
+      url: replacePath('/pairs/{pair_id}/kline', args),
+      method: 'GET',
+      ...extract('GET', args, [], ['pair_id'])
+    })
+  },
+  'Pair@get-pair-transaction-list'(args: {
+    /**
+     * @description pair id
+     */
+    pair_id: string
+  }) {
+    return requestAdapter<
+      ApiDocuments.proto_ListData & {
+        list?: ApiDocuments.proto_PairTransactionResponse[]
+      }
+    >({
+      url: replacePath('/pairs/{pair_id}/transactions', args),
+      method: 'GET',
+      ...extract('GET', args, [], ['pair_id'])
+    })
+  },
+  'Share@set-share'(args: ApiDocuments.proto_ShareSetRequest) {
+    return requestAdapter<ApiDocuments.proto_ShareSetResponse>({
+      url: replacePath('/share', args),
+      method: 'PUT',
+      ...extract('PUT', args, [], [])
+    })
+  },
+  'Share@get-share-page-html'(args: {
+    /**
+     * @description share code
+     */
+    share_code: string
+  }) {
+    return requestAdapter<any>({
+      url: replacePath('/share/{share_code}', args),
+      method: 'GET',
+      ...extract('GET', args, [], ['share_code'])
     })
   },
   'Upload@upload-file'(args: {
@@ -182,18 +270,25 @@ export const services = {
       ...extract('GET', args, [], [])
     })
   },
-  'Watch@update-watch'(args: ApiDocuments.proto_WatchUpdateRequest) {
-    return requestAdapter<ApiDocuments.proto_MessageResponse>({
-      url: replacePath('/watchs', args),
-      method: 'PUT',
-      ...extract('PUT', args, [], [])
-    })
-  },
   'Watch@create-watch'(args: ApiDocuments.proto_WatchCreateRequest) {
     return requestAdapter<ApiDocuments.proto_MessageResponse>({
       url: replacePath('/watchs', args),
       method: 'POST',
       ...extract('POST', args, [], [])
+    })
+  },
+  'Watch@update-watch'(
+    args: {
+      /**
+       * @description watch id
+       */
+      watch_id: string
+    } & ApiDocuments.proto_WatchUpdateRequest
+  ) {
+    return requestAdapter<ApiDocuments.proto_MessageResponse>({
+      url: replacePath('/watchs/{watch_id}', args),
+      method: 'PUT',
+      ...extract('PUT', args, [], ['watch_id'])
     })
   },
   'Watch@get-watch-pair-list'(args: {
