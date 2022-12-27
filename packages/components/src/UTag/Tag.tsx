@@ -1,33 +1,8 @@
-import { defineComponent } from 'vue'
-import type { PropType, ExtractPropTypes } from 'vue'
-import './index.css'
+import { NTag, TagProps } from 'naive-ui'
 
-export const UTagProps = {
-  type: {
-    type: String as PropType<'outlined' | 'filled'>,
-    default: 'outlined'
-  },
-  bgColor: {
-    type: String,
-    default: '#5331F4'
-  }
-}
+export type UTagPropsType = TagProps
 
-export type UTagPropsType = ExtractPropTypes<typeof UTagProps>
-
-export const Utag = defineComponent({
-  name: 'UTag',
-  props: UTagProps,
-  setup(props, { slots }) {
-    return () => (
-      <span
-        class={`u-tag-com u-tag-com__${props.type}`}
-        style={props.type === 'filled' ? { backgroundColor: props.bgColor } : undefined}
-      >
-        {slots.default?.()}
-      </span>
-    )
-  }
-})
+const Utag = NTag
+Utag.name = 'Utag'
 
 export default Utag

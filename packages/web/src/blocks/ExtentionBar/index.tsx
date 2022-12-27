@@ -13,12 +13,12 @@ import {
 } from '@wedex/icons'
 import { defineComponent, inject, ref } from 'vue'
 import Alerts from '@/blocks/Alerts'
+import EmbeddedBlock from '@/blocks/DataDetail/components/EmbeddedBlock'
 import MultiChart from '@/blocks/MultiChart'
 import Notebook from '@/blocks/Notebook'
 import Portfolio from '@/blocks/Portfolio'
 import Search from '@/blocks/Search'
 import WatchList from '@/blocks/WatchList'
-
 import { useGlobalConfigStore } from '@/stores'
 
 export default defineComponent({
@@ -100,8 +100,11 @@ export default defineComponent({
 
     return (
       <div class="border-color-border flex border-l-1">
-        <div class="flex-1 overflow-hidden">
-          {this.currentExtention && componentsMap[this.currentExtention].component}
+        <div class="flex flex-col flex-1 overflow-hidden">
+          <div class="flex-1 overflow-hidden">
+            {this.currentExtention && componentsMap[this.currentExtention].component}
+          </div>
+          {this.currentExpand === 'center' && <EmbeddedBlock />}
         </div>
         {/* icons */}
         <div class="border-color-border flex flex-col border-l-1 w-11">

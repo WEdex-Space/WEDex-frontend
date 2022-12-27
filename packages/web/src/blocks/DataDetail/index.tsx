@@ -1,10 +1,9 @@
 import { useMouse } from '@vueuse/core'
 import { UTabs, UTabPane } from '@wedex/components'
-import { SwapOutlined, ShareOutlined } from '@wedex/icons'
+import { ExportOutlined } from '@wedex/icons'
 import { defineComponent, inject, Ref, watch, ref, onMounted } from 'vue'
 import DetailHeader from './DetailHeader'
-import PoolBlock from './components/PoolBlock'
-import TradeBlock from './components/TradeBlock'
+import TokenInfoBlock from './components/TokenInfoBlock'
 import TransactionsBlock from './components/TransactionsBlock'
 
 export default defineComponent({
@@ -24,13 +23,14 @@ export default defineComponent({
 
     const targetActive = ref(false)
     const targetEventProp = {
-      onMousedown: () => {
-        console.log('handleTargetMouseDown', x, y)
-        targetMouseCache.value = {
-          x: x.value,
-          y: y.value
+      onMousedown: (e: any) => {
+        if (e.target.classList.contains('resize-handler')) {
+          targetMouseCache.value = {
+            x: x.value,
+            y: y.value
+          }
+          targetActive.value = true
         }
-        targetActive.value = true
       },
       onMouseup: () => {
         targetMouseCache.value = {
@@ -79,18 +79,23 @@ export default defineComponent({
       tradingViewHeight.value = Math.floor(window.innerHeight * 0.45)
     })
 
+    const tabValue = ref('Transactions')
+
     return {
       tradingViewHeight,
       targetActive,
       currentExpand,
       widgetLoaded,
-      targetEventProp
+      targetEventProp,
+      tabValue
     }
   },
   render() {
     return (
       <div
-        class={`flex flex-col ${this.currentExpand ? 'border-l-1 border-color-border' : ''}`}
+        class={`flex flex-col ${
+          this.currentExpand === 'center' ? 'border-l-1 border-color-border' : ''
+        }`}
         {...this.targetEventProp}
       >
         <DetailHeader />
@@ -100,47 +105,38 @@ export default defineComponent({
           </div>
         ) : null}
         {this.widgetLoaded ? (
-          <div class="border-color-border flex border-t-1 flex-1 overflow-hidden relative">
+          <div class="border-color-border border-t-1 flex-1 overflow-hidden relative">
             {/* resize handler */}
             <div
-              class={`h-1 w-full top-0 z-50 absolute hover:bg-bg3 ${
+              class={`h-1 w-full top-0 z-50 absolute hover:bg-bg3 resize-handler ${
                 this.targetActive ? '!bg-primary-bg' : ''
               }`}
               style={{ cursor: 'n-resize' }}
             ></div>
-            <div style={{ flex: 2 }} class="border-color-border border-r-1">
-              <UTabs
-                bar-width={0}
-                tabs-padding={10}
-                tab-style={{ userSelect: 'none' }}
-                pane-style={{ padding: 0, flex: 1 }}
-                class="flex flex-col h-full"
-              >
-                <UTabPane name="Transactions" tab="Transactions">
-                  <TransactionsBlock />
-                </UTabPane>
-                <UTabPane name="ProjectInfo" tab="Project Info">
-                  ProjectInfo
-                </UTabPane>
-                <UTabPane name="TokenInfo" tab="Token Info">
-                  TokenInfo
-                </UTabPane>
-              </UTabs>
-            </div>
-            <div style={{ flex: 1 }} class="overflow-y-scroll">
-              <TradeBlock />
-              <PoolBlock />
-              <div class="border-color-border cursor-pointer flex border-t-1 text-xs p-2.5 text-color3 items-center hover:text-primary">
-                <SwapOutlined class="h-4 w-4" />
-                <div class="flex-1">Trade on PancakeSwap</div>
-                <ShareOutlined class="h-4 w-4" />
-              </div>
-              <div class="border-color-border cursor-pointer flex border-t-1 text-xs p-2.5 text-color3 items-center hover:text-primary">
-                <SwapOutlined class="h-4 w-4" />
-                <div class="flex-1">Trade on BogSwap</div>
-                <ShareOutlined class="h-4 w-4" />
-              </div>
-            </div>
+            <UTabs
+              bar-width={0}
+              tabs-padding={10}
+              tab-style={{ userSelect: 'none' }}
+              pane-style={{ padding: 0, flex: 1 }}
+              class="border-color-border flex flex-col h-full border-r-1"
+              value={this.tabValue}
+              onUpdate:value={value => (this.tabValue = value)}
+              v-slots={{
+                suffix: () =>
+                  this.tabValue === 'Transactions' ? (
+                    <div class="cursor-pointer flex text-xs px-2 text-color3 items-center hover:text-color1">
+                      <ExportOutlined class="h-4 mr-1 w-3" /> Export
+                    </div>
+                  ) : null
+              }}
+            >
+              <UTabPane name="Transactions" tab="Transactions">
+                <TransactionsBlock />
+              </UTabPane>
+              <UTabPane name="TokenInfo" tab="Token Info">
+                <TokenInfoBlock />
+              </UTabPane>
+            </UTabs>
           </div>
         ) : null}
       </div>

@@ -36,7 +36,7 @@ export default defineComponent({
   render() {
     return (
       <div
-        class="bg-purple flex flex-col h-5 w-3 items-center justify-center"
+        class="bg-purple flex flex-col h-4.5 w-3 items-center justify-center"
         style={{ lineHeight: 0 }}
       >
         <div

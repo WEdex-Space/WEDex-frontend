@@ -76,3 +76,21 @@ body {
 .transparentTable .n-data-table-th {
   @apply text-color3;
 }
+
+/* tinyTable */
+.tinyTable.n-data-table {
+  @apply border-color-border border-b-1 pb-2;
+}
+
+.tinyTable.n-data-table .n-data-table-td {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.tinyTable.n-data-table .n-data-table-th {
+  border-bottom: 0;
+}
+
+.tinyTable.n-data-table .n-data-table-td.n-data-table-td--last-row {
+  border-bottom: 0;
+}

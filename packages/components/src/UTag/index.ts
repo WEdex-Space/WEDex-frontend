@@ -1,2 +1,2 @@
-export { default as UTag, UTagProps } from './Tag'
+export { default as UTag } from './Tag'
 export type { UTagPropsType } from './Tag'

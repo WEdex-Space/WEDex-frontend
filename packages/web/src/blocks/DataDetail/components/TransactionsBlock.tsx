@@ -60,10 +60,19 @@ export default defineComponent({
     const customRenderSortTitle = (
       sortTitle: string,
       filterName: string,
-      filterProps?: { [key: string]: any } | null
+      filterProps?: { [key: string]: any } | null,
+      align?: 'left' | 'center' | 'right'
     ) => {
+      const flexAlignClass = {
+        left: 'start',
+        center: 'justify-center',
+        right: 'justify-end'
+      }[align || 'right']
+
       const content = (hasValue?: boolean) => (
-        <div class="cursor-pointer flex h-7 -mx-[2px] justify-end items-center hover:text-color2">
+        <div
+          class={`cursor-pointer flex h-7 -mx-[2px] ${flexAlignClass} items-center hover:text-color2`}
+        >
           <div>{sortTitle}</div>
           <FilterOutlined class={`h-3 ml-[2px] w-3 ${hasValue ? 'text-primary' : ''}`} />
         </div>
@@ -78,23 +87,34 @@ export default defineComponent({
 
     const columns = computed<any[]>(() => [
       {
-        title: customRenderSortTitle('Date', 'date', {
-          values: filterData.value.date,
-          onChange: (value: any) => (filterData.value.date = value)
-        }),
+        title: customRenderSortTitle(
+          'Date',
+          'date',
+          {
+            values: filterData.value.date,
+            onChange: (value: any) => (filterData.value.date = value)
+          },
+          'center'
+        ),
         key: 'date',
-        align: 'right',
+        align: 'center',
         render: (data: TransactionsDataType, index: number) => {
           return <TimeAgo value={data.date} />
         }
       },
       {
-        title: customRenderSortTitle('Type', 'type', {
-          value: filterData.value.type,
-          onChange: (value: string) => (filterData.value.type = value)
-        }),
+        title: customRenderSortTitle(
+          'Type',
+          'type',
+          {
+            value: filterData.value.type,
+            onChange: (value: string) => (filterData.value.type = value)
+          },
+          'center'
+        ),
         key: 'type',
         align: 'center',
+        width: 60,
         render: (data: TransactionsDataType, index: number) => {
           return <strong class="text-color-up">{data.type}</strong>
         }
@@ -114,7 +134,7 @@ export default defineComponent({
         }
       },
       {
-        title: customRenderSortTitle('Price', 'price', {
+        title: customRenderSortTitle('Price USD', 'price', {
           inputProps: {
             prefix: '$'
           },
@@ -128,7 +148,7 @@ export default defineComponent({
         }
       },
       {
-        title: customRenderSortTitle('Token0', 'token0', {
+        title: customRenderSortTitle('AMT Token0', 'token0', {
           inputProps: {
             suffix: 'Token0'
           },
@@ -142,7 +162,7 @@ export default defineComponent({
         }
       },
       {
-        title: customRenderSortTitle('Token1', 'token1', {
+        title: customRenderSortTitle('Total Token1', 'token1', {
           inputProps: {
             suffix: 'Token1'
           },

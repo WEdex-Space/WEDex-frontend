@@ -81,12 +81,8 @@ export default defineComponent({
   },
   render() {
     return (
-      <div>
-        <div class="flex h-9 px-3 items-center">
-          <div class="flex-1 font-700 text-primary">Trade</div>
-          <div class="text-xs text-color3">BSC/pancakeSwap</div>
-        </div>
-        <ul class="border-color-border flex border-b-1 h-9 px-3 items-center">
+      <>
+        <ul class="border-color-border flex bg-bg1 border-b-1 h-9 px-3 items-center">
           {this.tradeTimeTypes.map(time => (
             <li
               class={`cursor-pointer flex-1 text-color3 hover:text-color1 ${
@@ -99,7 +95,7 @@ export default defineComponent({
           ))}
         </ul>
         <UTable
-          class="transparentTable"
+          class="transparentTable tinyTable"
           columns={this.columns}
           data={this.dataList}
           size="small"
@@ -107,7 +103,7 @@ export default defineComponent({
           single-column
           single-line
         />
-      </div>
+      </>
     )
   }
 })
