@@ -168,7 +168,7 @@ export default defineComponent({
           ))}
         </ul>
 
-        <div class="cursor-pointer flex text-primary text-xs p-3 items-center hover:opacity-80">
+        <div class="cursor-pointer flex text-primary text-xs p-3 select-none items-center hover:opacity-80">
           <div class="flex-1"></div>
           <div
             class={`flex items-center ${this.createList.length ? 'cursor-not-allowed' : ''}`}
