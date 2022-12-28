@@ -7,6 +7,7 @@ import type { SupportedWalletTypes } from '@/types/wallet'
 const MetaMaskInstance = MetamaskWallet.getInstance
 const WalletConnectInstance = WalletConnectWallet.getInstance
 const CoinbaseInstance = CoinbaseWallet.getInstance
+
 export async function getWallet(
   walletName: SupportedWalletTypes
 ): Promise<AbstractWallet | undefined> {

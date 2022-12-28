@@ -9,6 +9,10 @@ export type MultiSelectorOptionType = {
   icon?: string
 }
 
+export { default as NetworkSelector } from './NetworkSelector'
+
+export { default as DexSelector } from './DexSelector'
+
 export default defineComponent({
   name: 'MultiSelector',
   props: {

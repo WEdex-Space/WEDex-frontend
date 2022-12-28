@@ -3,80 +3,52 @@ interface BasicDto {
   [key: string]: any
 }
 export declare namespace ApiDocuments {
-  export interface model_EndPoint extends BasicDto {
-    rpcUrl?: string
-    wssUrl?: string
-  }
-  export interface model_SocialBook extends BasicDto {
-    _id?: string
-    socialTool?: ApiDocuments.model_SocialTool
-    socialToolId?: string
-    targetId?: string
-    type?: number
-    value?: string
-  }
-  export interface model_SocialTool extends BasicDto {
-    _id?: string
-    domain?: string
-    logo?: string
-    name?: string
-    sortIndex?: number
-  }
-  export interface model_Token extends BasicDto {
+  export interface model_Pair extends BasicDto {
     _id?: string
     chainId?: number
-    contractAddress?: string
     decimals?: number
-    description?: string
+    dexId?: string
+    factory?: string
     logo?: string
     name?: string
-    socials?: ApiDocuments.model_SocialBook[]
+    pairAddress?: string
+    pairDetail?: {}
     symbol?: string
-    totalSupply?: number
-  }
-  export interface model_TokenBasic extends BasicDto {
-    _id?: string
-    chainId?: number
-    contractAddress?: string
-    decimals?: number
-    logo?: string
-    name?: string
-    socials?: ApiDocuments.model_SocialBook[]
-    symbol?: string
-    totalSupply?: number
+    token0?: {}
+    token0Info?: {}
+    token1?: {}
+    token1Info?: {}
+    tokenW0?: string
+    tokenW1?: string
   }
   export interface proto_ChainResponse extends BasicDto {
     _id?: string
     chainId?: number
     currentSymbol?: string
     description?: string
-    endPoint?: ApiDocuments.model_EndPoint
     explorer?: string
     logo?: string
     name?: string
+    rpcUrl?: string
+    wssUrl?: string
   }
   export interface proto_DEXResponse extends BasicDto {
     _id?: string
-    chain_id?: number
-    domain?: string
+    appUrl?: string
+    chainId?: number
+    dexType?: number
+    factory?: string
     logo?: string
     name?: string
+    officialSite?: string
+    router01?: string
+    router02?: string
   }
   export interface proto_JwtAuthorizationResponse extends BasicDto {
     /**
      * @description Token
      */
     token: string
-  }
-  export interface proto_ListData extends BasicDto {
-    /**
-     * @description data list
-     */
-    list?: any
-    /**
-     * @description total
-     */
-    total: number
   }
   export interface proto_MessageResponse extends BasicDto {
     /**
@@ -85,37 +57,41 @@ export declare namespace ApiDocuments {
     message: string
   }
   export interface proto_MultiChartPairCreateRequest extends BasicDto {
-    dex_pair_contract_address: string
+    chainId: number
+    dexPairContractAddress: string
+    sortIndex?: number
   }
   export interface proto_MultiChartPairResponse extends BasicDto {
     _id?: string
-    createdAt?: string
-    dex_pair_contract_address?: string
-    sort_index?: number
-    updatedAt?: string
+    chainId?: number
+    dexPairContractAddress?: string
+    pair?: ApiDocuments.model_Pair
+    sortIndex?: number
+    tabId?: string
+    userWalletAddress?: string
   }
   export interface proto_MultiChartTabCreateRequest extends BasicDto {
     name: string
     setting?: {}
+    sortIndex?: number
   }
   export interface proto_MultiChartTabResponse extends BasicDto {
     _id?: string
-    createdAt?: string
     name?: string
     setting?: {}
-    sort_index?: number
-    updatedAt?: string
-    user_wallet_address?: string
+    sortIndex?: number
+    userWalletAddress?: string
   }
   export interface proto_MultiChartTabUpdateRequest extends BasicDto {
     name: string
     setting?: {}
+    sortIndex?: number
   }
   export interface proto_NonceResponse extends BasicDto {
     /**
      * @description expiration time
      */
-    expiration_time: string
+    expirationTime: string
     /**
      * @description nonce
      */
@@ -127,34 +103,73 @@ export declare namespace ApiDocuments {
   export interface proto_NotebookResponse extends BasicDto {
     _id?: string
     content?: string
+    userWalletAddress?: string
   }
   export interface proto_NotebookUpdateRequest extends BasicDto {
     content: string
   }
   export interface proto_NotificationCreateRequest extends BasicDto {
-    condition: any
+    condition: {}
     content: string
     type: number
   }
   export interface proto_NotificationResponse extends BasicDto {
     _id?: string
-    condition?: any
+    condition?: {}
     content?: string
     /**
-     * @description ture 以及提现了
+     * @description ture 已经提醒了
      */
     state?: boolean
     type?: number
+    userWalletAddress?: string
+  }
+  export interface proto_PageData extends BasicDto {
+    /**
+     * @description data list
+     */
+    list?: any
+    /**
+     * @description pagination select current page, default: 1
+     */
+    page?: number
+    /**
+     * @description pagination size, default: 20
+     */
+    size?: number
+    /**
+     * @description total
+     */
+    total: number
   }
   export interface proto_PairBasicResponse extends BasicDto {
     _id?: string
     chainId?: number
     dexId?: string
     name?: string
-    token0?: ApiDocuments.model_TokenBasic
-    token1?: ApiDocuments.model_TokenBasic
+    token0?: {}
+    token0Info?: {}
+    token1?: {}
+    token1Info?: {}
     tokenW0?: string
     tokenW1?: string
+  }
+  export interface proto_PairReportResponse extends BasicDto {
+    _id?: string
+    buys?: number
+    chainId?: number
+    dexId?: string
+    happenAt?: string
+    pairId?: string
+    priceAvg?: number
+    priceEnd?: number
+    priceMax?: number
+    priceMin?: number
+    priceStart?: number
+    sells?: number
+    txns?: number
+    views?: number
+    volume?: number
   }
   export interface proto_PairResponse extends BasicDto {
     _id?: string
@@ -165,22 +180,14 @@ export declare namespace ApiDocuments {
     logo?: string
     name?: string
     pairAddress?: string
-    reverse0?: number
-    reverse1?: number
+    pairDetail?: {}
     symbol?: string
-    token0?: ApiDocuments.model_Token
-    token1?: ApiDocuments.model_Token
+    token0?: {}
+    token0Info?: {}
+    token1?: {}
+    token1Info?: {}
     tokenW0?: string
     tokenW1?: string
-  }
-  export interface proto_PairTickResponse extends BasicDto {
-    _id?: string
-    close?: number
-    high?: number
-    low?: number
-    open?: number
-    time?: string
-    volume?: number
   }
   export interface proto_PairTransactionResponse extends BasicDto {
     _id?: string
@@ -193,6 +200,7 @@ export declare namespace ApiDocuments {
     blockNumber?: number
     blockTime?: number
     chainId?: number
+    dexId?: string
     effectiveGasPrice?: number
     from?: string
     gasUsed?: number
@@ -226,32 +234,34 @@ export declare namespace ApiDocuments {
     /**
      * @description Wallet address
      */
-    wallet_address: string
+    walletAddress: string
   }
   export interface proto_WatchCreateRequest extends BasicDto {
     name: string
+    sortIndex?: number
   }
   export interface proto_WatchPairCreateRequest extends BasicDto {
-    dex_pair_contract_address: string
+    chainId: number
+    dexPairContractAddress: string
+    sortIndex?: number
   }
   export interface proto_WatchPairResponse extends BasicDto {
     _id?: string
-    chain_id?: number
-    createdAt?: string
-    dex_pair_contract_address?: string
-    sort_index?: number
-    updatedAt?: string
-    user_wallet_address?: string
+    chainId?: number
+    dexPairContractAddress?: string
+    pair?: ApiDocuments.model_Pair
+    sortIndex?: number
+    userWalletAddress?: string
+    watchId?: string
   }
   export interface proto_WatchResponse extends BasicDto {
     _id?: string
-    chain_id?: string
-    createdAt?: string
-    sort_index?: number
-    updatedAt?: string
-    user_wallet_address?: string
+    name?: string
+    sortIndex?: number
+    userWalletAddress?: string
   }
   export interface proto_WatchUpdateRequest extends BasicDto {
     name: string
+    sortIndex?: number
   }
 }

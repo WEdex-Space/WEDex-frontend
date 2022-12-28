@@ -3,6 +3,7 @@ import { WalletConnectProvider } from './provider/WalletConnectProvider'
 import { ChainNetworkType, WALLET_INFURA_ID } from '@/constants'
 import { useWalletStore } from '@/stores'
 let _instance: WalletConnectWallet | undefined
+
 export default class WalletConnectWallet extends AbstractWallet {
   walletConnectProvider: WalletConnectProvider
   constructor() {

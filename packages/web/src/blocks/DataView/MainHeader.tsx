@@ -9,16 +9,14 @@ import {
   ExpandRightOutlined
 } from '@wedex/icons'
 import { defineComponent, ref, inject, onMounted, Ref } from 'vue'
-import DexSelector from './components/DexSelector'
 import HeaderGainerFilter from './components/HeaderGainerFilter'
 import HeaderRankFilter from './components/HeaderRankFilter'
 import HeaderTagFilter from './components/HeaderTagFilter'
 import HeaderTopFilter from './components/HeaderTopFilter'
-import NetworkSelector from './components/NetworkSelector'
 import TrendTypeSelector from './components/TrendTypeSelector'
 
 import style from './style.module.css'
-import { MultiSelectorOptionType } from '@/components/MultiSelector'
+import { MultiSelectorOptionType, NetworkSelector, DexSelector } from '@/components/MultiSelector'
 import { allNetworks } from '@/constants'
 import { DataListParamsKey } from '@/pages/index'
 

@@ -9,17 +9,14 @@ import AbstractWallet from '@/wallets/AbstractWallet'
 export type UserState = {
   // user token
   token: string | undefined
-  address: string | undefined
 }
 
 export const useUserStore = defineStore('user', {
   state: (): UserState => ({
-    token: storage('local').get<string>(STORE_KEY_TOKEN),
-    address: undefined
+    token: storage('local').get<string>(STORE_KEY_TOKEN)
   }),
   getters: {
-    logged: state => !!state.token,
-    is_connected_wallet: state => !!state.address
+    logged: state => !!state.token
   },
   actions: {
     refreshToken(token?: string) {
@@ -27,9 +24,9 @@ export const useUserStore = defineStore('user', {
       storage('local').set(STORE_KEY_TOKEN, this.token as string)
     },
     async loginWithWalletAddress(wallet: AbstractWallet) {
-      const wallet_address = await wallet.getAddress()
+      const walletAddress = await wallet.getAddress()
       const { error, data } = await services['Authorization@get-nonce-by-address']({
-        wallet_address
+        wallet_address: walletAddress
       })
       if (!error) {
         let signedMsg
@@ -42,7 +39,7 @@ export const useUserStore = defineStore('user', {
         const { error: tokenError, data: tokenData } = await services[
           'Authorization@login-by-wallet-address'
         ]({
-          wallet_address,
+          walletAddress,
           nonce: data.nonce!,
           signature: signedMsg
         })
@@ -51,7 +48,8 @@ export const useUserStore = defineStore('user', {
           return false
         }
         if (tokenData?.token) {
-          return this.onLogin(tokenData?.token)
+          this.onLogin(tokenData?.token)
+          return true
         } else {
           console.error('get token fail')
           return false
@@ -61,22 +59,16 @@ export const useUserStore = defineStore('user', {
         return false
       }
     },
-    setLocalToken(token: string) {
+    onLogin(token: string) {
       storage('local').set(STORE_KEY_TOKEN, token)
       this.token = token
     },
-    onLogin(token: string) {
-      this.setLocalToken(token)
-    },
-    onLogout() {
+    logout(msg?: false | string) {
       const walletStore = useWalletStore()
       this.token = ''
       storage('session').clear()
       storage('local').remove(STORE_KEY_TOKEN)
       walletStore.wallet && walletStore.disconnectWallet()
-    },
-    logout(msg?: false | string, query?: any) {
-      this.onLogout()
       if (msg) {
         message.info(typeof msg === 'string' ? msg : 'You have been logged out')
       }

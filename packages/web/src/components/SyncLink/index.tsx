@@ -8,11 +8,10 @@ export default defineComponent({
     const walletStore = useWalletStore()
     const loading = ref(false)
 
-    const { ensureWalletConnected } = walletStore
     const walletLogin = async () => {
       loading.value = true
       try {
-        await ensureWalletConnected(true)
+        await walletStore.ensureWalletConnected(true)
       } catch (error) {
         // do nothing
       }

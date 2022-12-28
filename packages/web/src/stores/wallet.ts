@@ -31,8 +31,6 @@ export type WalletState = {
   walletType?: SupportedWalletTypes
   // wallet instance
   wallet?: AbstractWallet
-  // is wallet connected
-  connected: boolean
   // is wallet connect modal opened
   connectModalOpened: boolean
   // bind wallet modal opened
@@ -57,11 +55,11 @@ export const useWalletStore = defineStore('wallet', {
     chainId: undefined,
     chainName: undefined,
     walletType: storage('local').get<NonNullable<WalletState['walletType']>>(STORE_KEY_WALLET_TYPE),
-    connected: false,
     wallet: undefined,
     connectModalOpened: false
   }),
   getters: {
+    connected: state => !!state.address,
     isNetworkSupported: state => {
       let status = false
       supportedNetworks.forEach(item => {
@@ -94,12 +92,13 @@ export const useWalletStore = defineStore('wallet', {
       })
     },
     async _onWallectConnect(wallet: AbstractWallet) {
+      console.warn('_onWallectConnect', wallet)
       this.wallet = markRaw(wallet)
-      this.connected = true
       this.address = await wallet.getAddress()
       const network = await wallet.getProvider().getNetwork()
       this.chainId = network.chainId
       this.chainName = network.name
+      this.walletType = storage('local').get(STORE_KEY_WALLET_TYPE)
       this._addEventListeners(this.wallet.getProvider())
       return network
     },
@@ -131,7 +130,7 @@ export const useWalletStore = defineStore('wallet', {
         window.location.pathname !== '/auth/login'
       ) {
         message.info('Account switched, please re-login')
-        userStore.onLogout()
+        userStore.logout()
         router.replace('/auth/login')
       }
     },
@@ -140,7 +139,6 @@ export const useWalletStore = defineStore('wallet', {
       providers.map(item => {
         item.close && item.close()
       })
-      this.connected = false
       storage('local').remove(STORE_KEY_WALLET_CONNECTED)
       this.address = undefined
       this.chainId = undefined
@@ -185,7 +183,7 @@ export const useWalletStore = defineStore('wallet', {
         this.disconnectWallet()
         storage('local').remove(STORE_KEY_WALLET_CONSTAST_TYPE)
         message.info('Account switched, please re-login')
-        userStore.onLogout()
+        userStore.logout()
         router.replace('/auth/login')
         return undefined
       }
@@ -209,10 +207,8 @@ export const useWalletStore = defineStore('wallet', {
       }
     },
     async ensureWalletConnected(force = false) {
-      const userStore = useUserStore()
-
       return new Promise<void>((resolve, reject) => {
-        if (!this.connected || force || this.connected !== userStore.is_connected_wallet) {
+        if (!this.connected || force) {
           this.openConnectModal()
           _resolve = resolve
           _reject = reject
@@ -222,7 +218,6 @@ export const useWalletStore = defineStore('wallet', {
       })
     },
     async bindWallet(wallet: AbstractWallet) {
-      console.log(12313132)
       const address = await wallet.getAddress()
       const { error, data } = await services['Authorization@get-nonce-by-address']({
         wallet_address: address

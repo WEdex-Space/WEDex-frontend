@@ -10,8 +10,11 @@ const WalletConnectBlock = defineComponent({
 
     const onWalletClick: UWalletConnectPropsType['onClick'] = async type => {
       const wallet = await walletStore.onSelectWallet(type)
-      console.warn(wallet, userStore.logged, userStore.is_connected_wallet)
-      if (wallet && (!userStore.logged || !userStore.is_connected_wallet)) {
+      console.warn(wallet, userStore.logged, walletStore.connected)
+      // wallet &&
+      //   walletStore.getBalance(await wallet.getAddress()).then(balance => console.log(balance))
+
+      if (wallet && (!userStore.logged || !walletStore.connected)) {
         const loginRes = await userStore.loginWithWalletAddress(wallet)
         console.log('onWalletClick loginRes', loginRes)
         if (loginRes) {

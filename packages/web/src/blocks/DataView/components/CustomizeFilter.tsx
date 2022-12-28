@@ -4,8 +4,7 @@ import { defineComponent, ref, inject, onMounted } from 'vue'
 import { DataListParamsKey } from '@/pages/index'
 import './CustomizeFilter.css'
 import CustomizeTimeRadio from './CustomizeTimeRadio'
-import DexSelector from './DexSelector'
-import NetworkSelector from './NetworkSelector'
+import { NetworkSelector, DexSelector } from '@/components/MultiSelector'
 import { allNetworks } from '@/constants'
 import {
   formatCurrency,
