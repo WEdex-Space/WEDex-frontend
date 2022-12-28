@@ -71,6 +71,7 @@ export default defineComponent({
     }
 
     return {
+      currentExpand,
       dataList,
       DataListParams,
       loopSwitchSortValue,
@@ -80,6 +81,7 @@ export default defineComponent({
   render() {
     return (
       <TradingDataList
+        isStretch={this.currentExpand === 'left'}
         dataList={this.dataList}
         onSortSwitch={this.loopSwitchSortValue}
         onRowClick={row => {
