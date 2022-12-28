@@ -36,7 +36,7 @@ export default defineComponent({
       ]
     })
 
-    const columns = ref([
+    const columns = ref<any[]>([
       {
         title: 'Token',
         key: 'Token',
