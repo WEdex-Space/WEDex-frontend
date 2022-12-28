@@ -11,6 +11,7 @@ type metaMaskType = {
   }>
   request?: (request: { method: string }) => Promise<any>
 }
+
 export default class MetamaskWallet extends AbstractWallet {
   constructor() {
     super('Metamask', new MetamaskProvider(window.ethereum))

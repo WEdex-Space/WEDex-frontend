@@ -72,6 +72,13 @@ export const useWalletStore = defineStore('wallet', {
     blockchainExplorerUrl: state => allNetworks.find(n => n.chainId === state.chainId)?.explorerUrl
   },
   actions: {
+    async test() {
+      const provider = new ethers.providers.JsonRpcProvider('https://eth.llamarpc.com')
+      this.address &&
+        (await provider.getBalance(this.address).then((res: any) => {
+          console.log(res, ethers.utils.formatUnits(res, 18))
+        }))
+    },
     async init(reload = false) {
       return new Promise((resolve, reject) => {
         if (this.connected && !reload) return resolve(true)

@@ -27,7 +27,10 @@ export default defineComponent({
     return (
       <div class="text-xs px-2 text-color3">
         {this.walletStore.connected ? (
-          <span class="cursor-pointer text-color1 hover:text-primary">
+          <span
+            class="cursor-pointer text-color1 hover:text-primary"
+            onClick={() => this.walletStore.test()}
+          >
             {this.walletStore.address && shortenAddress(this.walletStore.address)}
           </span>
         ) : (
