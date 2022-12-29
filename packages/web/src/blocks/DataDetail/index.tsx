@@ -48,15 +48,20 @@ export default defineComponent({
         targetActive.value = false
       },
       onMousemove: () => {
-        setTimeout(() => {
-          if (targetMouseCache.value.y) {
+        if (targetMouseCache.value.y) {
+          // Security Range: 10~90% window.innerHeight
+          if (tradingViewHeight.value > window.innerHeight * 0.9) {
+            tradingViewHeight.value = Math.floor(window.innerHeight * 0.9)
+          } else if (tradingViewHeight.value < window.innerHeight * 0.2) {
+            tradingViewHeight.value = Math.ceil(window.innerHeight * 0.2)
+          } else {
             tradingViewHeight.value += y.value - targetMouseCache.value.y
             targetMouseCache.value = {
               x: x.value,
               y: y.value
             }
           }
-        }, 0)
+        }
       }
     }
 
@@ -105,7 +110,7 @@ export default defineComponent({
           <div class="border-color-border border-t-1 flex-1 overflow-hidden relative">
             {/* resize handler */}
             <div
-              class={`h-1 w-full top-0 z-50 absolute hover:bg-bg3 resize-handler ${
+              class={`h-2 w-full top-0 z-50 absolute hover:bg-bg3 resize-handler ${
                 this.targetActive ? '!bg-primary-bg' : ''
               }`}
               style={{ cursor: 'n-resize' }}

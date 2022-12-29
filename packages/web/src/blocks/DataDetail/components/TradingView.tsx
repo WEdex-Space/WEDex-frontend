@@ -26,7 +26,7 @@ export default defineComponent({
     const datafeed = ref<DataFeed>()
     const info = ref<IApiSymbol>()
     const infoRef = ref(info)
-    const { width, height } = useElementSize(container)
+    const { width } = useElementSize(container)
 
     const init = async () => {
       const res = await fetchSymbols()
