@@ -4,6 +4,7 @@ import { ExportOutlined } from '@wedex/icons'
 import { defineComponent, inject, Ref, watch, ref, onMounted } from 'vue'
 import DetailHeader from './DetailHeader'
 import TokenInfoBlock from './components/TokenInfoBlock'
+import TradingView from './components/TradingView'
 import TransactionsBlock from './components/TransactionsBlock'
 
 export default defineComponent({
@@ -32,14 +33,14 @@ export default defineComponent({
           targetActive.value = true
         }
       },
-      onMouseup: () => {
+      onMouseup: (e: any) => {
         targetMouseCache.value = {
           x: 0,
           y: 0
         }
         targetActive.value = false
       },
-      onMouseleave: () => {
+      onMouseleave: (e: any) => {
         targetMouseCache.value = {
           x: 0,
           y: 0
@@ -68,9 +69,7 @@ export default defineComponent({
             widgetLoaded.value = true
           }, 300)
         } else {
-          setTimeout(() => {
-            widgetLoaded.value = false
-          }, 0)
+          widgetLoaded.value = false
         }
       }
     )
@@ -100,9 +99,7 @@ export default defineComponent({
       >
         <DetailHeader />
         {this.widgetLoaded ? (
-          <div class={`bg-bg1`} style={{ height: this.tradingViewHeight + 'px' }}>
-            TradingView
-          </div>
+          <TradingView style={{ height: this.tradingViewHeight + 'px' }} />
         ) : null}
         {this.widgetLoaded ? (
           <div class="border-color-border border-t-1 flex-1 overflow-hidden relative">
