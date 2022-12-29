@@ -1,4 +1,5 @@
 import { useElementSize } from '@vueuse/core'
+import { storage } from '@wedex/utils'
 import { defineComponent, ref, onMounted } from 'vue'
 import { DataFeed } from '../datafeed'
 import { fetchKLine, fetchSymbols, IApiSymbol } from '../services'
@@ -133,6 +134,9 @@ export default defineComponent({
 
     const initTradingView = (data?: IApiSymbol) => {
       console.log('initTradingView width=', width.value)
+      // remove local theme
+      storage('local').remove('tradingview.current_theme.name')
+
       const currentInfo = data || info.value
       widget.value = new window.TradingView.widget({
         symbol: currentInfo?.symbol,
@@ -142,7 +146,11 @@ export default defineComponent({
         datafeed: datafeed.value!,
         preset: width.value < 600 ? 'mobile' : undefined,
         library_path: '/charting_library/',
-        theme: globalConfigStore.theme
+        theme: globalConfigStore.theme,
+        loading_screen: {
+          backgroundColor: globalConfigStore.theme === 'dark' ? '#181a1f' : '#fff',
+          foregroundColor: '#FF9D00'
+        }
       })
     }
 
