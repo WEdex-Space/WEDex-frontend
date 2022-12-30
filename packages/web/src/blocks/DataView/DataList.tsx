@@ -33,18 +33,18 @@ export default defineComponent({
     }
 
     const dataList = ref<TradingDataItem[]>([])
-    const queryParam = ref<{
-      page?: number
-      size?: number
-      keyword?: string
-      orderKey?: string
-      orderValue?: number
-    }>({
-      page: 1,
-      size: 100,
-      keyword: '',
-      orderKey: ''
-    })
+    // const queryParam = ref<{
+    //   page?: number
+    //   size?: number
+    //   keyword?: string
+    //   orderKey?: string
+    //   orderValue?: number
+    // }>({
+    //   page: 1,
+    //   size: 100,
+    //   keyword: '',
+    //   orderKey: ''
+    // })
 
     const fetchData = async function () {
       // Pair@get-pair-list
