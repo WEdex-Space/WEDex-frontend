@@ -1,4 +1,5 @@
 /* tv custom_css */
+/* no radius */
 .layout-with-border-radius .chart-container.top-full-width-chart .chart-container-border, .layout-with-border-radius .chart-container.top-full-width-chart.multiple.active:after{
     border-radius: 0;
 }
@@ -8,7 +9,7 @@
 .layout__area--top, .layout__area--top .overflowWrap-ymEQuMuZ, .layout__area--top .wrap-7mUBPdQo{
     height: 40px !important;
 }
-
+/* 1px distance */
 .layout__area--left{
     margin-top:-1px;
 }
@@ -27,4 +28,25 @@
     position: absolute;
     left:0;
     top:0;
+}
+/* left width */
+.layout__area--top .menu-cXbh8Gcw{
+    width: 40px;
+    padding: 0;
+}
+.layout__area--left{
+    width:40px !important;
+}
+.layout__area--left .inner-3e32hIe9, .layout__area--left .control-m5d9X7vB, .layout__area--left .button-G7o5fBfa{
+    width:100%
+}
+.layout__area--center{
+    margin-left: -15px;
+    padding-left: 15px;
+}
+
+/* font size */
+.button-G7o5fBfa .icon-G7o5fBfa svg,  .icon-4TFSfyGO svg{
+    width: 20px;
+    height: 20px;
 }
