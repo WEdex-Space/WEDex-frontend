@@ -102,7 +102,7 @@ export default defineComponent({
             <ExpandOutlined class={iconClass} />
           )}
         </div>
-        <div class="border-color-border flex border-b-1 h-14 items-center">
+        <div class="border-color-border flex border-b-1 h-14 items-center overflow-hidden">
           <strong class="flex-1 mx-5">WatchList</strong>
           <span
             class={`cursor-pointer px-1  text-color3 leading-0 hover:text-color1 ${
@@ -119,7 +119,7 @@ export default defineComponent({
         {this.editListMode ? (
           <ListEdit list={this.watchLists} onCancel={() => (this.editListMode = false)} />
         ) : (
-          <>
+          <div class="flex-1 overflow-y-auto">
             <ListBar list={this.watchLists} onChange={value => null} />
             {this.dataList.length ? (
               <TradingDataList
@@ -137,7 +137,7 @@ export default defineComponent({
               <Empty />
             )}
             <SyncLink />
-          </>
+          </div>
         )}
       </div>
     )

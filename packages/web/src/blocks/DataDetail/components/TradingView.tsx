@@ -150,7 +150,9 @@ export default defineComponent({
         loading_screen: {
           backgroundColor: globalConfigStore.theme === 'dark' ? '#181a1f' : '#fff',
           foregroundColor: '#FF9D00'
-        }
+        },
+        // enabled_features
+        disabled_features: ['header_symbol_search', 'symbol_search_hot_key']
       })
     }
 
