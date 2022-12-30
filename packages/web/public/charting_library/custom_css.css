@@ -1,0 +1,30 @@
+/* tv custom_css */
+.layout-with-border-radius .chart-container.top-full-width-chart .chart-container-border, .layout-with-border-radius .chart-container.top-full-width-chart.multiple.active:after{
+    border-radius: 0;
+}
+.layout-with-border-radius .drawingToolbar-3e32hIe9, .layout-with-border-radius .group-3e32hIe9:first-child{
+    border-radius: 0;
+}
+.layout__area--top, .layout__area--top .overflowWrap-ymEQuMuZ, .layout__area--top .wrap-7mUBPdQo{
+    height: 40px !important;
+}
+
+.layout__area--left{
+    margin-top:-1px;
+}
+.layout__area--center{
+    margin-top: -1px;
+    padding-top:1px;
+    margin-left: -3px;
+    padding-left: 3px;
+}
+.layout__area--center .top-full-width-chart{
+    width: 100% !important;
+    padding-top: 1px;
+    background:#171b26;
+}
+.layout__area--center .chart-container-border{
+    position: absolute;
+    left:0;
+    top:0;
+}
