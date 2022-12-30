@@ -40,6 +40,10 @@ body {
 }
 
 /* custom */
+.selectTransparent .n-base-selection__border,
+.selectTransparent .n-base-selection__state-border {
+  display: none;
+}
 
 .selectTransparent .n-base-selection-label {
   background-color: transparent;

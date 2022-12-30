@@ -1,6 +1,7 @@
 import { UPopover, UInput, UButton } from '@wedex/components'
 import { ArrowDownOutlined } from '@wedex/icons'
 import { defineComponent, PropType, ref, computed, watch } from 'vue'
+import { useGlobalConfigStore } from '@/stores'
 
 export type MultiSelectorValueType = string | number | null
 export type MultiSelectorOptionType = {
@@ -38,6 +39,7 @@ export default defineComponent({
   },
   emits: ['change'],
   setup(props, ctx) {
+    const globalConfigStore = useGlobalConfigStore()
     const tipRef = ref()
     const optionSelectedMap = ref<{ [key: string | number]: any }>({})
     const searchKeywords = ref('')
@@ -91,6 +93,7 @@ export default defineComponent({
     })
 
     return {
+      globalConfigStore,
       tipRef,
       optionSelectedMap,
       optionSelect,
@@ -115,7 +118,7 @@ export default defineComponent({
         trigger="click"
         placement="bottom"
         raw={true}
-        arrowStyle={{ background: '#2C3138' }}
+        arrowStyle={{ background: this.globalConfigStore.theme === 'dark' ? '#2C3138' : '#F5F5F5' }}
         on-update:show={(show: boolean) => !show && this.handleClose()}
         v-slots={{
           trigger: () => (
@@ -146,7 +149,7 @@ export default defineComponent({
               </div>
               {this.$slots.total && <div class="mb-2">{this.$slots.total()}</div>}
               <ul class="mb-6 grid gap-2.5 grid-cols-3">
-                {this.finnalOptions.map(option => (
+                {this.finnalOptions.map((option: MultiSelectorOptionType) => (
                   <li
                     class={`flex items-center justify-center cursor-pointer select-none bg-bg3 rounded-sm text-color1 hover:bg-primary-bg px-1 h-6 ${
                       (option.value !== null && this.optionSelectedMap[option.value]) ||

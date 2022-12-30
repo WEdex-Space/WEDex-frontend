@@ -2,6 +2,7 @@ import { defineComponent, ref, onMounted, inject, Ref } from 'vue'
 import { default as TradingDataList, TradingDataItem } from '@/components/TradingDataList'
 import { ControlSlotValueType } from '@/components/TradingDataList/ControlSlot'
 import { DataListParamsKey } from '@/pages/index'
+// import { services } from '@/services'
 
 const getControlSlotFilterValue = (sortMethod: string | null, sortType: string) => {
   const arr = sortMethod?.split('-') || []
@@ -32,9 +33,26 @@ export default defineComponent({
     }
 
     const dataList = ref<TradingDataItem[]>([])
+    const queryParam = ref<{
+      page?: number
+      size?: number
+      keyword?: string
+      orderKey?: string
+      orderValue?: number
+    }>({
+      page: 1,
+      size: 100,
+      keyword: '',
+      orderKey: ''
+    })
 
-    const fetchData = function () {
-      const data = new Array(10).fill(null).map((e, i) => {
+    const fetchData = async function () {
+      // Pair@get-pair-list
+      // const { error, data } = await services['Pair@get-pair-list'](queryParam.value)
+      // if (!error) {
+      //   dataList.value = data.list
+      // }
+      dataList.value = new Array(10).fill(null).map((e, i) => {
         return {
           index: i,
           token: `token_${i}`,
@@ -56,7 +74,6 @@ export default defineComponent({
           TrendsUp: !!(Math.floor(Math.random() * 10) % 2 > 0)
         }
       })
-      dataList.value = data
       // test
       // setTimeout(fetchData, 5000 * Math.random())
     }

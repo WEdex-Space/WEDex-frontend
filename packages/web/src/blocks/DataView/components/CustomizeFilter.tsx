@@ -6,18 +6,19 @@ import './CustomizeFilter.css'
 import CustomizeTimeRadio from './CustomizeTimeRadio'
 import { NetworkSelector, DexSelector } from '@/components/MultiSelector'
 import { allNetworks } from '@/constants'
+import { useGlobalConfigStore } from '@/stores'
 import {
   formatCurrency,
   parseCurrency,
   parseCurrencyWithUnit,
   formatCurrencyWithUnit
 } from '@/utils/numberFormat'
-// test
 
 export default defineComponent({
   name: 'CustomizeFilter',
   emits: ['change'],
   setup(props, ctx) {
+    const globalConfigStore = useGlobalConfigStore()
     const DataListParams = inject(DataListParamsKey)
     const networksOptions = ref<any[]>([])
     const isVisible = ref(false)
@@ -87,6 +88,7 @@ export default defineComponent({
     })
 
     return {
+      globalConfigStore,
       formData,
       networksOptions,
       isVisible,
@@ -105,7 +107,7 @@ export default defineComponent({
         trigger="click"
         placement="top"
         raw={true}
-        arrowStyle={{ background: '#2C3138' }}
+        arrowStyle={{ background: this.globalConfigStore.theme === 'dark' ? '#2C3138' : '#F5F5F5' }}
         on-update:show={this.handleVisibleUpdate}
         v-slots={{
           trigger: () => (this.$slots.default ? this.$slots.default(this.isVisible) : 'Customize'),
@@ -310,7 +312,7 @@ export default defineComponent({
                   type="primary"
                   ghost
                   size="small"
-                  class="px-5"
+                  class="px-5 hover:opacity-80"
                   onClick={() => this.closeSelfModal()}
                 >
                   Cancel
@@ -318,7 +320,7 @@ export default defineComponent({
                 <UButton
                   type="primary"
                   size="small"
-                  class="px-5 text-color1 !hover:text-color2"
+                  class="text-white px-5 hover:opacity-80"
                   onClick={() => this.handleSave()}
                 >
                   Apply

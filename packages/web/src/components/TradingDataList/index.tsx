@@ -315,7 +315,7 @@ export default defineComponent({
           key: 'Buys',
           align: 'right',
           render: (data: TradingDataItem, index: number) => {
-            return <strong class="text-color1">{formatCurrency(data.Buys)}</strong>
+            return <span class="text-color1">{formatCurrency(data.Buys)}</span>
           }
         },
         {
@@ -323,7 +323,7 @@ export default defineComponent({
           key: 'Sells',
           align: 'right',
           render: (data: TradingDataItem, index: number) => {
-            return <strong class="text-color1">{formatCurrency(data.Sells)}</strong>
+            return <span class="text-color1">{formatCurrency(data.Sells)}</span>
           }
         },
         {
@@ -331,7 +331,7 @@ export default defineComponent({
           key: 'Vol',
           align: 'right',
           render: (data: TradingDataItem, index: number) => {
-            return <strong class="text-color1">{`$${formatBigNumber(data.Vol)}`}</strong>
+            return <span class="text-color1">{`$${formatBigNumber(data.Vol)}`}</span>
           }
         },
         {
@@ -347,7 +347,7 @@ export default defineComponent({
           key: 'FDV',
           align: 'right',
           render: (data: TradingDataItem, index: number) => {
-            return <strong class="text-color1">{`$${formatBigNumber(data.FDV)}`}</strong>
+            return <span class="text-color1">{`$${formatBigNumber(data.FDV)}`}</span>
           }
         },
         {
@@ -355,7 +355,7 @@ export default defineComponent({
           key: 'MKTCap',
           align: 'right',
           render: (data: TradingDataItem, index: number) => {
-            return <strong class="text-color1">{`$${formatBigNumber(data.MKTCap)}`}</strong>
+            return <span class="text-color1">{`$${formatBigNumber(data.MKTCap)}`}</span>
           }
         }
       ]

@@ -1,5 +1,6 @@
 import { UPopover } from '@wedex/components'
 import { defineComponent, ref } from 'vue'
+import { useGlobalConfigStore } from '@/stores'
 
 export default defineComponent({
   name: 'TrendTypeFilterPopover',
@@ -13,6 +14,7 @@ export default defineComponent({
     }
   },
   setup(props, ctx) {
+    const globalConfigStore = useGlobalConfigStore()
     const modalValue = ref(props.value)
     const tipRef = ref()
 
@@ -42,6 +44,7 @@ export default defineComponent({
     }
 
     return {
+      globalConfigStore,
       options,
       modalValue,
       tipRef,
@@ -56,7 +59,7 @@ export default defineComponent({
         trigger="click"
         placement="bottom"
         raw={true}
-        arrowStyle={{ background: '#2C3138' }}
+        arrowStyle={{ background: this.globalConfigStore.theme === 'dark' ? '#2C3138' : '#F5F5F5' }}
         v-slots={{
           trigger: () => (this.$slots.default ? this.$slots.default(!!this.value) : 'Customize'),
           default: () => (

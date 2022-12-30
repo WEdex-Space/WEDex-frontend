@@ -1,5 +1,6 @@
 import { UPopover, UForm, UFormItem, UInputNumber, UButton } from '@wedex/components'
 import { defineComponent, ref, PropType } from 'vue'
+import { useGlobalConfigStore } from '@/stores'
 
 type RangeType = {
   from: number
@@ -30,6 +31,7 @@ export default defineComponent({
     }
   },
   setup(props, ctx) {
+    const globalConfigStore = useGlobalConfigStore()
     const formData = ref<RangeType>(Object.assign({}, props.values) as RangeType)
     const tipRef = ref()
 
@@ -65,6 +67,7 @@ export default defineComponent({
     }
 
     return {
+      globalConfigStore,
       options,
       formData,
       tipRef,
@@ -80,7 +83,7 @@ export default defineComponent({
         trigger="click"
         placement="bottom"
         raw={true}
-        arrowStyle={{ background: '#2C3138' }}
+        arrowStyle={{ background: this.globalConfigStore.theme === 'dark' ? '#2C3138' : '#F5F5F5' }}
         on-update:show={this.handleVisibleUpdate}
         v-slots={{
           trigger: () =>

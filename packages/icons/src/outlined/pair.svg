@@ -1,5 +1,5 @@
 <svg width="14" height="10" viewBox="0 0 14 10" fill="none"
     xmlns="http://www.w3.org/2000/svg">
     <circle cx="5" cy="5" r="4.5" stroke="currentColor"/>
-    <circle cx="9" cy="5" r="4.5" fill="#181A1F" stroke="currentColor"/>
+    <circle cx="9" cy="5" r="4.5" fill="rgba(0,0,0,0.5)" stroke="currentColor"/>
 </svg>
