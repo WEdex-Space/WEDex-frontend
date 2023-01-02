@@ -5,14 +5,13 @@ import ControlSlot from './ControlSlot'
 import type { ControlSlotValueType } from './ControlSlot'
 import DynamicNumber from '@/components/DynamicNumber'
 import Overlap from '@/components/Overlap'
-import { allNetworks } from '@/constants'
 import { DataListParamsKey } from '@/pages/index'
 import { formatBigNumber, formatCurrency } from '@/utils/numberFormat'
 import { customTimeAgo } from '@/utils/timeago'
 
 export type TradingDataItem = {
   index: number
-  token: string
+  token: Record<string, any>[]
   price: number | string
   views: number | string
   '5m': number | string
@@ -210,14 +209,19 @@ export default defineComponent({
                 {props.isStretch && (
                   <Overlap
                     class="mr-2"
-                    nodes={[0, 1].map(index => (
-                      <img src={allNetworks[index].logo} />
+                    nodes={data.token.map(item => (
+                      <img src={item.logo} />
                     ))}
                   />
                 )}
-                <div class="flex-1 truncate" title={`Token1/Token2`}>
-                  <strong class="text-color1 ">Token1</strong>
-                  {props.isStretch && <strong class="text-color3">/ Token2</strong>}
+                <div
+                  class="flex-1 truncate"
+                  title={`${
+                    Array.isArray(data.token) ? data.token.map(e => e.symbol).join('/') : '--'
+                  }`}
+                >
+                  <strong class="text-color1">{data.token[0].symbol}</strong>
+                  {props.isStretch && <strong class="text-color3">/ {data.token[1].symbol}</strong>}
                 </div>
               </div>
             )

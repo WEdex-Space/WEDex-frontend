@@ -80,7 +80,7 @@ export const useSocketStore = defineStore('websocket', {
                   } else if (
                     key.split('__').length === 2 &&
                     key.split('__')[0] === received_msg.topic &&
-                    key.split('__')[1] === `${received_msg.data.project}-${received_msg.data.type}`
+                    key.split('__')[1] === `${received_msg.data.type}-${received_msg.data.value}`
                   ) {
                     this.listeners[key].map(fun => fun(received_msg))
                   }
@@ -150,33 +150,33 @@ export const useSocketStore = defineStore('websocket', {
       }
     },
     subscribe(
-      project: string,
-      type: number,
+      type: string,
+      value: any,
       callback: (msg: SocketMsgType) => void,
       target_id?: number
     ) {
-      this.addLisener('subscribe', callback, `${project}-${type}`)
+      this.addLisener('subscribe', callback, `${type}-${value}`)
 
       this.send({
         topic: 'subscribe',
         data: {
-          project,
           type,
+          value,
           target_id
         }
       })
     },
-    unsubscribe(project: string, type: number, target_id?: number) {
+    unsubscribe(type: string, value: any, target_id?: number) {
       this.send({
         topic: 'unsubscribe',
         data: {
-          project,
           type,
+          value,
           target_id
         }
       })
 
-      this.removeLisener('subscribe', `${project}-${type}`)
+      this.removeLisener('subscribe', `${type}-${value}`)
     }
   }
 })

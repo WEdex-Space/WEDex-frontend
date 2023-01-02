@@ -26,7 +26,7 @@ export const useUserStore = defineStore('user', {
     async loginWithWalletAddress(wallet: AbstractWallet) {
       const walletAddress = await wallet.getAddress()
       const { error, data } = await services['Authorization@get-nonce-by-address']({
-        wallet_address: walletAddress
+        walletAddress
       })
       if (!error) {
         let signedMsg

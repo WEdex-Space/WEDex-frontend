@@ -217,7 +217,7 @@ export declare namespace ApiDocuments {
     title: string
   }
   export interface proto_ShareSetResponse extends BasicDto {
-    share_code: string
+    shareCode: string
   }
   export interface proto_UploadResponse extends BasicDto {
     url: string

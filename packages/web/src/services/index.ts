@@ -15,12 +15,12 @@ export const services = {
     /**
      * @description wallet address
      */
-    wallet_address: string
+    walletAddress: string
   }) {
     return requestAdapter<ApiDocuments.proto_NonceResponse>({
-      url: replacePath('/authorizations/{wallet_address}/nonce', args),
+      url: replacePath('/authorizations/{walletAddress}/nonce', args),
       method: 'GET',
-      ...extract('GET', args, [], ['wallet_address'])
+      ...extract('GET', args, [], ['walletAddress'])
     })
   },
   'Chain@get-chain-list'(args: {
@@ -95,13 +95,13 @@ export const services = {
       /**
        * @description tab id
        */
-      tab_id: string
+      tabId: string
     } & ApiDocuments.proto_MultiChartTabUpdateRequest
   ) {
     return requestAdapter<ApiDocuments.proto_MessageResponse>({
-      url: replacePath('/multi-chart-tabs/{tab_id}', args),
+      url: replacePath('/multi-chart-tabs/{tabId}', args),
       method: 'PUT',
-      ...extract('PUT', args, [], ['tab_id'])
+      ...extract('PUT', args, [], ['tabId'])
     })
   },
   'MultiChart@get-multi-chart-pair-list'(
@@ -109,7 +109,7 @@ export const services = {
       /**
        * @description tab id
        */
-      tab_id: string
+      tabId: string
     } & {
       /**
        * @description pagination select current page, default: 1
@@ -126,9 +126,9 @@ export const services = {
         list?: ApiDocuments.proto_MultiChartPairResponse[]
       }
     >({
-      url: replacePath('/multi-chart-tabs/{tab_id}/pairs', args),
+      url: replacePath('/multi-chart-tabs/{tabId}/pairs', args),
       method: 'GET',
-      ...extract('GET', args, ['page', 'size'], ['tab_id'])
+      ...extract('GET', args, ['page', 'size'], ['tabId'])
     })
   },
   'MultiChart@create-multi-chart-pair'(
@@ -136,29 +136,29 @@ export const services = {
       /**
        * @description multi chart tab id
        */
-      tab_id: string
+      tabId: string
     } & ApiDocuments.proto_MultiChartPairCreateRequest
   ) {
     return requestAdapter<ApiDocuments.proto_MessageResponse>({
-      url: replacePath('/multi-chart-tabs/{tab_id}/pairs', args),
+      url: replacePath('/multi-chart-tabs/{tabId}/pairs', args),
       method: 'POST',
-      ...extract('POST', args, [], ['tab_id'])
+      ...extract('POST', args, [], ['tabId'])
     })
   },
   'MultiChart@delete-multi-chart-pair'(args: {
     /**
      * @description multi-chart-tab id
      */
-    tab_id: string
+    tabId: string
     /**
      * @description multi-chart-tab-pair id
      */
-    pair_id: string
+    pairId: string
   }) {
     return requestAdapter<ApiDocuments.proto_MessageResponse>({
-      url: replacePath('/multi-chart-tabs/{tab_id}/pairs/{pair_id}', args),
+      url: replacePath('/multi-chart-tabs/{tabId}/pairs/{pairId}', args),
       method: 'DELETE',
-      ...extract('DELETE', args, [], ['tab_id', 'pair_id'])
+      ...extract('DELETE', args, [], ['tabId', 'pairId'])
     })
   },
   'Notebook@get-notebook-list'(args: {
@@ -193,25 +193,25 @@ export const services = {
       /**
        * @description notebook id
        */
-      notebook_id: string
+      notebookId: string
     } & ApiDocuments.proto_NotebookUpdateRequest
   ) {
     return requestAdapter<ApiDocuments.proto_MessageResponse>({
-      url: replacePath('/notebooks/{notebook_id}', args),
+      url: replacePath('/notebooks/{notebookId}', args),
       method: 'PUT',
-      ...extract('PUT', args, [], ['notebook_id'])
+      ...extract('PUT', args, [], ['notebookId'])
     })
   },
   'Notebook@delete-notebook'(args: {
     /**
      * @description notebook id
      */
-    notebook_id: string
+    notebookId: string
   }) {
     return requestAdapter<ApiDocuments.proto_MessageResponse>({
-      url: replacePath('/notebooks/{notebook_id}', args),
+      url: replacePath('/notebooks/{notebookId}', args),
       method: 'DELETE',
-      ...extract('DELETE', args, [], ['notebook_id'])
+      ...extract('DELETE', args, [], ['notebookId'])
     })
   },
   'Notification@get-notification-list'(args: {
@@ -271,12 +271,12 @@ export const services = {
     /**
      * @description pair id
      */
-    pair_id: string
+    pairId: string
   }) {
     return requestAdapter<ApiDocuments.proto_PairResponse>({
-      url: replacePath('/pairs/{pair_id}', args),
+      url: replacePath('/pairs/{pairId}', args),
       method: 'GET',
-      ...extract('GET', args, [], ['pair_id'])
+      ...extract('GET', args, [], ['pairId'])
     })
   },
   'Pair@get-kline-list'(
@@ -284,7 +284,7 @@ export const services = {
       /**
        * @description pair id
        */
-      pair_id: string
+      pairId: string
       /**
        * @description kline type, example: 1m\5m\1h
        */
@@ -305,9 +305,9 @@ export const services = {
         list?: ApiDocuments.proto_PairReportResponse[]
       }
     >({
-      url: replacePath('/pairs/{pair_id}/kline/{type}', args),
+      url: replacePath('/pairs/{pairId}/kline/{type}', args),
       method: 'GET',
-      ...extract('GET', args, ['page', 'size'], ['pair_id', 'type'])
+      ...extract('GET', args, ['page', 'size'], ['pairId', 'type'])
     })
   },
   'Pair@get-pair-transaction-list'(
@@ -315,7 +315,7 @@ export const services = {
       /**
        * @description pair id
        */
-      pair_id: string
+      pairId: string
     } & {
       /**
        * @description pagination select current page, default: 1
@@ -332,9 +332,9 @@ export const services = {
         list?: ApiDocuments.proto_PairTransactionResponse[]
       }
     >({
-      url: replacePath('/pairs/{pair_id}/transactions', args),
+      url: replacePath('/pairs/{pairId}/transactions', args),
       method: 'GET',
-      ...extract('GET', args, ['page', 'size'], ['pair_id'])
+      ...extract('GET', args, ['page', 'size'], ['pairId'])
     })
   },
   'Share@set-share'(args: ApiDocuments.proto_ShareSetRequest) {
@@ -348,12 +348,12 @@ export const services = {
     /**
      * @description share code
      */
-    share_code: string
+    shareCode: string
   }) {
     return requestAdapter<any>({
-      url: replacePath('/share/{share_code}', args),
+      url: replacePath('/share/{shareCode}', args),
       method: 'GET',
-      ...extract('GET', args, [], ['share_code'])
+      ...extract('GET', args, [], ['shareCode'])
     })
   },
   'Upload@upload-file'(args: {
@@ -400,13 +400,13 @@ export const services = {
       /**
        * @description watch id
        */
-      watch_id: string
+      watchId: string
     } & ApiDocuments.proto_WatchUpdateRequest
   ) {
     return requestAdapter<ApiDocuments.proto_MessageResponse>({
-      url: replacePath('/watchs/{watch_id}', args),
+      url: replacePath('/watchs/{watchId}', args),
       method: 'PUT',
-      ...extract('PUT', args, [], ['watch_id'])
+      ...extract('PUT', args, [], ['watchId'])
     })
   },
   'Watch@get-watch-pair-list'(
@@ -414,7 +414,7 @@ export const services = {
       /**
        * @description watch id
        */
-      watch_id: string
+      watchId: string
     } & {
       /**
        * @description pagination select current page, default: 1
@@ -431,9 +431,9 @@ export const services = {
         list?: ApiDocuments.proto_WatchPairResponse[]
       }
     >({
-      url: replacePath('/watchs/{watch_id}/pairs', args),
+      url: replacePath('/watchs/{watchId}/pairs', args),
       method: 'GET',
-      ...extract('GET', args, ['page', 'size'], ['watch_id'])
+      ...extract('GET', args, ['page', 'size'], ['watchId'])
     })
   },
   'Watch@create-watch-pair'(
@@ -441,29 +441,29 @@ export const services = {
       /**
        * @description watch id
        */
-      watch_id: string
+      watchId: string
     } & ApiDocuments.proto_WatchPairCreateRequest
   ) {
     return requestAdapter<ApiDocuments.proto_MessageResponse>({
-      url: replacePath('/watchs/{watch_id}/pairs', args),
+      url: replacePath('/watchs/{watchId}/pairs', args),
       method: 'POST',
-      ...extract('POST', args, [], ['watch_id'])
+      ...extract('POST', args, [], ['watchId'])
     })
   },
   'Watch@delete-watch-pair'(args: {
     /**
      * @description watch id
      */
-    watch_id: string
+    watchId: string
     /**
      * @description watch pair id
      */
-    pair_id: string
+    pairId: string
   }) {
     return requestAdapter<ApiDocuments.proto_MessageResponse>({
-      url: replacePath('/watchs/{watch_id}/pairs/{pair_id}', args),
+      url: replacePath('/watchs/{watchId}/pairs/{pairId}', args),
       method: 'DELETE',
-      ...extract('DELETE', args, [], ['watch_id', 'pair_id'])
+      ...extract('DELETE', args, [], ['watchId', 'pairId'])
     })
   }
 }
