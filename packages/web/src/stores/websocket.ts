@@ -69,20 +69,22 @@ export const useSocketStore = defineStore('websocket', {
                 try {
                   received_msg.data = JSON.parse(received_msg.data)
                 } catch (err) {
-                  console.log('received_msg：', received_msg)
+                  // console.log('received_msg：', received_msg)
                 }
 
                 // trigger liseners
                 const listenersKey = Object.keys(this.listeners)
                 listenersKey.forEach((key: string) => {
-                  if (key === received_msg.topic) {
+                  if (key === received_msg.data.type) {
                     this.listeners[key].map(fun => fun(received_msg))
                   } else if (
                     key.split('__').length === 2 &&
-                    key.split('__')[0] === received_msg.topic &&
-                    key.split('__')[1] === `${received_msg.data.type}-${received_msg.data.value}`
+                    key.split('__')[0] === received_msg.data?.type &&
+                    key.split('__')[1] === received_msg.data?.value?.tradePair
                   ) {
                     this.listeners[key].map(fun => fun(received_msg))
+                  } else {
+                    console.warn('miss catch socket msg:', received_msg)
                   }
                 })
               }
@@ -155,7 +157,13 @@ export const useSocketStore = defineStore('websocket', {
       callback: (msg: SocketMsgType) => void,
       target_id?: number
     ) {
-      this.addLisener('subscribe', callback, `${type}-${value}`)
+      if (Array.isArray(value)) {
+        value.map(val => {
+          this.addLisener(type, callback, val)
+        })
+      } else {
+        this.addLisener(type, callback, value)
+      }
 
       this.send({
         topic: 'subscribe',
@@ -166,17 +174,21 @@ export const useSocketStore = defineStore('websocket', {
         }
       })
     },
-    unsubscribe(type: string, value: any, target_id?: number) {
+    unsubscribe(type: string, value: any) {
       this.send({
         topic: 'unsubscribe',
         data: {
           type,
-          value,
-          target_id
+          value
         }
       })
-
-      this.removeLisener('subscribe', `${type}-${value}`)
+      if (Array.isArray(value) && value.length) {
+        value.map(val => {
+          this.removeLisener(type, val)
+        })
+      } else {
+        this.removeLisener(type, value)
+      }
     }
   }
 })

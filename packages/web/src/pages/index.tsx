@@ -23,7 +23,7 @@ const LandingPage = defineComponent({
     const leftClass = ref(`panelExpand`)
     const centerClass = ref('w-0')
     const rightClass = ref(`rightPanelStatic`)
-
+    const currentDetailId = ref<string | undefined>()
     const currentExpand = ref<'left' | 'center' | 'right'>('left')
 
     watch(
@@ -73,7 +73,7 @@ const LandingPage = defineComponent({
     })
 
     provide(DataListParamsKey, DataListParams.value)
-
+    provide('currentDetailId', currentDetailId)
     provide('currentExpand', currentExpand)
 
     return {

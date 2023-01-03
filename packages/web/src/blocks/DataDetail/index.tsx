@@ -11,6 +11,7 @@ export default defineComponent({
   name: 'DataDetail',
   setup() {
     const currentExpand = inject<Ref<'left' | 'center' | 'right'>>('currentExpand')
+    const currentDetailId = inject<Ref<string | undefined>>('currentDetailId')
     const widgetLoaded = ref(false)
     const timer = ref()
     const { x, y } = useMouse()
@@ -88,6 +89,7 @@ export default defineComponent({
     return {
       tradingViewHeight,
       targetActive,
+      currentDetailId,
       currentExpand,
       widgetLoaded,
       targetEventProp,
@@ -104,7 +106,10 @@ export default defineComponent({
       >
         <DetailHeader />
         {this.widgetLoaded ? (
-          <TradingView style={{ height: this.tradingViewHeight + 'px' }} />
+          <TradingView
+            style={{ height: this.tradingViewHeight + 'px' }}
+            pariId={this.currentDetailId}
+          />
         ) : null}
         {this.widgetLoaded ? (
           <div class="border-color-border border-t-1 flex-1 overflow-hidden relative">
@@ -133,10 +138,10 @@ export default defineComponent({
               }}
             >
               <UTabPane name="Transactions" tab="Transactions">
-                <TransactionsBlock />
+                <TransactionsBlock pariId={this.currentDetailId} />
               </UTabPane>
               <UTabPane name="TokenInfo" tab="Token Info">
-                <TokenInfoBlock />
+                <TokenInfoBlock pariId={this.currentDetailId} />
               </UTabPane>
             </UTabs>
           </div>

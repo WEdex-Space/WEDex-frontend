@@ -19,6 +19,11 @@ const Resolution = {
 
 export default defineComponent({
   name: 'TradingView',
+  props: {
+    pariId: {
+      type: String
+    }
+  },
   setup() {
     const globalConfigStore = useGlobalConfigStore()
     const interval = ref<keyof typeof Resolution>('5')

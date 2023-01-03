@@ -1,4 +1,5 @@
 import { defineComponent, ref, inject, Ref, onBeforeUnmount, watch } from 'vue'
+import { updatePairListWithSocketData } from './util'
 import { default as TradingDataList, TradingDataItem } from '@/components/TradingDataList'
 import { ControlSlotValueType } from '@/components/TradingDataList/ControlSlot'
 import { DataListParamsKey } from '@/pages/index'
@@ -17,6 +18,7 @@ export default defineComponent({
     const SocketStore = useSocketStore()
     const DataListParams = inject(DataListParamsKey)
     const currentExpand = inject<Ref<'left' | 'center' | 'right'>>('currentExpand')
+    const currentDetailId = inject<Ref<string | undefined>>('currentDetailId')
 
     const loopSwitchSortValue = (sortType: string) => {
       if (DataListParams) {
@@ -45,7 +47,7 @@ export default defineComponent({
       orderValue?: number
     }>({
       page: 1,
-      size: 50
+      size: 100
     })
 
     const fetchData = async function () {
@@ -64,24 +66,11 @@ export default defineComponent({
               }
             )
             return {
+              id: item._id,
               index,
               token: pairs,
-              price: Math.random() * 1e3,
-              views: Math.floor(Math.random() * 1e7),
-              '5m': (Math.random() * 10).toFixed(2),
-              '1h': (Math.random() * 10).toFixed(2),
-              '4h': (Math.random() * 10).toFixed(2),
-              '6h': (Math.random() * 10).toFixed(2),
-              '24h': (Math.random() * 10).toFixed(2),
-              Txns: Math.floor(Math.random() * 1e7),
-              Buys: Math.floor(Math.random() * 1e7),
-              Sells: Math.floor(Math.random() * 1e7),
-              Vol: Math.random() * Math.random() * 1e7,
-              Liquidity: Math.random() * Math.random() * 1e7,
-              FDV: Math.random() * Math.random() * 1e7,
-              MKTCap: Math.random() * Math.random() * 1e7,
-              createAt: Math.floor(Math.random() * Math.random() * 1e7),
-              TrendsUp: !!(Math.floor(Math.random() * 10) % 2 > 0)
+              views: item.views,
+              createdAt: item.createdAt
             }
           }
         )
@@ -104,7 +93,7 @@ export default defineComponent({
       //     Liquidity: Math.random() * Math.random() * 1e7,
       //     FDV: Math.random() * Math.random() * 1e7,
       //     MKTCap: Math.random() * Math.random() * 1e7,
-      //     createAt: Math.floor(Math.random() * Math.random() * 1e7),
+      //     createdAt: Math.floor(Math.random() * Math.random() * 1e7),
       //     TrendsUp: !!(Math.floor(Math.random() * 10) % 2 > 0)
       //   }
       // })
@@ -125,6 +114,7 @@ export default defineComponent({
             ),
             msg => {
               console.log('subscribe', msg)
+              dataList.value = updatePairListWithSocketData(msg.data.value, dataList.value)
             }
           )
         }
@@ -142,6 +132,7 @@ export default defineComponent({
       }
     )
 
+    // init
     SocketStore.init().then(socket => {
       fetchData()
     })
@@ -153,6 +144,11 @@ export default defineComponent({
     const handleRowClick = (row: any) => {
       console.log('handleRowClick', row, currentExpand)
       currentExpand && (currentExpand.value = 'center')
+      currentDetailId && (currentDetailId.value = row.id)
+    }
+
+    const handleDataTableScroll = (evt: Event) => {
+      console.log('handleDataTableScroll', evt)
     }
 
     return {
@@ -160,7 +156,8 @@ export default defineComponent({
       dataList,
       DataListParams,
       loopSwitchSortValue,
-      handleRowClick
+      handleRowClick,
+      handleDataTableScroll
     }
   },
   render() {
@@ -171,6 +168,9 @@ export default defineComponent({
         onSortSwitch={this.loopSwitchSortValue}
         onRowClick={row => {
           this.handleRowClick(row)
+        }}
+        tableProps={{
+          'on-scroll': this.handleDataTableScroll
         }}
       />
     )

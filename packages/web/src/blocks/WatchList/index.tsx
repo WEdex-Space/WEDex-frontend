@@ -40,7 +40,7 @@ export default defineComponent({
           Liquidity: Math.random() * Math.random() * 1e7,
           FDV: Math.random() * Math.random() * 1e7,
           MKTCap: Math.random() * Math.random() * 1e7,
-          createAt: Math.floor(Math.random() * Math.random() * 1e7),
+          createdAt: Math.floor(Math.random() * Math.random() * 1e7),
           TrendsUp: !!(Math.floor(Math.random() * 10) % 2 > 0)
         }
       })

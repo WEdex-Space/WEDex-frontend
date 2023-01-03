@@ -15,6 +15,11 @@ const socialIconClass = 'w-4 h-4 mr-2'
 
 export default defineComponent({
   name: 'TokenInfoBlock',
+  props: {
+    pariId: {
+      type: String
+    }
+  },
   setup(props, ctx) {
     return {}
   },

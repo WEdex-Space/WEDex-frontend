@@ -10,24 +10,25 @@ import { formatBigNumber, formatCurrency } from '@/utils/numberFormat'
 import { customTimeAgo } from '@/utils/timeago'
 
 export type TradingDataItem = {
+  id: string
   index: number
   token: Record<string, any>[]
-  price: number | string
-  views: number | string
-  '5m': number | string
-  '1h': number | string
-  '4h': number | string
-  '6h': number | string
-  '24h': number | string
-  Txns: number
-  Buys: number
-  Sells: number
-  Vol: number
-  Liquidity: number
-  FDV: number
-  MKTCap: number
-  createAt: number
-  TrendsUp: boolean
+  price?: number | string
+  views?: number | string
+  '5m'?: number | string
+  '1h'?: number | string
+  '4h'?: number | string
+  '6h'?: number | string
+  '24h'?: number | string
+  Txns?: number
+  Buys?: number
+  Sells?: number
+  Vol?: number
+  Liquidity?: number
+  FDV?: number
+  MKTCap?: number
+  createdAt?: number
+  TrendsUp?: boolean
 }
 
 const getControlSlotFilterValue = (sortMethod: string | null, sortType: string) => {
@@ -53,9 +54,7 @@ export default defineComponent({
     tableProps: {
       type: Object,
       default() {
-        return {
-          flexHeight: true
-        }
+        return {}
       }
     }
   },
@@ -139,7 +138,9 @@ export default defineComponent({
               key: 'views',
               align: 'right',
               render: (data: TradingDataItem, index: number) => {
-                return <strong class="text-color1">{formatCurrency(data.views)}</strong>
+                return (
+                  <strong class="text-color1">{data.views ? formatCurrency(data.views) : 0}</strong>
+                )
               }
             })
             break
@@ -155,7 +156,7 @@ export default defineComponent({
               render: (data: TradingDataItem, index: number) => {
                 return (
                   <strong class="text-color1">
-                    {customTimeAgo(new Date().getTime() - data.createAt)}
+                    {data.createdAt ? customTimeAgo(new Date().getTime() - data.createdAt) : '--'}
                   </strong>
                 )
               }
@@ -233,7 +234,7 @@ export default defineComponent({
           key: 'price',
           align: 'right',
           render: (data: TradingDataItem, index: number) => {
-            return `$${formatBigNumber(data.price)}`
+            return data.price ? `$${formatBigNumber(data.price)}` : '--'
           }
         },
         {
@@ -311,7 +312,9 @@ export default defineComponent({
           key: 'Txns',
           align: 'right',
           render: (data: TradingDataItem, index: number) => {
-            return <strong class="text-color1">{formatCurrency(data.Txns)}</strong>
+            return (
+              <strong class="text-color1">{data.Txns ? formatCurrency(data.Txns) : '--'}</strong>
+            )
           }
         },
         {
@@ -319,7 +322,7 @@ export default defineComponent({
           key: 'Buys',
           align: 'right',
           render: (data: TradingDataItem, index: number) => {
-            return <span class="text-color1">{formatCurrency(data.Buys)}</span>
+            return <span class="text-color1">{data.Buys ? formatCurrency(data.Buys) : '--'}</span>
           }
         },
         {
@@ -327,7 +330,7 @@ export default defineComponent({
           key: 'Sells',
           align: 'right',
           render: (data: TradingDataItem, index: number) => {
-            return <span class="text-color1">{formatCurrency(data.Sells)}</span>
+            return <span class="text-color1">{data.Sells ? formatCurrency(data.Sells) : '--'}</span>
           }
         },
         {
@@ -335,7 +338,9 @@ export default defineComponent({
           key: 'Vol',
           align: 'right',
           render: (data: TradingDataItem, index: number) => {
-            return <span class="text-color1">{`$${formatBigNumber(data.Vol)}`}</span>
+            return (
+              <span class="text-color1">{data.Vol ? `$${formatBigNumber(data.Vol)}` : '--'}</span>
+            )
           }
         },
         {
@@ -343,7 +348,11 @@ export default defineComponent({
           key: 'Liquidity',
           align: 'right',
           render: (data: TradingDataItem, index: number) => {
-            return <strong class="text-color1">{`$${formatBigNumber(data.Liquidity)}`}</strong>
+            return (
+              <strong class="text-color1">
+                {data.Liquidity ? `$${formatBigNumber(data.Liquidity)}` : '--'}
+              </strong>
+            )
           }
         },
         {
@@ -351,7 +360,9 @@ export default defineComponent({
           key: 'FDV',
           align: 'right',
           render: (data: TradingDataItem, index: number) => {
-            return <span class="text-color1">{`$${formatBigNumber(data.FDV)}`}</span>
+            return (
+              <span class="text-color1">{data.FDV ? `$${formatBigNumber(data.FDV)}` : '--'}</span>
+            )
           }
         },
         {
@@ -359,7 +370,11 @@ export default defineComponent({
           key: 'MKTCap',
           align: 'right',
           render: (data: TradingDataItem, index: number) => {
-            return <span class="text-color1">{`$${formatBigNumber(data.MKTCap)}`}</span>
+            return (
+              <span class="text-color1">
+                {data.MKTCap ? `$${formatBigNumber(data.MKTCap)}` : '--'}
+              </span>
+            )
           }
         }
       ]
@@ -376,7 +391,7 @@ export default defineComponent({
         columns={this.columns}
         scroll-x={1300}
         data={this.dataList}
-        {...this.tableProps}
+        {...Object.assign({ flexHeight: true }, this.tableProps)}
         size="small"
         bordered={false}
         row-class-name="cursor-pointer"

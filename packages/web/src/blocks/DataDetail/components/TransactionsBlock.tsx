@@ -32,6 +32,11 @@ const FilterComponentMap: {
 
 export default defineComponent({
   name: 'TransactionsBlock',
+  props: {
+    pariId: {
+      type: String
+    }
+  },
   setup(props, ctx) {
     const filterData = ref({
       date: {

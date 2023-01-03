@@ -6,6 +6,7 @@ export declare namespace ApiDocuments {
   export interface model_Pair extends BasicDto {
     _id?: string
     chainId?: number
+    createdAt?: number
     decimals?: number
     dexId?: string
     factory?: string
@@ -20,6 +21,7 @@ export declare namespace ApiDocuments {
     token1Info?: {}
     tokenW0?: string
     tokenW1?: string
+    views?: number
   }
   export interface proto_ChainResponse extends BasicDto {
     _id?: string
@@ -145,6 +147,7 @@ export declare namespace ApiDocuments {
   export interface proto_PairBasicResponse extends BasicDto {
     _id?: string
     chainId?: number
+    createdAt?: number
     dexId?: string
     name?: string
     token0?: {}
@@ -155,11 +158,14 @@ export declare namespace ApiDocuments {
     tokenW1?: string
   }
   export interface proto_PairReportResponse extends BasicDto {
+    FDV?: number
+    MKTCap?: number
     _id?: string
     buys?: number
     chainId?: number
     dexId?: string
     happenAt?: string
+    liquidity?: number
     pairId?: string
     priceAvg?: number
     priceEnd?: number
@@ -167,6 +173,7 @@ export declare namespace ApiDocuments {
     priceMin?: number
     priceStart?: number
     sells?: number
+    trendType?: number
     txns?: number
     views?: number
     volume?: number
@@ -174,6 +181,7 @@ export declare namespace ApiDocuments {
   export interface proto_PairResponse extends BasicDto {
     _id?: string
     chainId?: number
+    createdAt?: number
     decimals?: number
     dexId?: string
     factory?: string
@@ -188,6 +196,7 @@ export declare namespace ApiDocuments {
     token1Info?: {}
     tokenW0?: string
     tokenW1?: string
+    views?: number
   }
   export interface proto_PairTransactionResponse extends BasicDto {
     _id?: string
