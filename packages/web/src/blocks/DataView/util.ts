@@ -1,7 +1,7 @@
 import { TradingDataItem } from '@/components/TradingDataList'
 
 type SocketTimeData = {
-  buys: number
+  volumeBuys: number
   chainId: number
   dexId: string
   happenAt: string
@@ -11,7 +11,7 @@ type SocketTimeData = {
   priceMax: number
   priceMin: number
   priceStart: number
-  sells: number
+  volumeSells: number
   txns: number
   views: number
   volume: number
@@ -20,6 +20,13 @@ type SocketTimeData = {
   MKTCap: number
   trendType: number
   _id: string
+  txnsBuys: number
+  txnsSells: number
+  priceAvgBuys: number
+  priceAvgSells: number
+  makers: number
+  makersBuys: number
+  makersSells: number
 }
 
 type SocketDataValue = {
@@ -52,8 +59,8 @@ export const updatePairListWithSocketData = (item: SocketDataValue, list: Tradin
       '6h': getPricePercentageFromSocketData(item['6h']),
       '24h': getPricePercentageFromSocketData(item['1d']),
       Txns: item['1d']?.txns,
-      Buys: item['1d']?.buys,
-      Sells: item['1d']?.sells,
+      Buys: item['1d']?.volumeBuys,
+      Sells: item['1d']?.volumeSells,
       Vol: item['1d']?.volume,
       Liquidity: item['1d']?.liquidity,
       FDV: item['1d']?.FDV,

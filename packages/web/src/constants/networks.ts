@@ -192,3 +192,7 @@ export const supportedNetworks: ChainNetworkType[] = allNetworks.filter(network 
 )
 
 export const infuraKey = '65b449dc78314fe583ece8797faccc0a'
+
+export const getNetByChainId = (chainId: number) => {
+  return allNetworks.find(item => item.chainId === chainId)
+}

@@ -20,7 +20,7 @@ const Resolution = {
 export default defineComponent({
   name: 'TradingView',
   props: {
-    pariId: {
+    pairId: {
       type: String
     }
   },

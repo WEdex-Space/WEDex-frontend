@@ -1,11 +1,12 @@
 import { UTable } from '@wedex/components'
 import { FilterOutlined } from '@wedex/icons'
-import { defineComponent, ref, onMounted, h, Component, computed } from 'vue'
+import { defineComponent, ref, h, Component, computed, watch } from 'vue'
 import DateRangeFilterPopover from './DateRangeFilterPopover'
 import NumberRangeFilterPopover from './NumberRangeFilterPopover'
 import TrendTypeFilterPopover from './TrendTypeFilterPopover'
-import DynamicNumber from '@/components/DynamicNumber'
 import TimeAgo from '@/components/TimeAgo'
+import { services } from '@/services'
+import type { ApiDocuments } from '@/services/a2s.namespace'
 import { formatCurrency, formatCurrencyWithUnit } from '@/utils/numberFormat'
 
 type TransactionsDataType = {
@@ -33,7 +34,7 @@ const FilterComponentMap: {
 export default defineComponent({
   name: 'TransactionsBlock',
   props: {
-    pariId: {
+    pairId: {
       type: String
     }
   },
@@ -121,7 +122,11 @@ export default defineComponent({
         align: 'center',
         width: 60,
         render: (data: TransactionsDataType, index: number) => {
-          return <strong class="text-color-up">{data.type}</strong>
+          return (
+            <strong class={data.type ? 'text-color-up' : 'text-color-down'}>
+              {data.type ? 'Buy' : 'Sell'}
+            </strong>
+          )
         }
       },
       {
@@ -135,7 +140,7 @@ export default defineComponent({
         key: 'usd',
         align: 'right',
         render: (data: TransactionsDataType, index: number) => {
-          return <DynamicNumber value={data['usd']} symbol={index % 2 ? 1 : -1} />
+          return <span class={data.type ? 'text-color-up' : 'text-color-down'}>{data['usd']}</span>
         }
       },
       {
@@ -149,7 +154,9 @@ export default defineComponent({
         key: 'price',
         align: 'right',
         render: (data: TransactionsDataType, index: number) => {
-          return <DynamicNumber value={data['price']} symbol={index % 2 ? 1 : -1} />
+          return (
+            <span class={data.type ? 'text-color-up' : 'text-color-down'}>{data['price']}</span>
+          )
         }
       },
       {
@@ -163,7 +170,9 @@ export default defineComponent({
         key: 'token0',
         align: 'right',
         render: (data: TransactionsDataType, index: number) => {
-          return <DynamicNumber value={data['token0']} symbol={index % 2 ? 1 : -1} />
+          return (
+            <span class={data.type ? 'text-color-up' : 'text-color-down'}>{data['token0']}</span>
+          )
         }
       },
       {
@@ -177,7 +186,9 @@ export default defineComponent({
         key: 'token1',
         align: 'right',
         render: (data: TransactionsDataType, index: number) => {
-          return <DynamicNumber value={data['token1']} symbol={index % 2 ? 1 : -1} />
+          return (
+            <span class={data.type ? 'text-color-up' : 'text-color-down'}>{data['token1']}</span>
+          )
         }
       },
       {
@@ -185,7 +196,11 @@ export default defineComponent({
         key: 'maker',
         align: 'right',
         render: (data: TransactionsDataType, index: number) => {
-          return <div class="text-color-up text-color1 truncate underline">{data.maker}</div>
+          return (
+            <div class="truncate underline">
+              <span class={data.type ? 'text-color-up' : 'text-color-down'}>{data.maker}</span>
+            </div>
+          )
         }
       },
       {
@@ -193,34 +208,77 @@ export default defineComponent({
         key: 'txn',
         align: 'right',
         render: (data: TransactionsDataType, index: number) => {
-          return <div class="text-color-up text-color1 truncate underline">{data.txn}</div>
+          return (
+            <div class="truncate underline">
+              <span class={data.type ? 'text-color-up' : 'text-color-down'}>{data.txn}</span>
+            </div>
+          )
         }
       }
     ])
 
     const dataList = ref<any[]>([])
+    const queryParam = ref<{
+      page?: number
+      size?: number
+      pairId: string
+    }>({
+      page: 1,
+      size: 50,
+      pairId: ''
+    })
+    const totalPage = ref(0)
 
-    const fetchData = function () {
-      const data = new Array(10).fill(null).map((e, i) => {
-        return {
-          date: new Date().getTime() - Math.floor(Math.random() * 1e5),
-          type: Math.floor(Math.random() * 10) % 2 > 0 ? 'Buy' : 'Sell',
-          usd: formatCurrency((Math.random() * 1e5).toFixed(0)),
-          price: formatCurrencyWithUnit((Math.random() * 1e5).toFixed(0)),
-          token0: formatCurrency((Math.random() * 1e5).toFixed(0)),
-          token1: formatCurrency((Math.random() * 1e5).toFixed(0)),
-          maker: '41123112321',
-          txn: '41123112321'
-        }
-      })
-      dataList.value = data
+    // return true=Buy || false=Cell
+    const transactionBuyOrSell = (item: ApiDocuments.proto_PairTransactionResponse) => {
+      return !!(item.amount1In && item.amount1In > 0)
+    }
+
+    const transactionPrice = (item: ApiDocuments.proto_PairTransactionResponse) => {
+      const num1 = transactionBuyOrSell(item) ? item.amount0Out : item.amount0In
+      const num2 = transactionBuyOrSell(item) ? item.amount1In : item.amount1Out
+      return num1 || 0 / (num2 || 0)
+    }
+
+    const fetchData = async function () {
+      const { error, data } = await services['Pair@get-pair-transaction-list'](queryParam.value)
+      if (!error) {
+        dataList.value = data?.list.map((item: ApiDocuments.proto_PairTransactionResponse) => {
+          return {
+            date: item.blockTime ? item.blockTime * 1000 : 0,
+            type: transactionBuyOrSell(item),
+            usd: '--',
+            price: formatCurrencyWithUnit(transactionPrice(item)),
+            token0: formatCurrency(
+              (transactionBuyOrSell(item) ? item.amount0Out : item.amount0In) || 0
+            ),
+            token1: formatCurrency(
+              (transactionBuyOrSell(item) ? item.amount1In : item.amount1Out) || 0
+            ),
+            maker: item.from,
+            txn: item.transactionHash
+          }
+        })
+
+        totalPage.value = data.total
+      }
+
       // test
       // setTimeout(fetchData, 5000 * Math.random())
     }
 
-    onMounted(() => {
-      fetchData()
-    })
+    watch(
+      () => props.pairId,
+      () => {
+        if (props.pairId) {
+          queryParam.value.pairId = props.pairId
+          fetchData()
+        }
+      },
+      {
+        immediate: true
+      }
+    )
 
     return {
       columns,

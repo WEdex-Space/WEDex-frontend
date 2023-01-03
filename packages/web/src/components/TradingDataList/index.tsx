@@ -245,8 +245,8 @@ export default defineComponent({
             return (
               <DynamicNumber
                 class="font-semibold"
-                value={data['5m'] + '%'}
-                symbol={index % 2 ? 1 : -1}
+                value={data['5m'] ? data['5m'] + '%' : '--'}
+                symbol={data['5m'] && data['5m'] > 0 ? 1 : -1}
               />
             )
           }
@@ -259,8 +259,8 @@ export default defineComponent({
             return (
               <DynamicNumber
                 class="font-semibold"
-                value={data['1h'] + '%'}
-                symbol={index % 2 ? 1 : -1}
+                value={data['1h'] ? data['1h'] + '%' : '--'}
+                symbol={data['1h'] && data['1h'] > 0 ? 1 : -1}
               />
             )
           }
@@ -273,8 +273,8 @@ export default defineComponent({
             return (
               <DynamicNumber
                 class="font-semibold"
-                value={data['4h'] + '%'}
-                symbol={index % 2 ? 1 : -1}
+                value={data['4h'] ? data['4h'] + '%' : '--'}
+                symbol={data['4h'] && data['4h'] > 0 ? 1 : -1}
               />
             )
           }
@@ -287,8 +287,8 @@ export default defineComponent({
             return (
               <DynamicNumber
                 class="font-semibold"
-                value={data['6h'] + '%'}
-                symbol={index % 2 ? 1 : -1}
+                value={data['6h'] ? data['6h'] + '%' : '--'}
+                symbol={data['6h'] && data['6h'] > 0 ? 1 : -1}
               />
             )
           }
@@ -301,8 +301,8 @@ export default defineComponent({
             return (
               <DynamicNumber
                 class="font-semibold"
-                value={data['24h'] + '%'}
-                symbol={index % 2 ? 1 : -1}
+                value={data['24h'] ? data['24h'] + '%' : '--'}
+                symbol={data['24h'] && data['24h'] > 0 ? 1 : -1}
               />
             )
           }

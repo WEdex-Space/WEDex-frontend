@@ -2,6 +2,7 @@ import { defineComponent, ref, watch, provide, InjectionKey } from 'vue'
 import DataDetail from '@/blocks/DataDetail'
 import DataView from '@/blocks/DataView'
 import ExtentionBar from '@/blocks/ExtentionBar'
+import { TradingDataItem } from '@/components/TradingDataList'
 
 export type DataListParamsType = {
   chainId: any[]
@@ -23,7 +24,7 @@ const LandingPage = defineComponent({
     const leftClass = ref(`panelExpand`)
     const centerClass = ref('w-0')
     const rightClass = ref(`rightPanelStatic`)
-    const currentDetailId = ref<string | undefined>()
+    const currentDetail = ref<TradingDataItem | undefined>()
     const currentExpand = ref<'left' | 'center' | 'right'>('left')
 
     watch(
@@ -34,6 +35,7 @@ const LandingPage = defineComponent({
             leftClass.value = 'panelExpand'
             setTimeout(() => {
               centerClass.value = 'w-0'
+              currentDetail.value = undefined
             }, 0)
             rightClass.value = 'rightPanelStatic'
             break
@@ -48,6 +50,7 @@ const LandingPage = defineComponent({
             leftClass.value = 'leftPanelStatic'
             setTimeout(() => {
               centerClass.value = 'w-0'
+              currentDetail.value = undefined
             }, 0)
             rightClass.value = 'panelExpand'
             break
@@ -73,7 +76,7 @@ const LandingPage = defineComponent({
     })
 
     provide(DataListParamsKey, DataListParams.value)
-    provide('currentDetailId', currentDetailId)
+    provide('currentDetail', currentDetail)
     provide('currentExpand', currentExpand)
 
     return {

@@ -6,12 +6,13 @@ import DetailHeader from './DetailHeader'
 import TokenInfoBlock from './components/TokenInfoBlock'
 import TradingView from './components/TradingView'
 import TransactionsBlock from './components/TransactionsBlock'
+import { usePair } from '@/hooks'
 
 export default defineComponent({
   name: 'DataDetail',
   setup() {
+    const Pair = usePair()
     const currentExpand = inject<Ref<'left' | 'center' | 'right'>>('currentExpand')
-    const currentDetailId = inject<Ref<string | undefined>>('currentDetailId')
     const widgetLoaded = ref(false)
     const timer = ref()
     const { x, y } = useMouse()
@@ -89,7 +90,7 @@ export default defineComponent({
     return {
       tradingViewHeight,
       targetActive,
-      currentDetailId,
+      currentDetail: Pair.current,
       currentExpand,
       widgetLoaded,
       targetEventProp,
@@ -108,7 +109,7 @@ export default defineComponent({
         {this.widgetLoaded ? (
           <TradingView
             style={{ height: this.tradingViewHeight + 'px' }}
-            pariId={this.currentDetailId}
+            pairId={this.currentDetail?.id}
           />
         ) : null}
         {this.widgetLoaded ? (
@@ -138,10 +139,10 @@ export default defineComponent({
               }}
             >
               <UTabPane name="Transactions" tab="Transactions">
-                <TransactionsBlock pariId={this.currentDetailId} />
+                <TransactionsBlock pairId={this.currentDetail?.id} />
               </UTabPane>
               <UTabPane name="TokenInfo" tab="Token Info">
-                <TokenInfoBlock pariId={this.currentDetailId} />
+                <TokenInfoBlock pairId={this.currentDetail?.id} />
               </UTabPane>
             </UTabs>
           </div>
