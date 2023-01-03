@@ -22,26 +22,13 @@ export default defineComponent({
     const dataList = ref<TradingDataItem[]>([])
 
     const fetchData = function () {
-      const data = new Array(10).fill(null).map((e, i) => {
+      const data = new Array(10).fill(null).map((item, index) => {
         return {
-          index: i,
-          token: `token_${i}`,
-          price: Math.random() * 1e3,
-          views: Math.floor(Math.random() * 1e7),
-          '5m': (Math.random() * 10).toFixed(2),
-          '1h': (Math.random() * 10).toFixed(2),
-          '4h': (Math.random() * 10).toFixed(2),
-          '6h': (Math.random() * 10).toFixed(2),
-          '24h': (Math.random() * 10).toFixed(2),
-          Txns: Math.floor(Math.random() * 1e7),
-          Buys: Math.floor(Math.random() * 1e7),
-          Sells: Math.floor(Math.random() * 1e7),
-          Vol: Math.random() * Math.random() * 1e7,
-          Liquidity: Math.random() * Math.random() * 1e7,
-          FDV: Math.random() * Math.random() * 1e7,
-          MKTCap: Math.random() * Math.random() * 1e7,
-          createdAt: Math.floor(Math.random() * Math.random() * 1e7),
-          TrendsUp: !!(Math.floor(Math.random() * 10) % 2 > 0)
+          id: item._id,
+          index,
+          token: [],
+          views: item.views,
+          createdAt: item.createdAt
         }
       })
       dataList.value = data

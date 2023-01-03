@@ -227,7 +227,7 @@ export const useWalletStore = defineStore('wallet', {
     async bindWallet(wallet: AbstractWallet) {
       const address = await wallet.getAddress()
       const { error, data } = await services['Authorization@get-nonce-by-address']({
-        wallet_address: address
+        walletAddress: address
       })
       if (!error) {
         try {
