@@ -1,4 +1,4 @@
-import { message } from '@wedex/components'
+import { message, UPagination } from '@wedex/components'
 import { defineComponent, ref, inject, Ref, onBeforeUnmount, watch } from 'vue'
 import { updatePairListWithSocketData } from './util'
 import { default as TradingDataList, TradingDataItem } from '@/components/TradingDataList'
@@ -49,7 +49,7 @@ export default defineComponent({
       orderValue?: number
     }>({
       page: 1,
-      size: 100
+      size: 50
     })
 
     const totalPage = ref(0)
@@ -120,6 +120,9 @@ export default defineComponent({
       fetchData()
     })
 
+    // Pagination
+    watch(() => queryParam.value, fetchData)
+
     onBeforeUnmount(() => {
       SocketStore.unsubscribe('trade-pair', [])
     })
@@ -134,32 +137,34 @@ export default defineComponent({
       }
     }
 
-    const handleDataTableScroll = (evt: Event) => {
-      console.log('handleDataTableScroll', evt)
-    }
-
     return {
+      queryParam,
+      totalPage,
       currentExpand,
       dataList,
       DataListParams,
       loopSwitchSortValue,
-      handleRowClick,
-      handleDataTableScroll
+      handleRowClick
     }
   },
   render() {
     return (
-      <TradingDataList
-        isStretch={this.currentExpand === 'left'}
-        dataList={this.dataList}
-        onSortSwitch={this.loopSwitchSortValue}
-        onRowClick={row => {
-          this.handleRowClick(row)
-        }}
-        tableProps={{
-          'on-scroll': this.handleDataTableScroll
-        }}
-      />
+      <div class="flex flex-col">
+        <TradingDataList
+          class="flex-1"
+          isStretch={this.currentExpand === 'left'}
+          dataList={this.dataList}
+          onSortSwitch={this.loopSwitchSortValue}
+          onRowClick={row => {
+            this.handleRowClick(row)
+          }}
+        />
+        <UPagination
+          v-model:page={this.queryParam.page}
+          pageCount={this.totalPage}
+          style={{ margin: '10px auto' }}
+        />
+      </div>
     )
   }
 })

@@ -1,11 +1,18 @@
 import { UPopover } from '@wedex/components'
 import { StarOutlined, StarFilled } from '@wedex/icons'
-import { defineComponent, ref, inject, Ref } from 'vue'
+import { defineComponent, ref, inject, Ref, computed } from 'vue'
+import { timeRangeToSocketMap } from '@/blocks/DataDetail/util'
+import { getPricePercentageFromSocketData } from '@/blocks/DataView/util'
 import DynamicNumber from '@/components/DynamicNumber'
+import { usePair } from '@/hooks'
+import { DataListParamsKey } from '@/pages/index'
+import { formatBigNumber, formatCurrencyWithUnit } from '@/utils/numberFormat'
 
 export default defineComponent({
   name: 'DetailHeader',
   setup() {
+    const DataListParams = inject(DataListParamsKey)
+    const Pair = usePair()
     const currentExpand = inject<Ref<'left' | 'center' | 'right'>>('currentExpand')
     const tipRef = ref()
     const watchLists = ref([
@@ -21,46 +28,91 @@ export default defineComponent({
       tipRef.value && tipRef.value.setShow?.(false)
     }
 
-    const headerCellData = ref([
+    const headerCellData = computed(() => [
       {
-        label: '433 ftm',
-        value: <span class="text-color1">$0.002797</span>
+        label: 'Price USD',
+        value: <span class="text-color1">$--</span>
+      },
+      {
+        label: 'Price',
+        value: (
+          <span class="text-color1">
+            {DataListParams && Pair.current?.value?.originSocketValue
+              ? formatBigNumber(
+                  Pair.current?.value?.originSocketValue[
+                    timeRangeToSocketMap(DataListParams.timeRange)
+                  ].liquidity
+                ) +
+                ' ' +
+                Pair.current.value.token[1].symbol
+              : '--'}
+          </span>
+        )
       },
       {
         label: '5m',
-        value: <DynamicNumber value={'10%'} symbol={Math.floor(Math.random() * 10) % 2 ? 1 : -1} />
+        value: (
+          <DynamicNumber
+            value={
+              getPricePercentageFromSocketData(Pair.current?.value?.originSocketValue['5m']) + '%'
+            }
+            symbol={Math.floor(Math.random() * 10) % 2 ? 1 : -1}
+          />
+        )
       },
       {
         label: '1h',
-        value: <DynamicNumber value={'10%'} symbol={Math.floor(Math.random() * 10) % 2 ? 1 : -1} />
+        value: (
+          <DynamicNumber
+            value={
+              getPricePercentageFromSocketData(Pair.current?.value?.originSocketValue['1h']) + '%'
+            }
+            symbol={Math.floor(Math.random() * 10) % 2 ? 1 : -1}
+          />
+        )
       },
       {
         label: '6h',
-        value: <DynamicNumber value={'10%'} symbol={Math.floor(Math.random() * 10) % 2 ? 1 : -1} />
+        value: (
+          <DynamicNumber
+            value={
+              getPricePercentageFromSocketData(Pair.current?.value?.originSocketValue['6h']) + '%'
+            }
+            symbol={Math.floor(Math.random() * 10) % 2 ? 1 : -1}
+          />
+        )
       },
       {
         label: '24h',
-        value: <DynamicNumber value={'10%'} symbol={Math.floor(Math.random() * 10) % 2 ? 1 : -1} />
+        value: (
+          <DynamicNumber
+            value={
+              getPricePercentageFromSocketData(Pair.current?.value?.originSocketValue['1d']) + '%'
+            }
+            symbol={Math.floor(Math.random() * 10) % 2 ? 1 : -1}
+          />
+        )
       },
       {
         label: '24h High',
-        value: <span class="text-color1">$0.002797</span>
+        value: (
+          <span class="text-color1">
+            {formatCurrencyWithUnit(Pair.current?.value?.originSocketValue['1d'].priceMax)}
+          </span>
+        )
       },
       {
         label: '24h Low',
-        value: <span class="text-color1">$0.002797</span>
-      },
-      {
-        label: 'Liquidity',
-        value: <span class="text-color1">$233k</span>
-      },
-      {
-        label: 'FDV',
-        value: <span class="text-color1">$233k</span>
+        value: (
+          <span class="text-color1">
+            {formatCurrencyWithUnit(Pair.current?.value?.originSocketValue['1d'].priceMin)}
+          </span>
+        )
       }
     ])
 
     return {
+      Pair,
       currentExpand,
       tipRef,
       watchLists,
@@ -72,8 +124,11 @@ export default defineComponent({
     return (
       <div class="border-color-border flex border-b-1 h-14 px-2.5 items-center">
         <div>
-          <div class="font-700 text-base text-color1">Token1/Token2</div>
-          <div class="text-color3">Token name</div>
+          <div class="font-700 text-base text-color1">
+            {this.Pair?.current?.value?.token[0].symbol}/
+            {this.Pair?.current?.value?.token[1].symbol}
+          </div>
+          <div class="text-color3">{this.Pair?.current?.value?.token[0].name}</div>
         </div>
         <div class="flex h-full flex-1 mx-6 text-right text-xs overflow-x-scroll items-center">
           {this.headerCellData.map(item => (

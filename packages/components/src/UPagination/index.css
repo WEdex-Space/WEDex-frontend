@@ -2,25 +2,3 @@
 .u-pagination {
   user-select: none;
 }
-
-.u-pagination .n-pagination-item {
-  color: var(--n-button-icon-color);
-  background-color: #fff;
-  border: var(--n-button-border);
-}
-
-.u-pagination .n-pagination-item:not(.n-pagination-item--disabled):hover {
-  color: var(--n-item-text-color-active);
-  background: var(--n-item-color-hover);
-  border: var(--n-item-border-active);
-}
-
-.u-pagination.n-pagination .n-pagination-item.n-pagination-item--button {
-  background-color: #fff;
-}
-
-.u-pagination.n-pagination
-  .n-pagination-item:not(.n-pagination-item--disabled).n-pagination-item--active {
-  color: #fff;
-  background-color: var(--n-item-text-color-active);
-}

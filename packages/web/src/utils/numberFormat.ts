@@ -47,7 +47,7 @@ export const parseCurrencyWithUnit = (input: string) => {
   return nums === '' ? null : Number.NaN
 }
 
-export const formatCurrencyWithUnit = (value: number | string | null) => {
-  if (value === null) return ''
+export const formatCurrencyWithUnit = (value: number | string | null | undefined) => {
+  if (value === null || value === undefined) return ''
   return `$${value.toLocaleString('en-US')}`
 }

@@ -12,16 +12,25 @@ const getDetail = async (pairId: string) => {
   return Promise.reject()
 }
 
+const pairIdCache = ref()
+
+const detail = ref()
+
 export function usePair() {
   const currentPair = inject<Ref<TradingDataItem | undefined>>('currentPair')
-  const detail = ref()
 
   watch(
     () => currentPair,
     () => {
       if (currentPair && currentPair.value) {
-        getDetail(currentPair.value.id).then(data => (detail.value = data))
+        if (pairIdCache.value !== currentPair.value.id) {
+          pairIdCache.value = currentPair.value.id
+          getDetail(currentPair.value.id).then(data => {
+            detail.value = data
+          })
+        }
       } else {
+        pairIdCache.value = undefined
         detail.value = undefined
       }
     },
@@ -33,6 +42,7 @@ export function usePair() {
 
   return {
     current: currentPair,
+    pairIdCache,
     detail,
     setCurrent: (value: TradingDataItem) => {
       currentPair && (currentPair.value = value)

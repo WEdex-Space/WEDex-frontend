@@ -120,6 +120,12 @@ const UStyleProvider = defineComponent({
         thPaddingSmall: '4px 8px',
         tdPaddingSmall: '8px',
         fontSizeSmall: '12px'
+      },
+      Pagination: {
+        itemColorActive: ColorOverrides.value.primaryBg,
+        itemTextColorActive: '#fff',
+        itemColorHover: ColorOverrides.value.primaryColor,
+        itemColorActiveHover: ColorOverrides.value.primaryColor
       }
     }))
 

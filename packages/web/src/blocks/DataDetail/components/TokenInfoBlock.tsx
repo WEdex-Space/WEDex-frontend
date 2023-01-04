@@ -1,6 +1,6 @@
 import { UAddress, USpin } from '@wedex/components'
 import { ShareOutlined } from '@wedex/icons'
-import { defineComponent, watch, ref, computed } from 'vue'
+import { defineComponent, computed } from 'vue'
 import SocialIcon from '@/components/SocialIcon'
 import { getNetByChainId } from '@/constants'
 import { usePair } from '@/hooks'
@@ -19,53 +19,51 @@ export default defineComponent({
   },
   setup(props, ctx) {
     const Pair = usePair()
-    const info = ref()
 
-    watch(
-      () => Pair.detail.value,
-      data => {
-        if (data) {
-          info.value = {
-            ...data,
-            currentToken: [data.tokenW0Info, data.tokenW1Info].find(
+    const info = computed(() => {
+      return Pair.detail.value
+        ? {
+            ...Pair.detail.value,
+            currentToken: [Pair.detail.value.tokenW0Info, Pair.detail.value.tokenW1Info].find(
               (item: any) => item.contractAddress === Pair.current?.value?.token[0].contractAddress
             )
           }
-        }
-      },
-      {
-        immediate: true
-      }
+        : null
+    })
+
+    const dataList = computed<any[]>(() =>
+      info.value
+        ? [
+            {
+              label: <strong>{info.value.currentToken.name}</strong>,
+              content: <span>{info.value.currentToken.symbol}</span>
+            },
+            {
+              label: 'Total Supply:',
+              content: <strong>{formatCurrency(info.value.currentToken.totalSupply)}</strong>
+            },
+            {
+              label: 'Holders:',
+              content: <strong>--</strong>
+            },
+            {
+              label: 'Contract:',
+              content: (
+                <UAddress
+                  class="w-full"
+                  address={info.value.currentToken.contractAddress}
+                  blockchainExplorerUrl={
+                    getNetByChainId(info.value.currentToken.chainId)?.explorerUrl + '/address/'
+                  }
+                />
+              )
+            }
+          ]
+        : []
     )
 
-    const dataList = computed<any[]>(() => [
-      {
-        label: <strong>{info.value.currentToken.name}</strong>,
-        content: <span>{info.value.currentToken.symbol}</span>
-      },
-      {
-        label: 'Total Supply:',
-        content: <strong>{formatCurrency(info.value.currentToken.totalSupply)}</strong>
-      },
-      {
-        label: 'Holders:',
-        content: <strong>--</strong>
-      },
-      {
-        label: 'Contract:',
-        content: (
-          <UAddress
-            class="w-full"
-            address={info.value.currentToken.contractAddress}
-            blockchainExplorerUrl={
-              getNetByChainId(info.value.currentToken.chainId)?.explorerUrl + '/address/'
-            }
-          />
-        )
-      }
-    ])
-
     return {
+      Pair,
       info,
       dataList
     }
