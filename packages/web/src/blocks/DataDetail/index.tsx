@@ -87,7 +87,7 @@ export default defineComponent({
     return {
       tradingViewHeight,
       targetActive,
-      currentDetail: Pair.current,
+      currentPair: Pair.current,
       currentExpand,
       widgetLoaded,
       targetEventProp,
@@ -106,7 +106,7 @@ export default defineComponent({
         {this.widgetLoaded ? (
           <TradingView
             style={{ height: this.tradingViewHeight + 'px' }}
-            pairId={this.currentDetail?.id}
+            pairId={this.currentPair?.id}
           />
         ) : null}
         {this.widgetLoaded ? (
@@ -119,7 +119,7 @@ export default defineComponent({
               style={{ cursor: 'n-resize' }}
             ></div>
             <div class="border-color-border flex flex-col h-full border-r-1">
-              <TransactionsBlock pairId={this.currentDetail?.id} />
+              <TransactionsBlock pairId={this.currentPair?.id} />
             </div>
           </div>
         ) : null}

@@ -1,10 +1,13 @@
 import { UTable } from '@wedex/components'
 import { defineComponent, ref } from 'vue'
+import { timeRangeToSocketMap } from '@/blocks/DataDetail/util'
+import { usePair } from '@/hooks'
 import { formatCurrency, formatCurrencyWithUnit } from '@/utils/numberFormat'
 
 export default defineComponent({
   name: 'TradeBlock',
   setup(props, ctx) {
+    const Pair = usePair()
     const tradeTimeTypes = ref(['5m', '1h', '4h', '6h', '24h', '7D'])
     const tradeTimeCurrent = ref(tradeTimeTypes.value[0])
 
@@ -47,31 +50,67 @@ export default defineComponent({
     const dataList = ref<any[]>([
       {
         Stats: 'Txns',
-        Total: formatCurrency((Math.random() * 1e5).toFixed(0)),
-        Buys: formatCurrency((Math.random() * 1e5).toFixed(0)),
-        Sells: formatCurrency((Math.random() * 1e5).toFixed(0))
+        Total: formatCurrency(
+          Pair.current?.value?.originSocketValue[timeRangeToSocketMap(tradeTimeCurrent.value)].txns
+        ),
+        Buys: formatCurrency(
+          Pair.current?.value?.originSocketValue[timeRangeToSocketMap(tradeTimeCurrent.value)]
+            .txnsBuys
+        ),
+        Sells: formatCurrency(
+          Pair.current?.value?.originSocketValue[timeRangeToSocketMap(tradeTimeCurrent.value)]
+            .txnsSells
+        )
       },
       {
         Stats: 'Makers',
-        Total: formatCurrency((Math.random() * 1e5).toFixed(0)),
-        Buys: formatCurrency((Math.random() * 1e5).toFixed(0)),
-        Sells: formatCurrency((Math.random() * 1e5).toFixed(0))
+        Total: formatCurrency(
+          Pair.current?.value?.originSocketValue[timeRangeToSocketMap(tradeTimeCurrent.value)]
+            .makers
+        ),
+        Buys: formatCurrency(
+          Pair.current?.value?.originSocketValue[timeRangeToSocketMap(tradeTimeCurrent.value)]
+            .makersBuys
+        ),
+        Sells: formatCurrency(
+          Pair.current?.value?.originSocketValue[timeRangeToSocketMap(tradeTimeCurrent.value)]
+            .makersSells
+        )
       },
       {
         Stats: 'Volume',
-        Total: formatCurrencyWithUnit((Math.random() * 1e5).toFixed(0)),
-        Buys: formatCurrencyWithUnit((Math.random() * 1e5).toFixed(0)),
-        Sells: formatCurrencyWithUnit((Math.random() * 1e5).toFixed(0))
+        Total: formatCurrencyWithUnit(
+          Pair.current?.value?.originSocketValue[timeRangeToSocketMap(tradeTimeCurrent.value)]
+            .volume
+        ),
+        Buys: formatCurrencyWithUnit(
+          Pair.current?.value?.originSocketValue[timeRangeToSocketMap(tradeTimeCurrent.value)]
+            .volumeBuys
+        ),
+        Sells: formatCurrencyWithUnit(
+          Pair.current?.value?.originSocketValue[timeRangeToSocketMap(tradeTimeCurrent.value)]
+            .volumeSells
+        )
       },
       {
         Stats: 'Price.avg',
-        Total: formatCurrencyWithUnit((Math.random() * 1e5).toFixed(0)),
-        Buys: formatCurrencyWithUnit((Math.random() * 1e5).toFixed(0)),
-        Sells: formatCurrencyWithUnit((Math.random() * 1e5).toFixed(0))
+        Total: formatCurrencyWithUnit(
+          Pair.current?.value?.originSocketValue[timeRangeToSocketMap(tradeTimeCurrent.value)]
+            .priceAvg
+        ),
+        Buys: formatCurrencyWithUnit(
+          Pair.current?.value?.originSocketValue[timeRangeToSocketMap(tradeTimeCurrent.value)]
+            .priceAvgBuys
+        ),
+        Sells: formatCurrencyWithUnit(
+          Pair.current?.value?.originSocketValue[timeRangeToSocketMap(tradeTimeCurrent.value)]
+            .priceAvgSells
+        )
       }
     ])
 
     return {
+      Pair,
       columns,
       dataList,
       tradeTimeTypes,
@@ -82,7 +121,7 @@ export default defineComponent({
   render() {
     return (
       <>
-        <ul class="flex h-9 text-xs px-3 items-center">
+        <ul class="flex h-9 text-xs text-center px-3 items-center">
           {this.tradeTimeTypes.map(time => (
             <li
               class={`cursor-pointer flex-1 text-color1 hover:text-color2 ${

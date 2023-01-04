@@ -10,6 +10,7 @@ import { formatBigNumber, formatCurrency } from '@/utils/numberFormat'
 import { customTimeAgo } from '@/utils/timeago'
 
 export type TradingDataItem = {
+  originSocketValue?: any
   id: string
   index: number
   token: Record<string, any>[]
@@ -221,8 +222,10 @@ export default defineComponent({
                     Array.isArray(data.token) ? data.token.map(e => e.symbol).join('/') : '--'
                   }`}
                 >
-                  <strong class="text-color1">{data.token[0].symbol}</strong>
-                  {props.isStretch && <strong class="text-color3">/ {data.token[1].symbol}</strong>}
+                  <strong class="text-color1">{data.token[0]?.symbol || '--'}</strong>
+                  {props.isStretch && (
+                    <strong class="text-color3">/ {data.token[1]?.symbol || '--'}</strong>
+                  )}
                 </div>
               </div>
             )

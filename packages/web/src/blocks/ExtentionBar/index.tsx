@@ -31,7 +31,7 @@ export default defineComponent({
     const currentExtention = ref<string | null>('WatchList')
 
     return {
-      currentDetail: Pair.current,
+      currentPair: Pair.current,
       currentExpand,
       currentExtention,
       globalConfigStore
@@ -107,7 +107,7 @@ export default defineComponent({
           <div class="flex-1 overflow-hidden">
             {this.currentExtention && componentsMap[this.currentExtention].component}
           </div>
-          {this.currentExpand === 'center' && <EmbeddedBlock pairId={this.currentDetail?.id} />}
+          {this.currentExpand === 'center' && <EmbeddedBlock pairId={this.currentPair?.id} />}
         </div>
         {/* icons */}
         <div class="border-color-border flex flex-col border-l-1 w-11">

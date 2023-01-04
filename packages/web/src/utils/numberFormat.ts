@@ -21,7 +21,7 @@ export function formatToFixed(value: number | string, precision: number) {
 export const formatBigNumber = (value: number | string) => {
   const data = Number(value)
   if (isNaN(data)) {
-    return 'parse error'
+    return '--'
   }
   return data > 1000000
     ? `${(data / 1000000).toFixed(1).replace(/\.0$/, '')}M`

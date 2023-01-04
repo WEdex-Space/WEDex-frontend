@@ -1,7 +1,8 @@
 import { USelect } from '@wedex/components'
 import { CustomOutlined, ExportOutlined } from '@wedex/icons'
-import { defineComponent, ref, inject, Ref } from 'vue'
+import { defineComponent, ref, inject, Ref, watch } from 'vue'
 import CustomizeFilter from './components/CustomizeFilter'
+import { DataListParamsKey } from '@/pages/index'
 
 const footerCellClass =
   'border-l-1 border-color-border 2xl:px-7 px-3 leading-10 cursor-pointer hover:text-color2 select-none'
@@ -12,31 +13,44 @@ export default defineComponent({
   name: 'MainFooter',
   setup() {
     const currentExpand = inject<Ref<'left' | 'center' | 'right'>>('currentExpand')
+    const DataListParams = inject(DataListParamsKey)
 
     const formData = ref({
-      range: 5
+      range: DataListParams?.timeRange || '24h'
     })
+
+    watch(
+      () => formData.value,
+      () => {
+        if (DataListParams) {
+          DataListParams.timeRange = formData.value.range
+        }
+      },
+      {
+        deep: true
+      }
+    )
 
     const rangeData = ref([
       {
         label: 'Last 5 mins',
-        value: 1
+        value: '5m'
       },
       {
         label: 'Last 1 hour',
-        value: 2
+        value: '1h'
       },
       {
         label: 'Last 4 hours',
-        value: 3
+        value: '4h'
       },
       {
         label: 'Last 6 hours',
-        value: 4
+        value: '6h'
       },
       {
         label: 'Last 24 hours',
-        value: 5
+        value: '24h'
       }
     ])
 

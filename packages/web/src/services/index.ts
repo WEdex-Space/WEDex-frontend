@@ -23,44 +23,39 @@ export const services = {
       ...extract('GET', args, [], ['walletAddress'])
     })
   },
-  'Chain@get-chain-list'(args: {
-    /**
-     * @description pagination select current page, default: 1
-     */
-    page?: number
-    /**
-     * @description pagination size, default: 20
-     */
-    size?: number
-  }) {
+  'Chain@get-chain-list'(args?: any) {
     return requestAdapter<
-      ApiDocuments.proto_PageData & {
+      ApiDocuments.proto_ListData & {
         list?: ApiDocuments.proto_ChainResponse[]
       }
     >({
       url: replacePath('/chains', args),
       method: 'GET',
-      ...extract('GET', args, ['page', 'size'], [])
+      ...extract('GET', args, [], [])
     })
   },
   'DEX@get-dex-list'(args: {
     /**
-     * @description pagination select current page, default: 1
+     * @description ad, advertise
      */
-    page?: number
+    ad?: boolean
     /**
-     * @description pagination size, default: 20
+     * @description chainId list
      */
-    size?: number
+    chainIds?: number[]
+    /**
+     * @description query keyword
+     */
+    keyword?: string
   }) {
     return requestAdapter<
-      ApiDocuments.proto_PageData & {
+      ApiDocuments.proto_ListData & {
         list?: ApiDocuments.proto_DEXResponse[]
       }
     >({
       url: replacePath('/dexs', args),
       method: 'GET',
-      ...extract('GET', args, ['page', 'size'], [])
+      ...extract('GET', args, ['ad', 'chainIds', 'keyword'], [])
     })
   },
   'MultiChart@get-multi-chart-tab-list'(args: {
@@ -251,11 +246,52 @@ export const services = {
      */
     size?: number
     /**
+     * @description categoires
+     */
+    categoires?: string[]
+    /**
+     * @description chain id
+     */
+    chainIds?: number[]
+    /**
+     * @description dex id
+     */
+    dexs?: string[]
+    /**
      * @description query keyword
      */
     keyword?: string
-    orderKey?: string
-    orderValue?: number
+    liquidityMax?: number
+    liquidityMin?: number
+    /**
+     * @description hour
+     */
+    pairAgeMax?: number
+    /**
+     * @description hour
+     */
+    pairAgeMin?: number
+    rankBy?: string
+    /**
+     * @description 1 asc, -1 desc
+     */
+    rankType?: number
+    /**
+     * @description 5m,15m,1h,4h,6h,24h
+     */
+    timeInterval?: string
+    /**
+     * @description %
+     */
+    trendMax?: number
+    /**
+     * @description %
+     */
+    trendMin?: number
+    txnsMax?: number
+    txnsMin?: number
+    volumeMax?: number
+    volumeMin?: number
   }) {
     return requestAdapter<
       ApiDocuments.proto_PageData & {
@@ -264,7 +300,32 @@ export const services = {
     >({
       url: replacePath('/pairs', args),
       method: 'GET',
-      ...extract('GET', args, ['page', 'size', 'keyword', 'orderKey', 'orderValue'], [])
+      ...extract(
+        'GET',
+        args,
+        [
+          'page',
+          'size',
+          'categoires',
+          'chainIds',
+          'dexs',
+          'keyword',
+          'liquidityMax',
+          'liquidityMin',
+          'pairAgeMax',
+          'pairAgeMin',
+          'rankBy',
+          'rankType',
+          'timeInterval',
+          'trendMax',
+          'trendMin',
+          'txnsMax',
+          'txnsMin',
+          'volumeMax',
+          'volumeMin'
+        ],
+        []
+      )
     })
   },
   'Pair@get-pair-info'(args: {
@@ -354,6 +415,17 @@ export const services = {
       url: replacePath('/share/{shareCode}', args),
       method: 'GET',
       ...extract('GET', args, [], ['shareCode'])
+    })
+  },
+  'Token@get-token-categories-list'(args?: any) {
+    return requestAdapter<
+      ApiDocuments.proto_ListData & {
+        list?: string[]
+      }
+    >({
+      url: replacePath('/tokens/categories', args),
+      method: 'GET',
+      ...extract('GET', args, [], [])
     })
   },
   'Upload@upload-file'(args: {

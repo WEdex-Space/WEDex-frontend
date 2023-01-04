@@ -15,6 +15,7 @@ export type DataListParamsType = {
   disablePaginate: boolean
   trendType: number | null
   rankBy: number | null
+  timeRange: string
 }
 export const DataListParamsKey = Symbol() as InjectionKey<DataListParamsType>
 
@@ -24,7 +25,7 @@ const LandingPage = defineComponent({
     const leftClass = ref(`panelExpand`)
     const centerClass = ref('w-0')
     const rightClass = ref(`rightPanelStatic`)
-    const currentDetail = ref<TradingDataItem | undefined>()
+    const currentPair = ref<TradingDataItem | undefined>()
     const currentExpand = ref<'left' | 'center' | 'right'>('left')
 
     watch(
@@ -35,7 +36,7 @@ const LandingPage = defineComponent({
             leftClass.value = 'panelExpand'
             setTimeout(() => {
               centerClass.value = 'w-0'
-              currentDetail.value = undefined
+              currentPair.value = undefined
             }, 0)
             rightClass.value = 'rightPanelStatic'
             break
@@ -50,7 +51,7 @@ const LandingPage = defineComponent({
             leftClass.value = 'leftPanelStatic'
             setTimeout(() => {
               centerClass.value = 'w-0'
-              currentDetail.value = undefined
+              currentPair.value = undefined
             }, 0)
             rightClass.value = 'panelExpand'
             break
@@ -72,11 +73,12 @@ const LandingPage = defineComponent({
       size: 20,
       disablePaginate: false,
       trendType: 0,
-      rankBy: null
+      rankBy: null,
+      timeRange: '24h'
     })
 
     provide(DataListParamsKey, DataListParams.value)
-    provide('currentDetail', currentDetail)
+    provide('currentPair', currentPair)
     provide('currentExpand', currentExpand)
 
     return {

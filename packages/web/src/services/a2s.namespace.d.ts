@@ -16,11 +16,11 @@ export declare namespace ApiDocuments {
     pairDetail?: {}
     symbol?: string
     token0?: {}
-    token0Info?: {}
     token1?: {}
-    token1Info?: {}
     tokenW0?: string
+    tokenW0Info?: {}
     tokenW1?: string
+    tokenW1Info?: {}
     views?: number
   }
   export interface proto_ChainResponse extends BasicDto {
@@ -51,6 +51,16 @@ export declare namespace ApiDocuments {
      * @description Token
      */
     token: string
+  }
+  export interface proto_ListData extends BasicDto {
+    /**
+     * @description data list
+     */
+    list?: any
+    /**
+     * @description total
+     */
+    total: number
   }
   export interface proto_MessageResponse extends BasicDto {
     /**
@@ -151,32 +161,39 @@ export declare namespace ApiDocuments {
     dexId?: string
     name?: string
     token0?: {}
-    token0Info?: {}
     token1?: {}
-    token1Info?: {}
     tokenW0?: string
+    tokenW0Info?: {}
     tokenW1?: string
+    tokenW1Info?: {}
   }
   export interface proto_PairReportResponse extends BasicDto {
     FDV?: number
     MKTCap?: number
     _id?: string
-    buys?: number
     chainId?: number
     dexId?: string
     happenAt?: string
     liquidity?: number
+    makers?: number
+    makersBuys?: number
+    makersSells?: number
     pairId?: string
     priceAvg?: number
+    priceAvgBuys?: number
+    priceAvgSells?: number
     priceEnd?: number
     priceMax?: number
     priceMin?: number
     priceStart?: number
-    sells?: number
     trendType?: number
     txns?: number
+    txnsBuys?: number
+    txnsSells?: number
     views?: number
     volume?: number
+    volumeBuys?: number
+    volumeSells?: number
   }
   export interface proto_PairResponse extends BasicDto {
     _id?: string
@@ -191,11 +208,11 @@ export declare namespace ApiDocuments {
     pairDetail?: {}
     symbol?: string
     token0?: {}
-    token0Info?: {}
     token1?: {}
-    token1Info?: {}
     tokenW0?: string
+    tokenW0Info?: {}
     tokenW1?: string
+    tokenW1Info?: {}
     views?: number
   }
   export interface proto_PairTransactionResponse extends BasicDto {

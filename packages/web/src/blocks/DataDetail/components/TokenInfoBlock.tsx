@@ -4,11 +4,10 @@ import { defineComponent, watch, ref, computed } from 'vue'
 import SocialIcon from '@/components/SocialIcon'
 import { getNetByChainId } from '@/constants'
 import { usePair } from '@/hooks'
-import { services } from '@/services'
 import { formatCurrency } from '@/utils/numberFormat'
 
 const socialTagClass =
-  'min-w-25 h-6 flex items-center px-2 text-color1 bg-bg3 rounded-sm hover:bg-primary-bg hover:text-primary cursor-pointer'
+  'min-w-25 h-6 flex items-center px-2 text-color1 border-1 border-color-border rounded-sm hover:bg-primary-bg hover:text-primary hover:border-primary-bg cursor-pointer'
 const socialIconClass = 'w-4 h-4 mr-2'
 
 export default defineComponent({
@@ -22,25 +21,16 @@ export default defineComponent({
     const Pair = usePair()
     const info = ref()
 
-    const fetchData = async (pairId: string) => {
-      const { error, data } = await services['Pair@get-pair-info']({
-        pairId
-      })
-      if (!error) {
-        info.value = {
-          ...data,
-          currentToken: [data.token0Info, data.token1Info].find(
-            (item: any) => item.contractAddress === Pair.current?.value?.token[0].contractAddress
-          )
-        }
-      }
-    }
-
     watch(
-      () => props.pairId,
-      () => {
-        if (props.pairId) {
-          fetchData(props.pairId)
+      () => Pair.detail.value,
+      data => {
+        if (data) {
+          info.value = {
+            ...data,
+            currentToken: [data.tokenW0Info, data.tokenW1Info].find(
+              (item: any) => item.contractAddress === Pair.current?.value?.token[0].contractAddress
+            )
+          }
         }
       },
       {
@@ -59,7 +49,7 @@ export default defineComponent({
       },
       {
         label: 'Holders:',
-        content: <strong>{formatCurrency(312123412312)}</strong>
+        content: <strong>--</strong>
       },
       {
         label: 'Contract:',
@@ -112,7 +102,7 @@ export default defineComponent({
                 {this.info.currentToken.description}
               </div>
               {/* social */}
-              <div class="flex py-4 gap-2">
+              <div class="flex mt-2 py-2 gap-2">
                 {this.info.currentToken.socials
                   .map((social: any) => {
                     const socialInfo =

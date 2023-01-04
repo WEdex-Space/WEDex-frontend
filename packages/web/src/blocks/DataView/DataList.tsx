@@ -1,3 +1,4 @@
+import { message } from '@wedex/components'
 import { defineComponent, ref, inject, Ref, onBeforeUnmount, watch } from 'vue'
 import { updatePairListWithSocketData } from './util'
 import { default as TradingDataList, TradingDataItem } from '@/components/TradingDataList'
@@ -59,7 +60,7 @@ export default defineComponent({
       if (!error) {
         dataList.value = data.list.map(
           (item: ApiDocuments.proto_PairBasicResponse, index: number) => {
-            const dexSort: any[] = [item.token0Info, item.token1Info]
+            const dexSort: any[] = [item.tokenW0Info, item.tokenW1Info]
             const pairs = [item.tokenW0 || '', item.tokenW1 || ''].map(
               (contractAddress: string) => {
                 const targetIndex = dexSort.findIndex(
@@ -96,6 +97,7 @@ export default defineComponent({
             msg => {
               console.log('subscribe', msg)
               dataList.value = updatePairListWithSocketData(msg.data.value, dataList.value)
+              Pair.handleSocketData(msg.data.value)
             }
           )
         }
@@ -124,8 +126,12 @@ export default defineComponent({
 
     const handleRowClick = (row: any) => {
       console.log('handleRowClick', row, currentExpand)
-      currentExpand && (currentExpand.value = 'center')
-      Pair.setCurrent(row)
+      if (row.originSocketValue) {
+        currentExpand && (currentExpand.value = 'center')
+        Pair.setCurrent(row)
+      } else {
+        message.warning('data not ready')
+      }
     }
 
     const handleDataTableScroll = (evt: Event) => {

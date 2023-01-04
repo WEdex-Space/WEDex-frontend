@@ -52,6 +52,7 @@ export const updatePairListWithSocketData = (item: SocketDataValue, list: Tradin
   if (targetIndex !== -1) {
     list.splice(targetIndex, 1, {
       ...list[targetIndex],
+      originSocketValue: item,
       price: item['1d']?.priceEnd,
       '5m': getPricePercentageFromSocketData(item['5m']),
       '1h': getPricePercentageFromSocketData(item['1h']),
