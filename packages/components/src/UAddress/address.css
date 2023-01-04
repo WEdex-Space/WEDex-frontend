@@ -1,5 +1,5 @@
 .u-address {
-  @apply flex text-color1 items-center;
+  @apply flex items-center;
 
   &__text {
     @apply cursor-default flex-1 truncate;

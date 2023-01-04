@@ -1,9 +1,6 @@
 import { useMouse } from '@vueuse/core'
-import { UTabs, UTabPane } from '@wedex/components'
-import { ExportOutlined } from '@wedex/icons'
 import { defineComponent, inject, Ref, watch, ref, onMounted } from 'vue'
 import DetailHeader from './DetailHeader'
-import TokenInfoBlock from './components/TokenInfoBlock'
 import TradingView from './components/TradingView'
 import TransactionsBlock from './components/TransactionsBlock'
 import { usePair } from '@/hooks'
@@ -121,30 +118,9 @@ export default defineComponent({
               }`}
               style={{ cursor: 'n-resize' }}
             ></div>
-            <UTabs
-              bar-width={0}
-              tabs-padding={10}
-              tab-style={{ userSelect: 'none' }}
-              pane-style={{ padding: 0, flex: 1 }}
-              class="border-color-border flex flex-col h-full border-r-1"
-              value={this.tabValue}
-              onUpdate:value={value => (this.tabValue = value)}
-              v-slots={{
-                suffix: () =>
-                  this.tabValue === 'Transactions' ? (
-                    <div class="cursor-pointer flex text-xs px-2 text-color3 items-center hover:text-color1">
-                      <ExportOutlined class="h-4 mr-1 w-3" /> Export
-                    </div>
-                  ) : null
-              }}
-            >
-              <UTabPane name="Transactions" tab="Transactions">
-                <TransactionsBlock pairId={this.currentDetail?.id} />
-              </UTabPane>
-              <UTabPane name="TokenInfo" tab="Token Info">
-                <TokenInfoBlock pairId={this.currentDetail?.id} />
-              </UTabPane>
-            </UTabs>
+            <div class="border-color-border flex flex-col h-full border-r-1">
+              <TransactionsBlock pairId={this.currentDetail?.id} />
+            </div>
           </div>
         ) : null}
       </div>

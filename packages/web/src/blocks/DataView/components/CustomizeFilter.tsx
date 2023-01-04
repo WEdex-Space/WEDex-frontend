@@ -210,7 +210,7 @@ export default defineComponent({
                     />
                   </div>
                 </UFormItem>
-                <UFormItem label="Volumn">
+                <UFormItem label="Volume">
                   <div class="flex w-full gap-2">
                     <UInputNumber
                       class="flex-1"

@@ -14,7 +14,7 @@ export default defineComponent({
 
     const tagData = ref([
       {
-        name: 'Volumn',
+        name: 'Volume',
         value: 4
       },
       {

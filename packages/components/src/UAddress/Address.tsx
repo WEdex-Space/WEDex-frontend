@@ -1,5 +1,5 @@
 import { CopyOutlined, ShareOutlined } from '@wedex/icons'
-import { shortenAddress } from '@wedex/utils/src'
+import { shortenAddress } from '@wedex/utils'
 import copy from 'copy-to-clipboard'
 import { defineComponent, toRefs, ref } from 'vue'
 import type { PropType } from 'vue'
@@ -19,7 +19,7 @@ export const UAddressProps = {
   },
   autoSlice: {
     type: Boolean,
-    default: false
+    default: true
   },
   address: {
     type: String,

@@ -66,7 +66,7 @@ export default defineComponent({
             24h Txns:<span class="text-color1">1234</span>
           </li>
           <li class={footerListCellClass}>
-            24h Volumn:<span class="text-color1">1234</span>
+            24h Volume:<span class="text-color1">1234</span>
           </li>
         </ul>
         <div class={`border-l-1 border-color-border w-40 flex items-center`}>

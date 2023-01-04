@@ -77,7 +77,7 @@ export default defineComponent({
 
       const content = (hasValue?: boolean) => (
         <div
-          class={`cursor-pointer flex h-7 -mx-[2px] ${flexAlignClass} items-center hover:text-color2`}
+          class={`cursor-pointer flex h-5 -mx-[2px] ${flexAlignClass} items-center hover:text-color2`}
         >
           <div>{sortTitle}</div>
           <FilterOutlined class={`h-3 ml-[2px] w-3 ${hasValue ? 'text-primary' : ''}`} />

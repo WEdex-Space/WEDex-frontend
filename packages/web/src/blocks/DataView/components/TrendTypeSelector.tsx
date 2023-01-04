@@ -30,7 +30,7 @@ export default defineComponent({
         value: 3
       },
       {
-        label: 'Trading Volumn',
+        label: 'Trading Volume',
         value: 4
       },
       {

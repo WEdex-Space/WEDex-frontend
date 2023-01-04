@@ -77,10 +77,6 @@ body {
   background-color: transparent;
 }
 
-.transparentTable .n-data-table-th {
-  @apply text-color3;
-}
-
 /* tinyTable */
 .tinyTable.n-data-table {
   @apply border-color-border border-b-1 pb-2;

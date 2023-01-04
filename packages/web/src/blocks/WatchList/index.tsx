@@ -22,7 +22,7 @@ export default defineComponent({
     const dataList = ref<TradingDataItem[]>([])
 
     const fetchData = function () {
-      const data = new Array(10).fill(null).map((item, index) => {
+      const data = new Array(10).fill({}).map((item, index) => {
         return {
           id: item._id,
           index,

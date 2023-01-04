@@ -22,7 +22,7 @@ export default defineComponent({
         value: 2
       },
       {
-        name: 'Top Volumn',
+        name: 'Top Volume',
         value: 3
       }
     ])

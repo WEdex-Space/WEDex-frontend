@@ -19,16 +19,19 @@ import Notebook from '@/blocks/Notebook'
 import Portfolio from '@/blocks/Portfolio'
 import Search from '@/blocks/Search'
 import WatchList from '@/blocks/WatchList'
+import { usePair } from '@/hooks'
 import { useGlobalConfigStore } from '@/stores'
 
 export default defineComponent({
   name: 'ExtentionBar',
   setup() {
+    const Pair = usePair()
     const globalConfigStore = useGlobalConfigStore()
     const currentExpand = inject<string>('currentExpand')
     const currentExtention = ref<string | null>('WatchList')
 
     return {
+      currentDetail: Pair.current,
       currentExpand,
       currentExtention,
       globalConfigStore
@@ -104,7 +107,7 @@ export default defineComponent({
           <div class="flex-1 overflow-hidden">
             {this.currentExtention && componentsMap[this.currentExtention].component}
           </div>
-          {this.currentExpand === 'center' && <EmbeddedBlock />}
+          {this.currentExpand === 'center' && <EmbeddedBlock pairId={this.currentDetail?.id} />}
         </div>
         {/* icons */}
         <div class="border-color-border flex flex-col border-l-1 w-11">
