@@ -21,12 +21,12 @@ export const updatePairListWithSocketData = (
         '4h': getTimeDataFromSocketValue(newIMData, '4h')?.priceChange || '--',
         '6h': getTimeDataFromSocketValue(newIMData, '6h')?.priceChange || '--',
         '24h': getTimeDataFromSocketValue(newIMData, '24h')?.priceChange || '--',
-        Txns: newIMData[timeInterval || '24h']?.txns.total,
-        Buys: newIMData[timeInterval || '24h']?.total.buys,
-        Sells: newIMData[timeInterval || '24h']?.total.sells,
-        Vol: newIMData[timeInterval || '24h']?.volume.total,
-        views: newIMData[timeInterval || '24h']?.views,
-        TrendsUp: newIMData[timeInterval || '24h']?.trendType > 0
+        Txns: getTimeDataFromSocketValue(newIMData, timeInterval)?.txns?.total,
+        Buys: getTimeDataFromSocketValue(newIMData, timeInterval)?.txns?.buys,
+        Sells: getTimeDataFromSocketValue(newIMData, timeInterval)?.txns?.sells,
+        Vol: getTimeDataFromSocketValue(newIMData, timeInterval)?.volume?.total,
+        views: getTimeDataFromSocketValue(newIMData, timeInterval)?.views,
+        TrendsUp: getTimeDataFromSocketValue(newIMData, timeInterval)?.trendType > 0
       }
     } else {
       return item

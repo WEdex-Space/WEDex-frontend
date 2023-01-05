@@ -89,7 +89,9 @@ export default defineComponent({
               MKTCap: item.pairReportIM?.mktCap,
               createdAt: item.createdAt ? item.createdAt * 1000 : 0
             }
-          })
+          }),
+          undefined,
+          DataListParams?.timeInterval
         )
 
         totalPage.value = data.total
@@ -102,22 +104,26 @@ export default defineComponent({
         console.warn('watch dataList', newList, prevList)
         // socket subscribe
         SocketStore.init().then(socket => {
-          // if (newList.length) {
-          //   SocketStore.subscribe(
-          //     'trade-pair',
-          //     newList.map(item => item.id),
-          //     msg => {
-          //       console.log('subscribe', msg)
-          //       dataList.value = updatePairListWithSocketData(dataList.value, msg.data.value)
-          //     }
-          //   )
-          // }
-          // if (prevList && prevList.length) {
-          //   SocketStore.unsubscribe(
-          //     'trade-pair',
-          //     prevList.map(item => (item ? item.id : null))
-          //   )
-          // }
+          if (newList.length) {
+            SocketStore.subscribe(
+              'trade-pair',
+              newList.map(item => item.id),
+              msg => {
+                console.log('subscribe', msg)
+                dataList.value = updatePairListWithSocketData(
+                  dataList.value,
+                  msg.data.value,
+                  DataListParams?.timeInterval
+                )
+              }
+            )
+          }
+          if (prevList && prevList.length) {
+            SocketStore.unsubscribe(
+              'trade-pair',
+              prevList.map(item => (item ? item.id : null))
+            )
+          }
         })
       }
     )
