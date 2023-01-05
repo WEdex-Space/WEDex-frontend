@@ -38,11 +38,9 @@ export default defineComponent({
   render() {
     const textColor = this.symbol > 0 ? 'text-color-up' : 'text-color-down'
     const shadowColor = this.symbol > 0 ? 'bg-color-up' : 'bg-color-down'
-    const symbolStr = this.symbol > 0 ? '+' : '-'
 
     return (
       <div class={`relative overflow-hidden text-right ${textColor}`}>
-        {symbolStr}
         {this.value}
         {this.showShadow ? (
           <span

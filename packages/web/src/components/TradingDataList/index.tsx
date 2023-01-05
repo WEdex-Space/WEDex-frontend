@@ -16,11 +16,11 @@ export type TradingDataItem = {
   tokenPair: Record<string, any>[]
   price?: number | string
   views?: number | string
-  '5m'?: number | string
-  '1h'?: number | string
-  '4h'?: number | string
-  '6h'?: number | string
-  '24h'?: number | string
+  '5m'?: number
+  '1h'?: number
+  '4h'?: number
+  '6h'?: number
+  '24h'?: number
   Txns?: number
   Buys?: number
   Sells?: number
@@ -250,7 +250,7 @@ export default defineComponent({
             return (
               <DynamicNumber
                 class="font-semibold"
-                value={data['5m'] ? data['5m'] + '%' : '--'}
+                value={(data['5m'] || 0) * 100 + '%'}
                 symbol={data['5m'] && data['5m'] > 0 ? 1 : -1}
               />
             )
@@ -264,7 +264,7 @@ export default defineComponent({
             return (
               <DynamicNumber
                 class="font-semibold"
-                value={data['1h'] ? data['1h'] + '%' : '--'}
+                value={(data['1h'] || 0) * 100 + '%'}
                 symbol={data['1h'] && data['1h'] > 0 ? 1 : -1}
               />
             )
@@ -278,7 +278,7 @@ export default defineComponent({
             return (
               <DynamicNumber
                 class="font-semibold"
-                value={data['4h'] ? data['4h'] + '%' : '--'}
+                value={(data['4h'] || 0) * 100 + '%'}
                 symbol={data['4h'] && data['4h'] > 0 ? 1 : -1}
               />
             )
@@ -292,7 +292,7 @@ export default defineComponent({
             return (
               <DynamicNumber
                 class="font-semibold"
-                value={data['6h'] ? data['6h'] + '%' : '--'}
+                value={(data['6h'] || 0) * 100 + '%'}
                 symbol={data['6h'] && data['6h'] > 0 ? 1 : -1}
               />
             )
@@ -306,7 +306,7 @@ export default defineComponent({
             return (
               <DynamicNumber
                 class="font-semibold"
-                value={data['24h'] ? data['24h'] + '%' : '--'}
+                value={(data['24h'] || 0) * 100 + '%'}
                 symbol={data['24h'] && data['24h'] > 0 ? 1 : -1}
               />
             )

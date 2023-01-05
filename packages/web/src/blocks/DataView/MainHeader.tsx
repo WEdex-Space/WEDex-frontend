@@ -135,6 +135,7 @@ export default defineComponent({
             onClick={() => (this.currentExpand = 'left')}
           />
         )}
+        {/* mainNav */}
         <div class={`${style.mainNav} h-14`}>
           <ul class="h-full py-3 whitespace-nowrap overflow-x-scroll overflow-y-hidden ">
             {this.mainNavs.map(item => (
@@ -148,6 +149,7 @@ export default defineComponent({
             ))}
           </ul>
         </div>
+        {/* subNav */}
         <div class={style.subNav}>
           {this.DataListParams && this.DataListParams.type === 4 && (
             <TrendTypeSelector class="mr-4" />
@@ -163,18 +165,20 @@ export default defineComponent({
             onChange={value => this.DataListParams && (this.DataListParams.chainIds = value)}
           />
           {/* DEXes selector */}
-          <DexSelector
-            class="mr-4"
-            value={this.DataListParams?.dexs}
-            options={this.networksOptions}
-            onChange={value => this.DataListParams && (this.DataListParams.dexs = value)}
-          />
+          {this.DataListParams?.type !== 6 && (
+            <DexSelector
+              class="mr-4"
+              value={this.DataListParams?.dexs}
+              options={this.networksOptions}
+              onChange={value => this.DataListParams && (this.DataListParams.dexs = value)}
+            />
+          )}
 
           {this.DataListParams && this.DataListParams.type === 1 && (
             <HeaderTopFilter class="mr-4" />
           )}
 
-          <HeaderTagFilter class="mr-4 __list" />
+          {this.DataListParams?.type !== 6 && <HeaderTagFilter class="mr-4 __list" />}
 
           {this.DataListParams && this.DataListParams.type === 6 && (
             <div class="flex items-center">
