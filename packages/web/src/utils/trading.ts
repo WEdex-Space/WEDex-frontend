@@ -26,7 +26,7 @@ export const updatePairListWithSocketData = (
         Sells: getTimeDataFromSocketValue(newIMData, timeInterval)?.txns?.sells,
         Vol: getTimeDataFromSocketValue(newIMData, timeInterval)?.volume?.total,
         views: getTimeDataFromSocketValue(newIMData, timeInterval)?.views,
-        TrendsUp: getTimeDataFromSocketValue(newIMData, timeInterval)?.trendType > 0
+        TrendsUp: (getTimeDataFromSocketValue(newIMData, timeInterval)?.priceChange || 0) > 0
       }
     } else {
       return item

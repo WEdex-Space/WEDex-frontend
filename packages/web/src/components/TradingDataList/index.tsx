@@ -131,7 +131,7 @@ export default defineComponent({
         })
 
         // dynamic Col with mainNav
-        switch (DataListParams?.type) {
+        switch (Number(DataListParams?.type)) {
           case 1:
             // Hot pairs
             extendColumns.push({
@@ -394,7 +394,7 @@ export default defineComponent({
     return (
       <UTable
         columns={this.columns}
-        scroll-x={1300}
+        scroll-x={1350}
         data={this.dataList}
         {...Object.assign({ flexHeight: true }, this.tableProps)}
         size="small"
