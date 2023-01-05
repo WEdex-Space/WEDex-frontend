@@ -271,21 +271,24 @@ export const services = {
      * @description hour
      */
     pairAgeMin?: number
+    /**
+     * @description sort by cloumn struct, example: sort by 5 minutes vloume =&gt; &quot;pairReportIM.last5m.vloume.total&quot;
+     */
     rankBy?: string
     /**
      * @description 1 asc, -1 desc
      */
     rankType?: number
     /**
-     * @description 5m,15m,1h,4h,6h,24h
+     * @description 1m,5m,15m,1h,4h,6h,24h
      */
     timeInterval?: string
     /**
-     * @description %
+     * @description %  100% = 1
      */
     trendMax?: number
     /**
-     * @description %
+     * @description %  100% = 1
      */
     trendMin?: number
     txnsMax?: number

@@ -15,11 +15,11 @@ export default defineComponent({
     const tagData = ref([
       {
         name: 'Volume',
-        value: 4
+        value: '4'
       },
       {
         name: 'Txns',
-        value: 5
+        value: '5'
       }
     ])
 
@@ -32,7 +32,7 @@ export default defineComponent({
     const handleClick = (item: any) => {
       if (this.DataListParams) {
         if (this.DataListParams.rankBy === item.value) {
-          this.DataListParams.rankBy = null
+          this.DataListParams.rankBy = undefined
         } else {
           this.DataListParams.rankBy = item.value
         }

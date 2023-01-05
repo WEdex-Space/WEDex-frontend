@@ -80,7 +80,7 @@ export const useSocketStore = defineStore('websocket', {
                   } else if (
                     key.split('__').length === 2 &&
                     key.split('__')[0] === received_msg.data?.type &&
-                    key.split('__')[1] === received_msg.data?.value?.tradePair
+                    key.split('__')[1] === received_msg.data?.value?.pairId
                   ) {
                     this.listeners[key].map(fun => fun(received_msg))
                   } else {

@@ -46,13 +46,6 @@ export function usePair() {
     detail,
     setCurrent: (value: TradingDataItem) => {
       currentPair && (currentPair.value = value)
-    },
-    handleSocketData: (value: any) => {
-      if (currentPair && currentPair.value && Array.isArray(currentPair.value.token) && value) {
-        if (currentPair.value.token.map(e => e.symbol).join('/') === value.tradePair) {
-          currentPair.value.originSocketValue = value
-        }
-      }
     }
   }
 }

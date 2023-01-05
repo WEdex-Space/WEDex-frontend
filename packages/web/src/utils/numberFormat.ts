@@ -36,8 +36,8 @@ export const parseCurrency = (input: string) => {
   return nums === '' ? null : Number.NaN
 }
 
-export const formatCurrency = (value: number | string | null) => {
-  if (value === null || isNaN(Number(value))) return ''
+export const formatCurrency = (value: number | string | null | undefined) => {
+  if (isNaN(Number(value))) return ''
   return Number(value).toLocaleString('en-US')
 }
 

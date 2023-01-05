@@ -157,7 +157,12 @@ export default defineComponent({
           foregroundColor: '#FF9D00'
         },
         // enabled_features
-        disabled_features: ['header_symbol_search', 'symbol_search_hot_key', 'header_compare'],
+        disabled_features: [
+          'header_symbol_search',
+          'symbol_search_hot_key',
+          'header_compare',
+          'header_interval_dialog_button'
+        ],
         custom_css_url: '/charting_library/custom_css.css'
       })
     }

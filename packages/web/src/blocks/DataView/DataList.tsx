@@ -1,39 +1,37 @@
 import { message, UPagination } from '@wedex/components'
 import { defineComponent, ref, inject, Ref, onBeforeUnmount, watch } from 'vue'
-import { updatePairListWithSocketData } from './util'
-import { default as TradingDataList, TradingDataItem } from '@/components/TradingDataList'
-import { ControlSlotValueType } from '@/components/TradingDataList/ControlSlot'
+import {
+  default as TradingDataList,
+  TradingDataItem,
+  getControlSlotFilterValue
+} from '@/components/TradingDataList'
 import { usePair } from '@/hooks'
-import { DataListParamsKey } from '@/pages/index'
+import { DataListParamsKey, DataListParamsType } from '@/pages/index'
 import { services } from '@/services'
 import type { ApiDocuments } from '@/services/a2s.namespace'
 import { useSocketStore } from '@/stores'
-
-const getControlSlotFilterValue = (sortMethod: string | null, sortType: string) => {
-  const arr = sortMethod?.split('-') || []
-  return (arr.length === 2 && arr[0] === sortType ? arr[1] : null) as ControlSlotValueType
-}
+import { updatePairListWithSocketData } from '@/utils/trading'
 
 export default defineComponent({
   name: 'DataList',
   setup() {
     const Pair = usePair()
     const SocketStore = useSocketStore()
-    const DataListParams = inject(DataListParamsKey)
+    const DataListParams = inject<DataListParamsType>(DataListParamsKey)
     const currentExpand = inject<Ref<'left' | 'center' | 'right'>>('currentExpand')
 
     const loopSwitchSortValue = (sortType: string) => {
       if (DataListParams) {
         const valueArray = ['down', 'up', null]
         const currentValue = valueArray.indexOf(
-          getControlSlotFilterValue(DataListParams.sortMethod, sortType)
+          getControlSlotFilterValue(sortType, DataListParams.sortMethod)
         )
         if (currentValue !== -1) {
           const nextIndex =
             currentValue + 1 >= valueArray.length
               ? currentValue + 1 - valueArray.length
               : currentValue + 1
-          const nextMethod = nextIndex === 2 ? null : `${sortType}-${valueArray[nextIndex]}`
+          const nextMethod = nextIndex === 2 ? undefined : `${sortType}-${valueArray[nextIndex]}`
           DataListParams.sortMethod = nextMethod
         }
       }
@@ -44,9 +42,22 @@ export default defineComponent({
     const queryParam = ref<{
       page?: number
       size?: number
+      chainIds?: number[]
+      dexs?: string[]
       keyword?: string
-      orderKey?: string
-      orderValue?: number
+      liquidityMax?: number
+      liquidityMin?: number
+      pairAgeMax?: number
+      pairAgeMin?: number
+      rankBy?: string
+      rankType?: number
+      timeInterval?: string
+      trendMax?: number
+      trendMin?: number
+      txnsMax?: number
+      txnsMin?: number
+      volumeMax?: number
+      volumeMin?: number
     }>({
       page: 1,
       size: 50
@@ -55,11 +66,10 @@ export default defineComponent({
     const totalPage = ref(0)
 
     const fetchData = async function () {
-      // Pair@get-pair-list
       const { error, data } = await services['Pair@get-pair-list'](queryParam.value)
       if (!error) {
-        dataList.value = data.list.map(
-          (item: ApiDocuments.proto_PairBasicResponse, index: number) => {
+        dataList.value = updatePairListWithSocketData(
+          data.list.map((item: ApiDocuments.proto_PairBasicResponse, index: number) => {
             const dexSort: any[] = [item.tokenW0Info, item.tokenW1Info]
             const pairs = [item.tokenW0 || '', item.tokenW1 || ''].map(
               (contractAddress: string) => {
@@ -70,13 +80,16 @@ export default defineComponent({
               }
             )
             return {
-              id: item._id,
+              pairReportIM: item.pairReportIM,
+              id: item._id || '--',
               index,
-              token: pairs,
-              views: item.views,
-              createdAt: item.createdAt
+              tokenPair: pairs,
+              Liquidity: item.pairReportIM?.liquidity,
+              FDV: item.pairReportIM?.fdv,
+              MKTCap: item.pairReportIM?.mktCap,
+              createdAt: item.createdAt ? item.createdAt * 1000 : 0
             }
-          }
+          })
         )
 
         totalPage.value = data.total
@@ -88,37 +101,29 @@ export default defineComponent({
       (newList, prevList) => {
         console.warn('watch dataList', newList, prevList)
         // socket subscribe
-        if (newList.length) {
-          SocketStore.subscribe(
-            'trade-pair',
-            newList.map(item =>
-              Array.isArray(item.token) ? item.token.map(token => token.symbol).join('/') : null
-            ),
-            msg => {
-              console.log('subscribe', msg)
-              dataList.value = updatePairListWithSocketData(msg.data.value, dataList.value)
-              Pair.handleSocketData(msg.data.value)
-            }
-          )
-        }
-
-        if (prevList && prevList.length) {
-          SocketStore.unsubscribe(
-            'trade-pair',
-            prevList.map(item =>
-              item && Array.isArray(item.token)
-                ? item.token.map(token => token.symbol).join('/')
-                : null
-            )
-          )
-        }
+        SocketStore.init().then(socket => {
+          // if (newList.length) {
+          //   SocketStore.subscribe(
+          //     'trade-pair',
+          //     newList.map(item => item.id),
+          //     msg => {
+          //       console.log('subscribe', msg)
+          //       dataList.value = updatePairListWithSocketData(dataList.value, msg.data.value)
+          //     }
+          //   )
+          // }
+          // if (prevList && prevList.length) {
+          //   SocketStore.unsubscribe(
+          //     'trade-pair',
+          //     prevList.map(item => (item ? item.id : null))
+          //   )
+          // }
+        })
       }
     )
 
     // init
-    SocketStore.init().then(socket => {
-      fetchData()
-    })
+    fetchData()
 
     // Pagination
     watch(() => queryParam.value, fetchData)
@@ -129,7 +134,7 @@ export default defineComponent({
 
     const handleRowClick = (row: any) => {
       console.log('handleRowClick', row, currentExpand)
-      if (row.originSocketValue) {
+      if (row.pairReportIM) {
         currentExpand && (currentExpand.value = 'center')
         Pair.setCurrent(row)
       } else {
@@ -159,11 +164,13 @@ export default defineComponent({
             this.handleRowClick(row)
           }}
         />
-        <UPagination
-          v-model:page={this.queryParam.page}
-          pageCount={this.totalPage}
-          style={{ margin: '10px auto' }}
-        />
+        {this.DataListParams && !this.DataListParams.disablePaginate && (
+          <UPagination
+            v-model:page={this.queryParam.page}
+            pageCount={this.totalPage}
+            style={{ margin: '10px auto' }}
+          />
+        )}
       </div>
     )
   }

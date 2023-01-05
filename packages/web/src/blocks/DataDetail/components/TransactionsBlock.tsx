@@ -5,6 +5,7 @@ import DateRangeFilterPopover from './DateRangeFilterPopover'
 import NumberRangeFilterPopover from './NumberRangeFilterPopover'
 import TrendTypeFilterPopover from './TrendTypeFilterPopover'
 import TimeAgo from '@/components/TimeAgo'
+import { usePair } from '@/hooks'
 import { services } from '@/services'
 import type { ApiDocuments } from '@/services/a2s.namespace'
 import { formatCurrency, formatCurrencyWithUnit } from '@/utils/numberFormat'
@@ -39,6 +40,8 @@ export default defineComponent({
     }
   },
   setup(props, ctx) {
+    const Pair = usePair()
+
     const filterData = ref({
       date: {
         from: 0,
@@ -91,131 +94,153 @@ export default defineComponent({
         : content()
     }
 
-    const columns = computed<any[]>(() => [
-      {
-        title: customRenderSortTitle(
-          'Date',
-          'date',
-          {
-            values: filterData.value.date,
-            onChange: (value: any) => (filterData.value.date = value)
-          },
-          'center'
-        ),
-        key: 'date',
-        align: 'center',
-        render: (data: TransactionsDataType, index: number) => {
-          return <TimeAgo value={data.date} />
-        }
-      },
-      {
-        title: customRenderSortTitle(
-          'Type',
-          'type',
-          {
-            value: filterData.value.type,
-            onChange: (value: string) => (filterData.value.type = value)
-          },
-          'center'
-        ),
-        key: 'type',
-        align: 'center',
-        width: 60,
-        render: (data: TransactionsDataType, index: number) => {
-          return (
-            <strong class={data.type ? 'text-color-up' : 'text-color-down'}>
-              {data.type ? 'Buy' : 'Sell'}
-            </strong>
-          )
-        }
-      },
-      {
-        title: customRenderSortTitle('USD', 'usd', {
-          inputProps: {
-            prefix: '$'
-          },
-          values: filterData.value.usd,
-          onChange: (value: any) => (filterData.value.usd = value)
-        }),
-        key: 'usd',
-        align: 'right',
-        render: (data: TransactionsDataType, index: number) => {
-          return <span class={data.type ? 'text-color-up' : 'text-color-down'}>{data['usd']}</span>
-        }
-      },
-      {
-        title: customRenderSortTitle('Price USD', 'price', {
-          inputProps: {
-            prefix: '$'
-          },
-          values: filterData.value.price,
-          onChange: (value: any) => (filterData.value.price = value)
-        }),
-        key: 'price',
-        align: 'right',
-        render: (data: TransactionsDataType, index: number) => {
-          return (
-            <span class={data.type ? 'text-color-up' : 'text-color-down'}>{data['price']}</span>
-          )
-        }
-      },
-      {
-        title: customRenderSortTitle('AMT Token0', 'token0', {
-          inputProps: {
-            suffix: 'Token0'
-          },
-          values: filterData.value.token0,
-          onChange: (value: any) => (filterData.value.token0 = value)
-        }),
-        key: 'token0',
-        align: 'right',
-        render: (data: TransactionsDataType, index: number) => {
-          return (
-            <span class={data.type ? 'text-color-up' : 'text-color-down'}>{data['token0']}</span>
-          )
-        }
-      },
-      {
-        title: customRenderSortTitle('Total Token1', 'token1', {
-          inputProps: {
-            suffix: 'Token1'
-          },
-          values: filterData.value.token1,
-          onChange: (value: any) => (filterData.value.token1 = value)
-        }),
-        key: 'token1',
-        align: 'right',
-        render: (data: TransactionsDataType, index: number) => {
-          return (
-            <span class={data.type ? 'text-color-up' : 'text-color-down'}>{data['token1']}</span>
-          )
-        }
-      },
-      {
-        title: 'Maker',
-        key: 'maker',
-        align: 'right',
-        render: (data: TransactionsDataType, index: number) => {
-          return (
-            <div class="truncate underline">
-              <span class={data.type ? 'text-color-up' : 'text-color-down'}>{data.maker}</span>
-            </div>
-          )
-        }
-      },
-      {
-        title: 'Txn',
-        key: 'txn',
-        align: 'right',
-        render: (data: TransactionsDataType, index: number) => {
-          return (
-            <div class="truncate underline">
-              <span class={data.type ? 'text-color-up' : 'text-color-down'}>{data.txn}</span>
-            </div>
-          )
-        }
-      }
-    ])
+    const columns = computed<any[]>(() =>
+      Pair.detail.value
+        ? [
+            {
+              title: customRenderSortTitle(
+                'Date',
+                'date',
+                {
+                  values: filterData.value.date,
+                  onChange: (value: any) => (filterData.value.date = value)
+                },
+                'center'
+              ),
+              key: 'date',
+              align: 'center',
+              render: (data: TransactionsDataType, index: number) => {
+                return <TimeAgo value={data.date} />
+              }
+            },
+            {
+              title: customRenderSortTitle(
+                'Type',
+                'type',
+                {
+                  value: filterData.value.type,
+                  onChange: (value: string) => (filterData.value.type = value)
+                },
+                'center'
+              ),
+              key: 'type',
+              align: 'center',
+              width: 60,
+              render: (data: TransactionsDataType, index: number) => {
+                return (
+                  <strong class={data.type ? 'text-color-up' : 'text-color-down'}>
+                    {data.type ? 'Buy' : 'Sell'}
+                  </strong>
+                )
+              }
+            },
+            {
+              title: customRenderSortTitle('USD', 'usd', {
+                inputProps: {
+                  prefix: '$'
+                },
+                values: filterData.value.usd,
+                onChange: (value: any) => (filterData.value.usd = value)
+              }),
+              key: 'usd',
+              align: 'right',
+              render: (data: TransactionsDataType, index: number) => {
+                return (
+                  <span class={data.type ? 'text-color-up' : 'text-color-down'}>{data['usd']}</span>
+                )
+              }
+            },
+            {
+              title: customRenderSortTitle('Price USD', 'price', {
+                inputProps: {
+                  prefix: '$'
+                },
+                values: filterData.value.price,
+                onChange: (value: any) => (filterData.value.price = value)
+              }),
+              key: 'price',
+              align: 'right',
+              render: (data: TransactionsDataType, index: number) => {
+                return (
+                  <span class={data.type ? 'text-color-up' : 'text-color-down'}>
+                    {data['price']}
+                  </span>
+                )
+              }
+            },
+            {
+              title: customRenderSortTitle(
+                `AMT ${Pair.current?.value?.tokenPair[0].symbol}`,
+                'token0',
+                {
+                  inputProps: {
+                    suffix: 'Token0'
+                  },
+                  values: filterData.value.token0,
+                  onChange: (value: any) => (filterData.value.token0 = value)
+                }
+              ),
+              key: 'token0',
+              align: 'right',
+              render: (data: TransactionsDataType, index: number) => {
+                return (
+                  <span class={data.type ? 'text-color-up' : 'text-color-down'}>
+                    {data['token0']}
+                  </span>
+                )
+              }
+            },
+            {
+              title: customRenderSortTitle(
+                `Total ${Pair.current?.value?.tokenPair[1].symbol}`,
+                'token1',
+                {
+                  inputProps: {
+                    suffix: 'Token1'
+                  },
+                  values: filterData.value.token1,
+                  onChange: (value: any) => (filterData.value.token1 = value)
+                }
+              ),
+              key: 'token1',
+              align: 'right',
+              render: (data: TransactionsDataType, index: number) => {
+                return (
+                  <span class={data.type ? 'text-color-up' : 'text-color-down'}>
+                    {data['token1']}
+                  </span>
+                )
+              }
+            },
+            {
+              title: 'Maker',
+              key: 'maker',
+              align: 'right',
+              render: (data: TransactionsDataType, index: number) => {
+                return (
+                  <div class="truncate underline">
+                    <span class={data.type ? 'text-color-up' : 'text-color-down'}>
+                      {data.maker}
+                    </span>
+                  </div>
+                )
+              }
+            },
+            {
+              title: 'Txn',
+              key: 'txn',
+              align: 'right',
+              render: (data: TransactionsDataType, index: number) => {
+                return (
+                  <div class="truncate underline">
+                    <span class={data.type ? 'text-color-up' : 'text-color-down'}>{data.txn}</span>
+                  </div>
+                )
+              }
+            }
+          ]
+        : []
+    )
 
     const dataList = ref<any[]>([])
     const queryParam = ref<{

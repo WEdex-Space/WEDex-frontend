@@ -1,14 +1,14 @@
 import { UTable } from '@wedex/components'
-import { defineComponent, ref } from 'vue'
-import { timeRangeToSocketMap } from '@/blocks/DataDetail/util'
+import { defineComponent, ref, computed } from 'vue'
 import { usePair } from '@/hooks'
 import { formatCurrency, formatCurrencyWithUnit } from '@/utils/numberFormat'
+import { getTimeDataFromSocketValue } from '@/utils/trading'
 
 export default defineComponent({
   name: 'TradeBlock',
   setup(props, ctx) {
     const Pair = usePair()
-    const tradeTimeTypes = ref(['5m', '1h', '4h', '6h', '24h', '7D'])
+    const tradeTimeTypes = ref(['5m', '30m', '1h', '4h', '6h', '24h'])
     const tradeTimeCurrent = ref(tradeTimeTypes.value[0])
 
     const handleClick = (time: string) => {
@@ -47,67 +47,59 @@ export default defineComponent({
       }
     ])
 
-    const dataList = ref<any[]>([
-      {
-        Stats: 'Txns',
-        Total: formatCurrency(
-          Pair.current?.value?.originSocketValue[timeRangeToSocketMap(tradeTimeCurrent.value)].txns
-        ),
-        Buys: formatCurrency(
-          Pair.current?.value?.originSocketValue[timeRangeToSocketMap(tradeTimeCurrent.value)]
-            .txnsBuys
-        ),
-        Sells: formatCurrency(
-          Pair.current?.value?.originSocketValue[timeRangeToSocketMap(tradeTimeCurrent.value)]
-            .txnsSells
-        )
-      },
-      {
-        Stats: 'Makers',
-        Total: formatCurrency(
-          Pair.current?.value?.originSocketValue[timeRangeToSocketMap(tradeTimeCurrent.value)]
-            .makers
-        ),
-        Buys: formatCurrency(
-          Pair.current?.value?.originSocketValue[timeRangeToSocketMap(tradeTimeCurrent.value)]
-            .makersBuys
-        ),
-        Sells: formatCurrency(
-          Pair.current?.value?.originSocketValue[timeRangeToSocketMap(tradeTimeCurrent.value)]
-            .makersSells
-        )
-      },
-      {
-        Stats: 'Volume',
-        Total: formatCurrencyWithUnit(
-          Pair.current?.value?.originSocketValue[timeRangeToSocketMap(tradeTimeCurrent.value)]
-            .volume
-        ),
-        Buys: formatCurrencyWithUnit(
-          Pair.current?.value?.originSocketValue[timeRangeToSocketMap(tradeTimeCurrent.value)]
-            .volumeBuys
-        ),
-        Sells: formatCurrencyWithUnit(
-          Pair.current?.value?.originSocketValue[timeRangeToSocketMap(tradeTimeCurrent.value)]
-            .volumeSells
-        )
-      },
-      {
-        Stats: 'Price.avg',
-        Total: formatCurrencyWithUnit(
-          Pair.current?.value?.originSocketValue[timeRangeToSocketMap(tradeTimeCurrent.value)]
-            .priceAvg
-        ),
-        Buys: formatCurrencyWithUnit(
-          Pair.current?.value?.originSocketValue[timeRangeToSocketMap(tradeTimeCurrent.value)]
-            .priceAvgBuys
-        ),
-        Sells: formatCurrencyWithUnit(
-          Pair.current?.value?.originSocketValue[timeRangeToSocketMap(tradeTimeCurrent.value)]
-            .priceAvgSells
-        )
-      }
-    ])
+    const dataList = computed<any[]>(() => {
+      const socketValue = Pair.current?.value?.pairReportIM
+      return [
+        {
+          Stats: 'Txns',
+          Total: formatCurrency(
+            getTimeDataFromSocketValue(socketValue, tradeTimeCurrent.value)?.txns?.total
+          ),
+          Buys: formatCurrency(
+            getTimeDataFromSocketValue(socketValue, tradeTimeCurrent.value)?.txns?.buys
+          ),
+          Sells: formatCurrency(
+            getTimeDataFromSocketValue(socketValue, tradeTimeCurrent.value)?.txns?.sells
+          )
+        },
+        {
+          Stats: 'Makers',
+          Total: formatCurrency(
+            getTimeDataFromSocketValue(socketValue, tradeTimeCurrent.value)?.makers?.total
+          ),
+          Buys: formatCurrency(
+            getTimeDataFromSocketValue(socketValue, tradeTimeCurrent.value)?.makers?.buys
+          ),
+          Sells: formatCurrency(
+            getTimeDataFromSocketValue(socketValue, tradeTimeCurrent.value)?.makers?.sells
+          )
+        },
+        {
+          Stats: 'Volume',
+          Total: formatCurrencyWithUnit(
+            getTimeDataFromSocketValue(socketValue, tradeTimeCurrent.value)?.volume?.total
+          ),
+          Buys: formatCurrencyWithUnit(
+            getTimeDataFromSocketValue(socketValue, tradeTimeCurrent.value)?.volume?.buys
+          ),
+          Sells: formatCurrencyWithUnit(
+            getTimeDataFromSocketValue(socketValue, tradeTimeCurrent.value)?.volume?.sells
+          )
+        },
+        {
+          Stats: 'Price.avg',
+          Total: formatCurrencyWithUnit(
+            getTimeDataFromSocketValue(socketValue, tradeTimeCurrent.value)?.priceAvg?.total
+          ),
+          Buys: formatCurrencyWithUnit(
+            getTimeDataFromSocketValue(socketValue, tradeTimeCurrent.value)?.priceAvg?.buys
+          ),
+          Sells: formatCurrencyWithUnit(
+            getTimeDataFromSocketValue(socketValue, tradeTimeCurrent.value)?.priceAvg?.sells
+          )
+        }
+      ]
+    })
 
     return {
       Pair,

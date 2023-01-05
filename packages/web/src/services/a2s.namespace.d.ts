@@ -14,6 +14,7 @@ export declare namespace ApiDocuments {
     name?: string
     pairAddress?: string
     pairDetail?: {}
+    pairReportIM?: ApiDocuments.model_PairReportIM
     symbol?: string
     token0?: {}
     token1?: {}
@@ -22,6 +23,39 @@ export declare namespace ApiDocuments {
     tokenW1?: string
     tokenW1Info?: {}
     views?: number
+  }
+  export interface model_PairReportIM extends BasicDto {
+    _id?: string
+    chainId?: number
+    dexId?: string
+    fdv?: number
+    last15m?: ApiDocuments.model_PairReportIMTimeData
+    last1h?: ApiDocuments.model_PairReportIMTimeData
+    last1m?: ApiDocuments.model_PairReportIMTimeData
+    last24h?: ApiDocuments.model_PairReportIMTimeData
+    last30m?: ApiDocuments.model_PairReportIMTimeData
+    last4h?: ApiDocuments.model_PairReportIMTimeData
+    last5m?: ApiDocuments.model_PairReportIMTimeData
+    last6h?: ApiDocuments.model_PairReportIMTimeData
+    liquidity?: number
+    mktCap?: number
+    pairId?: string
+    priceW0?: number
+    priceW1?: number
+  }
+  export interface model_PairReportIMTimeData extends BasicDto {
+    makers?: ApiDocuments.model_PairReportIMTimeDataInfo
+    price?: number
+    priceAvg?: ApiDocuments.model_PairReportIMTimeDataInfo
+    priceChange?: number
+    txns?: ApiDocuments.model_PairReportIMTimeDataInfo
+    views?: number
+    volume?: ApiDocuments.model_PairReportIMTimeDataInfo
+  }
+  export interface model_PairReportIMTimeDataInfo extends BasicDto {
+    buys?: number
+    sells?: number
+    total?: number
   }
   export interface proto_ChainResponse extends BasicDto {
     _id?: string
@@ -160,12 +194,29 @@ export declare namespace ApiDocuments {
     createdAt?: number
     dexId?: string
     name?: string
+    pairReportIM?: ApiDocuments.proto_PairReportIM
     token0?: {}
     token1?: {}
     tokenW0?: string
     tokenW0Info?: {}
     tokenW1?: string
     tokenW1Info?: {}
+  }
+  export interface proto_PairReportIM extends BasicDto {
+    _id?: string
+    chainId?: number
+    dexId?: string
+    fdv?: number
+    last1h?: ApiDocuments.model_PairReportIMTimeData
+    last24h?: ApiDocuments.model_PairReportIMTimeData
+    last4h?: ApiDocuments.model_PairReportIMTimeData
+    last5m?: ApiDocuments.model_PairReportIMTimeData
+    last6h?: ApiDocuments.model_PairReportIMTimeData
+    liquidity?: number
+    mktCap?: number
+    pairId?: string
+    priceW0?: number
+    priceW1?: number
   }
   export interface proto_PairReportResponse extends BasicDto {
     FDV?: number
@@ -206,6 +257,7 @@ export declare namespace ApiDocuments {
     name?: string
     pairAddress?: string
     pairDetail?: {}
+    pairReportIM?: ApiDocuments.model_PairReportIM
     symbol?: string
     token0?: {}
     token1?: {}

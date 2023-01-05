@@ -25,7 +25,8 @@ export default defineComponent({
         ? {
             ...Pair.detail.value,
             currentToken: [Pair.detail.value.tokenW0Info, Pair.detail.value.tokenW1Info].find(
-              (item: any) => item.contractAddress === Pair.current?.value?.token[0].contractAddress
+              (item: any) =>
+                item.contractAddress === Pair.current?.value?.tokenPair[0].contractAddress
             )
           }
         : null

@@ -1,11 +1,11 @@
 import { useTimeAgo } from '@vueuse/core'
 import { UAddress } from '@wedex/components'
 import { defineComponent, computed, inject } from 'vue'
-import { timeRangeToSocketMap } from '@/blocks/DataDetail/util'
 import { getNetByChainId } from '@/constants'
 import { usePair } from '@/hooks'
 import { DataListParamsKey } from '@/pages/index'
 import { formatBigNumber } from '@/utils/numberFormat'
+import { timeRangeToSocketMap, getTimeDataFromSocketValue } from '@/utils/trading'
 
 export default defineComponent({
   name: 'PoolBlock',
@@ -19,11 +19,15 @@ export default defineComponent({
             {
               label: 'Pool Liquidity',
               content:
-                DataListParams && Pair.current?.value?.originSocketValue
+                DataListParams &&
+                DataListParams.timeInterval &&
+                Pair.current?.value?.pairReportIM &&
+                timeRangeToSocketMap(DataListParams.timeInterval)
                   ? formatBigNumber(
-                      Pair.current?.value?.originSocketValue[
-                        timeRangeToSocketMap(DataListParams.timeRange)
-                      ].liquidity
+                      getTimeDataFromSocketValue(
+                        Pair.current?.value?.pairReportIM,
+                        DataListParams.timeInterval
+                      )?.liquidity
                     )
                   : '--'
             },
@@ -40,7 +44,7 @@ export default defineComponent({
               )
             },
             {
-              label: 'Token0',
+              label: Pair.current?.value?.tokenPair[0].symbol,
               content: (
                 <UAddress
                   address={Pair.detail.value.tokenW0Info?.contractAddress}
@@ -53,7 +57,7 @@ export default defineComponent({
               )
             },
             {
-              label: 'Token1',
+              label: Pair.current?.value?.tokenPair[1].symbol,
               content: (
                 <UAddress
                   address={Pair.detail.value.tokenW1Info?.contractAddress}
@@ -66,11 +70,11 @@ export default defineComponent({
               )
             },
             {
-              label: 'Pooled Token0',
+              label: `Pooled ${Pair.current?.value?.tokenPair[0].symbol}`,
               content: Pair.detail.value.pairDetail.reserve0
             },
             {
-              label: 'Pooled Token1',
+              label: `Pooled ${Pair.current?.value?.tokenPair[1].symbol}`,
               content: Pair.detail.value.pairDetail.reserve1
             },
             {

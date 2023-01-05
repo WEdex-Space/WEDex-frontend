@@ -10,10 +10,10 @@ import { formatBigNumber, formatCurrency } from '@/utils/numberFormat'
 import { customTimeAgo } from '@/utils/timeago'
 
 export type TradingDataItem = {
-  originSocketValue?: any
+  pairReportIM?: any
   id: string
   index: number
-  token: Record<string, any>[]
+  tokenPair: Record<string, any>[]
   price?: number | string
   views?: number | string
   '5m'?: number | string
@@ -32,7 +32,7 @@ export type TradingDataItem = {
   TrendsUp?: boolean
 }
 
-const getControlSlotFilterValue = (sortMethod: string | null, sortType: string) => {
+export const getControlSlotFilterValue = (sortType: string, sortMethod?: string) => {
   const arr = sortMethod?.split('-') || []
   return (arr.length === 2 && arr[0] === sortType ? arr[1] : null) as ControlSlotValueType
 }
@@ -75,7 +75,7 @@ export default defineComponent({
           </div>
           {DataListParams && !disableFilter && (
             <ControlSlot
-              value={getControlSlotFilterValue(DataListParams.sortMethod, sortType)}
+              value={getControlSlotFilterValue(sortType, DataListParams.sortMethod)}
               onTriggerUp={() => {
                 DataListParams.sortMethod = `${sortType}-up`
               }}
@@ -83,7 +83,7 @@ export default defineComponent({
                 DataListParams.sortMethod = `${sortType}-down`
               }}
               onTriggerClear={() => {
-                DataListParams.sortMethod = null
+                DataListParams.sortMethod = undefined
               }}
             />
           )}
@@ -211,7 +211,7 @@ export default defineComponent({
                 {props.isStretch && (
                   <Overlap
                     class="mr-2"
-                    nodes={data.token.map(item => (
+                    nodes={data.tokenPair.map(item => (
                       <img src={item.logo} />
                     ))}
                   />
@@ -219,12 +219,14 @@ export default defineComponent({
                 <div
                   class="flex-1 truncate"
                   title={`${
-                    Array.isArray(data.token) ? data.token.map(e => e.symbol).join('/') : '--'
+                    Array.isArray(data.tokenPair)
+                      ? data.tokenPair.map(e => e.symbol).join('/')
+                      : '--'
                   }`}
                 >
-                  <strong class="text-color1">{data.token[0]?.symbol || '--'}</strong>
+                  <strong class="text-color1">{data.tokenPair[0]?.symbol || '--'}</strong>
                   {props.isStretch && (
-                    <strong class="text-color3">/ {data.token[1]?.symbol || '--'}</strong>
+                    <strong class="text-color3">/ {data.tokenPair[1]?.symbol || '--'}</strong>
                   )}
                 </div>
               </div>

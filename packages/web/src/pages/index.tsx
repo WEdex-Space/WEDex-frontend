@@ -4,7 +4,7 @@ import DataView from '@/blocks/DataView'
 import ExtentionBar from '@/blocks/ExtentionBar'
 import { TradingDataItem } from '@/components/TradingDataList'
 
-export type DataListParamsType = {
+/**
   chainId: any[]
   type: number | null
   DEXe: any[]
@@ -16,6 +16,53 @@ export type DataListParamsType = {
   trendType: number | null
   rankBy: number | null
   timeRange: string
+ * */
+
+/**
+page?: number
+size?: number
+chainIds?: number[]
+dexs?: string[]
+keyword?: string
+liquidityMax?: number
+liquidityMin?: number
+pairAgeMax?: number
+pairAgeMin?: number
+rankBy?: string
+rankType?: number
+timeInterval?: string
+trendMax?: number
+trendMin?: number
+txnsMax?: number
+txnsMin?: number
+volumeMax?: number
+volumeMin?: number
+ * */
+export type DataListParamsType = {
+  page?: number
+  size?: number
+  chainIds?: number[]
+  dexs?: string[]
+  keyword?: string
+  liquidityMax?: number
+  liquidityMin?: number
+  pairAgeMax?: number
+  pairAgeMin?: number
+  rankBy?: string
+  rankType?: number
+  timeInterval?: string
+  trendMax?: number
+  trendMin?: number
+  txnsMax?: number
+  txnsMin?: number
+  volumeMax?: number
+  volumeMin?: number
+  // custom
+  type?: number
+  tag?: string
+  sortMethod?: string
+  trendType?: number
+  disablePaginate?: boolean
 }
 export const DataListParamsKey = Symbol() as InjectionKey<DataListParamsType>
 
@@ -64,17 +111,14 @@ const LandingPage = defineComponent({
       }
     )
     const DataListParams = ref<DataListParamsType>({
-      chainId: [],
+      chainIds: [],
       type: 2,
-      DEXe: [],
-      tag: null,
-      sortMethod: null,
+      dexs: [],
       page: 1,
       size: 20,
       disablePaginate: false,
       trendType: 0,
-      rankBy: null,
-      timeRange: '24h'
+      timeInterval: '24h'
     })
 
     provide(DataListParamsKey, DataListParams.value)

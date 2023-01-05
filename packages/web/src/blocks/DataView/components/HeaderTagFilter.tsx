@@ -15,7 +15,7 @@ export default defineComponent({
     const tagData = ref([
       {
         name: 'All',
-        value: null
+        value: undefined
       },
       {
         name: 'Defi',

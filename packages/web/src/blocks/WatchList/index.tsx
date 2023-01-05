@@ -26,7 +26,7 @@ export default defineComponent({
         return {
           id: item._id,
           index,
-          token: [],
+          tokenPair: [],
           views: item.views,
           createdAt: item.createdAt
         }

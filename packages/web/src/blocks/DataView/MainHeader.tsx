@@ -158,16 +158,16 @@ export default defineComponent({
           {/* Networks selector */}
           <NetworkSelector
             class="mr-4"
-            value={this.DataListParams?.chainId}
+            value={this.DataListParams?.chainIds}
             options={this.networksOptions}
-            onChange={value => this.DataListParams && (this.DataListParams.chainId = value)}
+            onChange={value => this.DataListParams && (this.DataListParams.chainIds = value)}
           />
           {/* DEXes selector */}
           <DexSelector
             class="mr-4"
-            value={this.DataListParams?.DEXe}
+            value={this.DataListParams?.dexs}
             options={this.networksOptions}
-            onChange={value => this.DataListParams && (this.DataListParams.DEXe = value)}
+            onChange={value => this.DataListParams && (this.DataListParams.dexs = value)}
           />
 
           {this.DataListParams && this.DataListParams.type === 1 && (

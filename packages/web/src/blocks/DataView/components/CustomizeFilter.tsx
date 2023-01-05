@@ -116,16 +116,18 @@ export default defineComponent({
               <UForm size="small" label-placement="left" label-width="auto" class="CustomizeFilter">
                 <UFormItem label="Networks">
                   <NetworkSelector
-                    value={this.DataListParams?.chainId}
+                    value={this.DataListParams?.chainIds}
                     options={this.networksOptions}
-                    onChange={value => this.DataListParams && (this.DataListParams.chainId = value)}
+                    onChange={value =>
+                      this.DataListParams && (this.DataListParams.chainIds = value)
+                    }
                   />
                 </UFormItem>
                 <UFormItem label="DEXes">
                   <DexSelector
-                    value={this.DataListParams?.DEXe}
+                    value={this.DataListParams?.dexs}
                     options={this.networksOptions}
-                    onChange={value => this.DataListParams && (this.DataListParams.DEXe = value)}
+                    onChange={value => this.DataListParams && (this.DataListParams.dexs = value)}
                   />
                 </UFormItem>
                 <UFormItem label="Time">

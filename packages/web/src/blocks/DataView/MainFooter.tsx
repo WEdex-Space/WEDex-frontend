@@ -16,14 +16,14 @@ export default defineComponent({
     const DataListParams = inject(DataListParamsKey)
 
     const formData = ref({
-      range: DataListParams?.timeRange || '24h'
+      range: DataListParams?.timeInterval || '24h'
     })
 
     watch(
       () => formData.value,
       () => {
         if (DataListParams) {
-          DataListParams.timeRange = formData.value.range
+          DataListParams.timeInterval = formData.value.range
         }
       },
       {
