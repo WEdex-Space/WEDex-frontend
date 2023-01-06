@@ -259,12 +259,6 @@ export default defineComponent({
       return !!(item.amount1In && item.amount1In > 0)
     }
 
-    const transactionPrice = (item: ApiDocuments.proto_PairTransactionResponse) => {
-      const num1 = transactionBuyOrSell(item) ? item.amount0Out : item.amount0In
-      const num2 = transactionBuyOrSell(item) ? item.amount1In : item.amount1Out
-      return num1 || 0 / (num2 || 0)
-    }
-
     const fetchData = async function () {
       const { error, data } = await services['Pair@get-pair-transaction-list'](queryParam.value)
       if (!error) {
@@ -273,7 +267,7 @@ export default defineComponent({
             date: item.blockTime ? item.blockTime * 1000 : 0,
             type: transactionBuyOrSell(item),
             usd: '--',
-            price: formatCurrencyWithUnit(transactionPrice(item)),
+            price: formatCurrencyWithUnit(item.token0PriceUSD),
             token0: formatCurrency(
               (transactionBuyOrSell(item) ? item.amount0Out : item.amount0In) || 0
             ),

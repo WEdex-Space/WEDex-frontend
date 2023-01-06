@@ -5,7 +5,6 @@ import { getNetByChainId } from '@/constants'
 import { usePair } from '@/hooks'
 import { DataListParamsKey } from '@/pages/index'
 import { formatBigNumber } from '@/utils/numberFormat'
-import { timeRangeToSocketMap, getTimeDataFromSocketValue } from '@/utils/trading'
 
 export default defineComponent({
   name: 'PoolBlock',
@@ -13,32 +12,24 @@ export default defineComponent({
     const DataListParams = inject(DataListParamsKey)
     const Pair = usePair()
 
-    const dataList = computed<any[]>(() =>
-      Pair.detail.value
+    const dataList = computed<any[]>(() => {
+      const socketValue = Pair.current?.value?.pairReportIM
+      const pariDetail = Pair.detail.value
+
+      return pariDetail && DataListParams?.timeInterval && socketValue
         ? [
             {
               label: 'Pool Liquidity',
-              content:
-                DataListParams &&
-                DataListParams.timeInterval &&
-                Pair.current?.value?.pairReportIM &&
-                timeRangeToSocketMap(DataListParams.timeInterval)
-                  ? formatBigNumber(
-                      getTimeDataFromSocketValue(
-                        Pair.current?.value?.pairReportIM,
-                        DataListParams.timeInterval
-                      )?.liquidity
-                    )
-                  : '--'
+              content: formatBigNumber(socketValue.liquidity) || '--'
             },
             {
               label: 'Pair',
               content: (
                 <UAddress
-                  address={Pair.detail.value.pairAddress}
+                  address={pariDetail.pairAddress}
                   class="w-full text-color3"
                   blockchainExplorerUrl={
-                    getNetByChainId(Pair.detail.value.chainId)?.explorerUrl + '/address/'
+                    getNetByChainId(pariDetail.chainId)?.explorerUrl + '/address/'
                   }
                 />
               )
@@ -47,11 +38,10 @@ export default defineComponent({
               label: Pair.current?.value?.tokenPair[0].symbol,
               content: (
                 <UAddress
-                  address={Pair.detail.value.tokenW0Info?.contractAddress}
+                  address={pariDetail.tokenW0Info?.contractAddress}
                   class="w-full text-color3"
                   blockchainExplorerUrl={
-                    getNetByChainId(Pair.detail.value.tokenW0Info.chainId)?.explorerUrl +
-                    '/address/'
+                    getNetByChainId(pariDetail.tokenW0Info.chainId)?.explorerUrl + '/address/'
                   }
                 />
               )
@@ -60,30 +50,29 @@ export default defineComponent({
               label: Pair.current?.value?.tokenPair[1].symbol,
               content: (
                 <UAddress
-                  address={Pair.detail.value.tokenW1Info?.contractAddress}
+                  address={pariDetail.tokenW1Info?.contractAddress}
                   class="w-full text-color3"
                   blockchainExplorerUrl={
-                    getNetByChainId(Pair.detail.value.tokenW1Info.chainId)?.explorerUrl +
-                    '/address/'
+                    getNetByChainId(pariDetail.tokenW1Info.chainId)?.explorerUrl + '/address/'
                   }
                 />
               )
             },
             {
               label: `Pooled ${Pair.current?.value?.tokenPair[0].symbol}`,
-              content: Pair.detail.value.pairDetail.reserve0
+              content: pariDetail.pairDetail.reserve0
             },
             {
               label: `Pooled ${Pair.current?.value?.tokenPair[1].symbol}`,
-              content: Pair.detail.value.pairDetail.reserve1
+              content: pariDetail.pairDetail.reserve1
             },
             {
               label: 'Pair created',
-              content: useTimeAgo(Pair.detail.value.createdAt * 1000).value
+              content: useTimeAgo(pariDetail.createdAt * 1000).value
             }
           ]
         : []
-    )
+    })
 
     return {
       Pair,

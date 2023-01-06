@@ -3,15 +3,40 @@ interface BasicDto {
   [key: string]: any
 }
 export declare namespace ApiDocuments {
+  export interface model_Chain extends BasicDto {
+    _id?: string
+    chainId?: number
+    currentSymbol?: string
+    description?: string
+    explorer?: string
+    logo?: string
+    name?: string
+    rpcUrl?: string
+    wssUrl?: string
+  }
+  export interface model_DEX extends BasicDto {
+    _id?: string
+    appUrl?: string
+    chainId?: number
+    dexType?: number
+    factory?: string
+    logo?: string
+    name?: string
+    officialSite?: string
+    router01?: string
+    router02?: string
+  }
   export interface model_Pair extends BasicDto {
     _id?: string
     chainId?: number
     createdAt?: number
     decimals?: number
+    dex?: ApiDocuments.model_DEX
     dexId?: string
     factory?: string
     logo?: string
     name?: string
+    network?: ApiDocuments.model_Chain
     pairAddress?: string
     pairDetail?: {}
     pairReportIM?: ApiDocuments.model_PairReportIM
@@ -23,6 +48,7 @@ export declare namespace ApiDocuments {
     tokenW1?: string
     tokenW1Info?: {}
     views?: number
+    watchs?: {}[]
   }
   export interface model_PairReportIM extends BasicDto {
     _id?: string
@@ -41,13 +67,18 @@ export declare namespace ApiDocuments {
     mktCap?: number
     pairId?: string
     priceW0?: number
+    priceW0USD?: number
     priceW1?: number
+    priceW1USD?: number
   }
   export interface model_PairReportIMTimeData extends BasicDto {
     makers?: ApiDocuments.model_PairReportIMTimeDataInfo
     price?: number
     priceAvg?: ApiDocuments.model_PairReportIMTimeDataInfo
     priceChange?: number
+    priceHigh?: number
+    priceLow?: number
+    priceUSD?: number
     txns?: ApiDocuments.model_PairReportIMTimeDataInfo
     views?: number
     volume?: ApiDocuments.model_PairReportIMTimeDataInfo
@@ -192,8 +223,10 @@ export declare namespace ApiDocuments {
     _id?: string
     chainId?: number
     createdAt?: number
+    dex?: ApiDocuments.model_DEX
     dexId?: string
     name?: string
+    network?: ApiDocuments.model_Chain
     pairReportIM?: ApiDocuments.proto_PairReportIM
     token0?: {}
     token1?: {}
@@ -201,6 +234,7 @@ export declare namespace ApiDocuments {
     tokenW0Info?: {}
     tokenW1?: string
     tokenW1Info?: {}
+    watchs?: {}[]
   }
   export interface proto_PairReportIM extends BasicDto {
     _id?: string
@@ -251,10 +285,12 @@ export declare namespace ApiDocuments {
     chainId?: number
     createdAt?: number
     decimals?: number
+    dex?: ApiDocuments.model_DEX
     dexId?: string
     factory?: string
     logo?: string
     name?: string
+    network?: ApiDocuments.model_Chain
     pairAddress?: string
     pairDetail?: {}
     pairReportIM?: ApiDocuments.model_PairReportIM
@@ -266,6 +302,7 @@ export declare namespace ApiDocuments {
     tokenW1?: string
     tokenW1Info?: {}
     views?: number
+    watchs?: {}[]
   }
   export interface proto_PairTransactionResponse extends BasicDto {
     _id?: string
@@ -285,6 +322,10 @@ export declare namespace ApiDocuments {
     pairAddress?: string
     pairId?: string
     to?: string
+    token0Price?: number
+    token0PriceUSD?: number
+    token1Price?: number
+    token1PriceUSD?: number
     transactionFee?: number
     transactionHash?: string
   }

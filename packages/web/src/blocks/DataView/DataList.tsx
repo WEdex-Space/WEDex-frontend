@@ -81,6 +81,8 @@ export default defineComponent({
             )
             return {
               pairReportIM: item.pairReportIM,
+              dex: item.dex,
+              network: item.network,
               id: item._id || '--',
               index,
               tokenPair: pairs,

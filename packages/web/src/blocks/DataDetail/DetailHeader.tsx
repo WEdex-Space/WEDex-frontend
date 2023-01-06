@@ -14,6 +14,7 @@ export default defineComponent({
     const Pair = usePair()
     const currentExpand = inject<Ref<'left' | 'center' | 'right'>>('currentExpand')
     const tipRef = ref()
+    // TODO watchlist
     const watchLists = ref([
       {
         name: 'MainList'
@@ -27,81 +28,101 @@ export default defineComponent({
       tipRef.value && tipRef.value.setShow?.(false)
     }
 
-    const headerCellData = computed(() => [
-      {
-        label: 'Price USD',
-        value: <span class="text-color1">$--</span>
-      },
-      {
-        label: 'Price',
-        value: (
-          <span class="text-color1">
-            {DataListParams && Pair.current?.value?.pairReportIM
-              ? formatBigNumber(
-                  getTimeDataFromSocketValue(
-                    Pair.current?.value?.pairReportIM,
-                    DataListParams.timeInterval
-                  )?.liquidity
-                ) +
-                ' ' +
-                Pair.current.value.tokenPair[1].symbol
-              : '--'}
-          </span>
-        )
-      },
-      {
-        label: '5m',
-        value: (
-          <DynamicNumber
-            value={(Pair.current?.value?.pairReportIM['5m']?.priceChange || '--') + '%'}
-            symbol={Math.floor(Math.random() * 10) % 2 ? 1 : -1}
-          />
-        )
-      },
-      {
-        label: '1h',
-        value: (
-          <DynamicNumber
-            value={(Pair.current?.value?.pairReportIM['1h']?.priceChange || '--') + '%'}
-            symbol={Math.floor(Math.random() * 10) % 2 ? 1 : -1}
-          />
-        )
-      },
-      {
-        label: '6h',
-        value: (
-          <DynamicNumber
-            value={(Pair.current?.value?.pairReportIM['6h']?.priceChange || '--') + '%'}
-            symbol={Math.floor(Math.random() * 10) % 2 ? 1 : -1}
-          />
-        )
-      },
-      {
-        label: '24h',
-        value: (
-          <DynamicNumber
-            value={(Pair.current?.value?.pairReportIM['1d']?.priceChange || '--') + '%'}
-            symbol={Math.floor(Math.random() * 10) % 2 ? 1 : -1}
-          />
-        )
-      },
-      {
-        label: '24h High',
-        value: (
-          <span class="text-color1">
-            {formatCurrencyWithUnit(Pair.current?.value?.pairReportIM['1d'].priceMax)}
-          </span>
-        )
-      },
-      {
-        label: '24h Low',
-        value: (
-          <span class="text-color1">
-            {formatCurrencyWithUnit(Pair.current?.value?.pairReportIM['1d'].priceMin)}
-          </span>
-        )
-      }
-    ])
+    const headerCellData = computed(() => {
+      const socketValue = Pair.current?.value?.pairReportIM
+
+      return DataListParams && socketValue
+        ? [
+            {
+              label: 'Price USD',
+              value: (
+                <span class="text-color1">
+                  $
+                  {formatBigNumber(
+                    getTimeDataFromSocketValue(socketValue, DataListParams.timeInterval)
+                      ?.priceUSD || '--'
+                  )}
+                </span>
+              )
+            },
+            {
+              label: 'Price',
+              value: (
+                <span class="text-color1">
+                  {formatBigNumber(
+                    getTimeDataFromSocketValue(socketValue, DataListParams.timeInterval)?.price ||
+                      '--'
+                  ) +
+                    ' ' +
+                    Pair.current?.value?.tokenPair[1].symbol}
+                </span>
+              )
+            },
+            {
+              label: '5m',
+              value: (
+                <DynamicNumber
+                  value={
+                    (getTimeDataFromSocketValue(socketValue, '5m')?.priceChange || 0) * 100 + '%'
+                  }
+                  symbol={Math.floor(Math.random() * 10) % 2 ? 1 : -1}
+                />
+              )
+            },
+            {
+              label: '1h',
+              value: (
+                <DynamicNumber
+                  value={
+                    (getTimeDataFromSocketValue(socketValue, '1h')?.priceChange || 0) * 100 + '%'
+                  }
+                  symbol={Math.floor(Math.random() * 10) % 2 ? 1 : -1}
+                />
+              )
+            },
+            {
+              label: '6h',
+              value: (
+                <DynamicNumber
+                  value={
+                    (getTimeDataFromSocketValue(socketValue, '6h')?.priceChange || 0) * 100 + '%'
+                  }
+                  symbol={Math.floor(Math.random() * 10) % 2 ? 1 : -1}
+                />
+              )
+            },
+            {
+              label: '24h',
+              value: (
+                <DynamicNumber
+                  value={
+                    (getTimeDataFromSocketValue(socketValue, '24h')?.priceChange || 0) * 100 + '%'
+                  }
+                  symbol={Math.floor(Math.random() * 10) % 2 ? 1 : -1}
+                />
+              )
+            },
+            {
+              label: '24h High',
+              value: (
+                <span class="text-color1">
+                  {formatCurrencyWithUnit(
+                    getTimeDataFromSocketValue(socketValue, '24h')?.priceHigh
+                  )}
+                </span>
+              )
+            },
+            {
+              label: '24h Low',
+              value: (
+                <span class="text-color1">
+                  {formatCurrencyWithUnit(getTimeDataFromSocketValue(socketValue, '24h')?.priceLow)}
+                </span>
+              )
+            }
+          ]
+        : []
+    })
 
     return {
       Pair,

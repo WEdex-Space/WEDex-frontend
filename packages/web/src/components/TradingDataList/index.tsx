@@ -6,11 +6,14 @@ import type { ControlSlotValueType } from './ControlSlot'
 import DynamicNumber from '@/components/DynamicNumber'
 import Overlap from '@/components/Overlap'
 import { DataListParamsKey } from '@/pages/index'
+import type { ApiDocuments } from '@/services/a2s.namespace'
 import { formatBigNumber, formatCurrency } from '@/utils/numberFormat'
 import { customTimeAgo } from '@/utils/timeago'
 
 export type TradingDataItem = {
   pairReportIM?: any
+  network?: ApiDocuments.model_Chain
+  dex?: ApiDocuments.model_DEX
   id: string
   index: number
   tokenPair: Record<string, any>[]
@@ -211,9 +214,7 @@ export default defineComponent({
                 {props.isStretch && (
                   <Overlap
                     class="mr-2"
-                    nodes={data.tokenPair.map(item => (
-                      <img src={item.logo} />
-                    ))}
+                    nodes={[data.network, data.dex].map(item => item && <img src={item.logo} />)}
                   />
                 )}
                 <div
