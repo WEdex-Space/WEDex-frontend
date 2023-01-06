@@ -82,18 +82,22 @@ export default defineComponent({
     return this.currentExpand === 'left' && this.DataListParams ? (
       <div class="border-color-border flex border-t-1 h-10 text-xs text-color3 ">
         <ul class="flex flex-1 items-center">
-          <li class={footerListCellClass}>
-            Tokens: <span class="text-color1">{this.stats?.tokens || '--'}</span>
-          </li>
-          <li class={footerListCellClass}>
-            Networks: <span class="text-color1">{this.stats?.networks || '--'}</span>
-          </li>
-          <li class={footerListCellClass}>
-            DEXes: <span class="text-color1">{this.stats?.dexs || '--'}</span>
-          </li>
-          <li class={footerListCellClass}>
-            Pools: <span class="text-color1">{this.stats?.pools || '--'}</span>
-          </li>
+          {[2, 3, 6].indexOf(this.DataListParams?.type || 0) !== -1 && (
+            <>
+              <li class={footerListCellClass}>
+                Tokens: <span class="text-color1">{this.stats?.tokens || '--'}</span>
+              </li>
+              <li class={footerListCellClass}>
+                Networks: <span class="text-color1">{this.stats?.networks || '--'}</span>
+              </li>
+              <li class={footerListCellClass}>
+                DEXes: <span class="text-color1">{this.stats?.dexs || '--'}</span>
+              </li>
+              <li class={footerListCellClass}>
+                Pools: <span class="text-color1">{this.stats?.pools || '--'}</span>
+              </li>
+            </>
+          )}
           <li class={footerListCellClass}>
             {this.DataListParams.timeInterval} Txns:
             <span class="px-1 text-color1">
