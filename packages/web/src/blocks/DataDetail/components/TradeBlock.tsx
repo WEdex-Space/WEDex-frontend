@@ -1,7 +1,7 @@
 import { UTable } from '@wedex/components'
 import { defineComponent, ref, computed } from 'vue'
 import { usePair } from '@/hooks'
-import { formatCurrency, formatCurrencyWithUnit } from '@/utils/numberFormat'
+import { formatCurrency, formatCurrencyWithUnit, formatBigNumber } from '@/utils/numberFormat'
 import { getTimeDataFromSocketValue } from '@/utils/trading'
 
 export default defineComponent({
@@ -76,15 +76,15 @@ export default defineComponent({
         },
         {
           Stats: 'Volume',
-          Total: formatCurrencyWithUnit(
-            getTimeDataFromSocketValue(socketValue, tradeTimeCurrent.value)?.volume?.total
-          ),
-          Buys: formatCurrencyWithUnit(
-            getTimeDataFromSocketValue(socketValue, tradeTimeCurrent.value)?.volume?.buys
-          ),
-          Sells: formatCurrencyWithUnit(
-            getTimeDataFromSocketValue(socketValue, tradeTimeCurrent.value)?.volume?.sells
-          )
+          Total: `$${formatBigNumber(
+            getTimeDataFromSocketValue(socketValue, tradeTimeCurrent.value)?.volume?.total || 0
+          )}`,
+          Buys: `$${formatBigNumber(
+            getTimeDataFromSocketValue(socketValue, tradeTimeCurrent.value)?.volume?.buys || 0
+          )}`,
+          Sells: `$${formatBigNumber(
+            getTimeDataFromSocketValue(socketValue, tradeTimeCurrent.value)?.volume?.sells || 0
+          )}`
         },
         {
           Stats: 'Price.avg',

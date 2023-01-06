@@ -1,8 +1,10 @@
 import { USelect } from '@wedex/components'
 import { CustomOutlined, ExportOutlined } from '@wedex/icons'
-import { defineComponent, ref, inject, Ref, watch } from 'vue'
+import { defineComponent, ref, inject, Ref, watch, onBeforeUnmount } from 'vue'
 import CustomizeFilter from './components/CustomizeFilter'
 import { DataListParamsKey } from '@/pages/index'
+import { useSocketStore } from '@/stores'
+import { timeRangeToSocketMap } from '@/utils/trading'
 
 const footerCellClass =
   'border-l-1 border-color-border 2xl:px-7 px-3 leading-10 cursor-pointer hover:text-color2 select-none'
@@ -12,6 +14,7 @@ const footerListCellClass = '2xl:px-7 px-3 border-r-1 border-color-border cursor
 export default defineComponent({
   name: 'MainFooter',
   setup() {
+    const SocketStore = useSocketStore()
     const currentExpand = inject<Ref<'left' | 'center' | 'right'>>('currentExpand')
     const DataListParams = inject(DataListParamsKey)
 
@@ -54,42 +57,73 @@ export default defineComponent({
       }
     ])
 
+    const stats = ref<any>(null)
+    // socket subscribe list-stats
+    SocketStore.init().then(socket => {
+      SocketStore.subscribe('list-stats', undefined, msg => {
+        console.log('subscribe list-stats', msg)
+        stats.value = msg.data.value
+      })
+    })
+
+    onBeforeUnmount(() => {
+      SocketStore.unsubscribe('list-stats')
+    })
+
     return {
+      DataListParams,
       currentExpand,
       formData,
-      rangeData
+      rangeData,
+      stats
     }
   },
   render() {
-    return this.currentExpand === 'left' ? (
+    return this.currentExpand === 'left' && this.DataListParams ? (
       <div class="border-color-border flex border-t-1 h-10 text-xs text-color3 ">
         <ul class="flex flex-1 items-center">
           <li class={footerListCellClass}>
-            Tokens:<span class="text-color1">1234</span>
+            Tokens: <span class="text-color1">{this.stats?.tokens || '--'}</span>
           </li>
           <li class={footerListCellClass}>
-            Networks:<span class="text-color1">1234</span>
+            Networks: <span class="text-color1">{this.stats?.networks || '--'}</span>
           </li>
           <li class={footerListCellClass}>
-            DEXes:<span class="text-color1">1234</span>
+            DEXes: <span class="text-color1">{this.stats?.dexs || '--'}</span>
           </li>
           <li class={footerListCellClass}>
-            Pools:<span class="text-color1">1234</span>
+            Pools: <span class="text-color1">{this.stats?.pools || '--'}</span>
           </li>
           <li class={footerListCellClass}>
-            24h Txns:<span class="text-color1">1234</span>
+            {this.DataListParams.timeInterval} Txns:
+            <span class="px-1 text-color1">
+              {this.stats
+                ? this.stats[
+                    timeRangeToSocketMap(this.DataListParams.timeInterval as string) as string
+                  ]?.txns
+                : '--'}
+            </span>
           </li>
           <li class={footerListCellClass}>
-            24h Volume:<span class="text-color1">1234</span>
+            {this.DataListParams.timeInterval} Volume:
+            <span class="px-1 text-color1">
+              {this.stats
+                ? this.stats[
+                    timeRangeToSocketMap(this.DataListParams.timeInterval as string) as string
+                  ]?.volume
+                : '--'}
+            </span>
           </li>
         </ul>
         <div class={`border-l-1 border-color-border w-40 flex items-center`}>
           <USelect
             class={`selectTransparent`}
             size="small"
-            v-model:value={this.formData.range}
+            value={this.DataListParams.timeInterval}
             options={this.rangeData}
-            onUpdate:value={value => (this.formData.range = value)}
+            onUpdate:value={value =>
+              this.DataListParams && (this.DataListParams.timeInterval = value)
+            }
           ></USelect>
         </div>
         <CustomizeFilter

@@ -17,46 +17,37 @@ export type SocketMsgType = {
   data: any
 }
 
+const initFuntions: (() => void)[] = []
+
 export const useSocketStore = defineStore('websocket', {
   state: (): SocketState => ({
     SOCKET: null,
     listeners: {}
   }),
   actions: {
-    init() {
+    init(flag?: any) {
       // clear listeners
-      this.listeners = {}
+      // this.listeners = {}
 
       // return the socket
-      if (this.SOCKET) {
+      if (this.SOCKET && this.SOCKET.readyState === 1) {
         return new Promise(resolve => {
           resolve(this.SOCKET)
         })
-      }
-
-      if ('WebSocket' in window) {
+      } else if ('WebSocket' in window) {
         // open a web socket
-        return this.createNewSocket()
+        return this.createNewSocket(flag)
       } else {
         return new Promise((resolve, reject) => {
           reject('Your browser does not support WebSocket')
         })
       }
     },
-    createNewSocket() {
-      const isReLink = !!this.SOCKET
+    createNewSocket(flag?: any) {
+      flag && console.warn('flag', flag)
       // this.SOCKET && this.SOCKET.close()
-      return new Promise(resolve => {
-        // craete socket connect
+      if (!this.SOCKET) {
         this.SOCKET = new WebSocket(`wss://${wsHost}/ws`)
-
-        this.SOCKET.onopen = () => {
-          resolve(this.SOCKET)
-          if (isReLink) {
-            console.log('SOCKET_RELINK')
-          }
-        }
-
         this.SOCKET.onmessage = (evt: any) => {
           try {
             const received_msg: SocketMsgType = JSON.parse(evt.data)
@@ -83,8 +74,6 @@ export const useSocketStore = defineStore('websocket', {
                     key.split('__')[1] === received_msg.data?.value?.pairId
                   ) {
                     this.listeners[key].map(fun => fun(received_msg))
-                  } else {
-                    console.warn('miss catch socket msg:', received_msg)
                   }
                 })
               }
@@ -102,6 +91,15 @@ export const useSocketStore = defineStore('websocket', {
         this.SOCKET.onerror = (error: Error) => {
           console.warn(`onerror | ${new Date().toLocaleTimeString()}`, error)
         }
+      }
+
+      return new Promise(resolve => {
+        initFuntions.push(() => {
+          resolve(this.SOCKET)
+        })
+        this.SOCKET.onopen = () => {
+          initFuntions.map(func => func())
+        }
       })
     },
     Heartbeat() {
@@ -109,7 +107,7 @@ export const useSocketStore = defineStore('websocket', {
         topic: 'ping'
       })
     },
-    addLisener(key: string, callback: (msg: SocketMsgType) => void, suffix?: string) {
+    addLisener(key: string, callback?: (msg: SocketMsgType) => void, suffix?: string) {
       if (this.SOCKET) {
         if (key && typeof callback === 'function') {
           if (suffix) {
@@ -121,7 +119,7 @@ export const useSocketStore = defineStore('websocket', {
             this.listeners[key].push(callback)
           }
         }
-        console.warn('addLisener:', this.listeners)
+        console.warn('addLisener:', key, suffix, JSON.stringify(this.listeners))
       } else {
         console.warn('The socket is not ready to receive messages', this.SOCKET.readyState)
       }
@@ -148,13 +146,13 @@ export const useSocketStore = defineStore('websocket', {
           console.warn(err)
         }
       } else if (this.SOCKET) {
-        console.warn('SOCKET is not ready', this.SOCKET.readyState)
+        console.warn('SOCKET is not ready', json)
       }
     },
     subscribe(
       type: string,
-      value: any,
-      callback: (msg: SocketMsgType) => void,
+      value?: any,
+      callback?: (msg: SocketMsgType) => void,
       target_id?: number
     ) {
       if (Array.isArray(value)) {
@@ -174,7 +172,7 @@ export const useSocketStore = defineStore('websocket', {
         }
       })
     },
-    unsubscribe(type: string, value: any) {
+    unsubscribe(type: string, value?: any) {
       this.send({
         topic: 'unsubscribe',
         data: {

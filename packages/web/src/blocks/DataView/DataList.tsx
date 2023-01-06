@@ -106,12 +106,15 @@ export default defineComponent({
         console.warn('watch dataList', newList, prevList)
         // socket subscribe
         SocketStore.init().then(socket => {
-          if (newList.length) {
+          const newPairs = newList.filter(
+            newItem => (prevList || []).map(e => e.id).indexOf(newItem.id) === -1
+          )
+          if (newPairs.length) {
             SocketStore.subscribe(
               'trade-pair',
-              newList.map(item => item.id),
+              newPairs.map(item => item.id),
               msg => {
-                console.log('subscribe', msg)
+                console.log('subscribe trade-pair', msg)
                 dataList.value = updatePairListWithSocketData(
                   dataList.value,
                   msg.data.value,
@@ -120,10 +123,13 @@ export default defineComponent({
               }
             )
           }
-          if (prevList && prevList.length) {
+          const oldPairs = (prevList || []).filter(
+            oldItem => newList.map(e => e.id).indexOf(oldItem.id) === -1
+          )
+          if (oldPairs.length) {
             SocketStore.unsubscribe(
               'trade-pair',
-              prevList.map(item => (item ? item.id : null))
+              oldPairs.map(item => item.id)
             )
           }
         })
