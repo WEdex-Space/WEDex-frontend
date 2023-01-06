@@ -8,7 +8,7 @@ import {
   ShareOutlined,
   ExpandRightOutlined
 } from '@wedex/icons'
-import { defineComponent, ref, inject, onMounted, Ref } from 'vue'
+import { defineComponent, ref, inject, Ref } from 'vue'
 import HeaderGainerFilter from './components/HeaderGainerFilter'
 import HeaderRankFilter from './components/HeaderRankFilter'
 import HeaderTagFilter from './components/HeaderTagFilter'
@@ -16,8 +16,7 @@ import HeaderTopFilter from './components/HeaderTopFilter'
 import TrendTypeSelector from './components/TrendTypeSelector'
 
 import style from './style.module.css'
-import { MultiSelectorOptionType, NetworkSelector, DexSelector } from '@/components/MultiSelector'
-import { allNetworks } from '@/constants'
+import { NetworkSelector, DexSelector } from '@/components/MultiSelector'
 import { DataListParamsKey } from '@/pages/index'
 
 export default defineComponent({
@@ -25,7 +24,7 @@ export default defineComponent({
   setup(props, ctx) {
     const DataListParams = inject(DataListParamsKey)
     const currentExpand = inject<Ref<'left' | 'center' | 'right'>>('currentExpand')
-    const networksOptions = ref<MultiSelectorOptionType[]>([])
+
     const navIconClass = 'h-4 mr-1 w-4 align-middle -mt-[3px]'
 
     const mainNavs = ref([
@@ -90,27 +89,7 @@ export default defineComponent({
       }
     ])
 
-    onMounted(() => {
-      // get networks
-      networksOptions.value = [
-        {
-          label: 'All Networks',
-          value: null
-        },
-        ...allNetworks
-          .filter(item => !!item.shortName)
-          .map(item => {
-            return {
-              label: item.shortName as string,
-              value: item.chainId,
-              icon: item.logo
-            }
-          })
-      ]
-    })
-
     return {
-      networksOptions,
       mainNavs,
       DEXesData,
       DataListParams,
@@ -161,7 +140,6 @@ export default defineComponent({
           <NetworkSelector
             class="mr-4"
             value={this.DataListParams?.chainIds}
-            options={this.networksOptions}
             onChange={value => this.DataListParams && (this.DataListParams.chainIds = value)}
           />
           {/* DEXes selector */}
@@ -169,7 +147,7 @@ export default defineComponent({
             <DexSelector
               class="mr-4"
               value={this.DataListParams?.dexs}
-              options={this.networksOptions}
+              chainIds={this.DataListParams?.chainIds}
               onChange={value => this.DataListParams && (this.DataListParams.dexs = value)}
             />
           )}

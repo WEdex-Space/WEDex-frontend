@@ -1,11 +1,10 @@
 import { UPopover, UForm, UFormItem, UButton, UInputNumber, USelect } from '@wedex/components'
-import { defineComponent, ref, inject, onMounted } from 'vue'
+import { defineComponent, ref, inject } from 'vue'
 // eslint-disable-next-line import/order
 import { DataListParamsKey } from '@/pages/index'
 import './CustomizeFilter.css'
 import CustomizeTimeRadio from './CustomizeTimeRadio'
 import { NetworkSelector, DexSelector } from '@/components/MultiSelector'
-import { allNetworks } from '@/constants'
 import { useGlobalConfigStore } from '@/stores'
 import {
   formatCurrency,
@@ -20,7 +19,6 @@ export default defineComponent({
   setup(props, ctx) {
     const globalConfigStore = useGlobalConfigStore()
     const DataListParams = inject(DataListParamsKey)
-    const networksOptions = ref<any[]>([])
     const isVisible = ref(false)
     const tipRef = ref()
     const formData = ref<{
@@ -68,29 +66,9 @@ export default defineComponent({
       console.log('show', show)
     }
 
-    onMounted(() => {
-      // get networks
-      networksOptions.value = [
-        {
-          label: 'All Networks',
-          value: null
-        },
-        ...allNetworks
-          .filter(item => !!item.shortName)
-          .map(item => {
-            return {
-              label: item.shortName as string,
-              value: item.chainId,
-              icon: item.logo
-            }
-          })
-      ]
-    })
-
     return {
       globalConfigStore,
       formData,
-      networksOptions,
       isVisible,
       DataListParams,
       tipRef,
@@ -117,7 +95,6 @@ export default defineComponent({
                 <UFormItem label="Networks">
                   <NetworkSelector
                     value={this.DataListParams?.chainIds}
-                    options={this.networksOptions}
                     onChange={value =>
                       this.DataListParams && (this.DataListParams.chainIds = value)
                     }
@@ -126,7 +103,7 @@ export default defineComponent({
                 <UFormItem label="DEXes">
                   <DexSelector
                     value={this.DataListParams?.dexs}
-                    options={this.networksOptions}
+                    chainIds={this.DataListParams?.chainIds}
                     onChange={value => this.DataListParams && (this.DataListParams.dexs = value)}
                   />
                 </UFormItem>

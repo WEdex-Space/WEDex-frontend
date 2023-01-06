@@ -6,7 +6,7 @@ import { useGlobalConfigStore } from '@/stores'
 export type MultiSelectorValueType = string | number | null
 export type MultiSelectorOptionType = {
   label: string
-  value: MultiSelectorValueType
+  value?: MultiSelectorValueType
   icon?: string
 }
 
@@ -49,7 +49,7 @@ export default defineComponent({
     })
 
     const handleOptionClick = (option: MultiSelectorOptionType) => {
-      if (option.value === null) {
+      if (option.value === null || option.value === undefined) {
         optionSelectedMap.value = {}
       } else {
         optionSelectedMap.value[option.value] = option
@@ -152,14 +152,20 @@ export default defineComponent({
                 {this.finnalOptions.map((option: MultiSelectorOptionType) => (
                   <li
                     class={`flex items-center justify-center cursor-pointer select-none bg-bg3 rounded-sm text-color1 hover:bg-primary-bg px-1 h-6 ${
-                      (option.value !== null && this.optionSelectedMap[option.value]) ||
+                      (option.value !== null &&
+                        option.value !== undefined &&
+                        this.optionSelectedMap[option.value]) ||
                       (!this.optionSelect.length && option.value === null)
                         ? 'bg-primary-bg text-primary'
                         : ''
                     }`}
                     onClick={() => this.handleOptionClick(option)}
                   >
-                    {option.icon && <img src={option.icon} class="h-4 mr-1 w-4" />}
+                    {option.icon && (
+                      <span class="bg-white rounded-full h-4 mr-1 leading-0 w-4">
+                        <img src={option.icon} class="h-full w-full" />
+                      </span>
+                    )}
                     <span class="truncate" title={option.label}>
                       {option.label}
                     </span>
