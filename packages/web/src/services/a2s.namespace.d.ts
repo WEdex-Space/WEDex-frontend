@@ -310,6 +310,8 @@ export declare namespace ApiDocuments {
     amount0Out?: number
     amount1In?: number
     amount1Out?: number
+    amountInUSD?: number
+    amountOutUSD?: number
     blockGasLimit?: number
     blockGasUsed?: number
     blockNumber?: number

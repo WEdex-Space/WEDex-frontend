@@ -213,6 +213,7 @@ export default defineComponent({
                 )} */}
                 {props.isStretch && (
                   <Overlap
+                    noOverlap
                     class="mr-2"
                     nodes={[data.network, data.dex].map(item => item && <img src={item.logo} />)}
                   />

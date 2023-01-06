@@ -45,7 +45,7 @@ export default defineComponent({
             },
             {
               label: 'Holders:',
-              content: <strong>--</strong>
+              content: <strong>{formatCurrency(info.value.currentToken.holders)}</strong>
             },
             {
               label: 'Contract:',

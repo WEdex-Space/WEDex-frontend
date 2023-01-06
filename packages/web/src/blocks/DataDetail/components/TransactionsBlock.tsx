@@ -146,7 +146,7 @@ export default defineComponent({
               align: 'right',
               render: (data: TransactionsDataType, index: number) => {
                 return (
-                  <span class={data.type ? 'text-color-up' : 'text-color-down'}>{data['usd']}</span>
+                  <span class={data.type ? 'text-color-up' : 'text-color-down'}>{data.usd}</span>
                 )
               }
             },
@@ -266,7 +266,9 @@ export default defineComponent({
           return {
             date: item.blockTime ? item.blockTime * 1000 : 0,
             type: transactionBuyOrSell(item),
-            usd: '--',
+            usd: formatCurrencyWithUnit(
+              transactionBuyOrSell(item) ? item.amountOutUSD : item.amountInUSD
+            ),
             price: formatCurrencyWithUnit(item.token0PriceUSD),
             token0: formatCurrency(
               (transactionBuyOrSell(item) ? item.amount0Out : item.amount0In) || 0

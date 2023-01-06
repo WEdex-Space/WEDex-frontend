@@ -13,10 +13,6 @@
   @apply bg-white rounded-full overflow-hidden;
 }
 
-.icon:not(:first-child) {
-  margin-left: -4px;
-}
-
 .icon img {
   @apply h-full w-full;
 }
