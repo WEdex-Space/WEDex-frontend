@@ -35,15 +35,15 @@ export default defineComponent({
           <span class="rounded-sm bg-bg1 h-1 -mt-0.5 -ml-8 top-[50%] left-[50%] w-16 absolute"></span>
         </div>
         <div class="border-color-border flex bg-bg3 border-t-1 h-11 px-3 items-center">
-          <span class="rounded-full bg-bg2 h-4 mr-1 w-4 overflow-hidden">
-            <img src={this.currentPair?.tokenPair[0].logo} class="h-full w-full" />
+          <span class="bg-white rounded-full h-4 mr-1 w-4 overflow-hidden">
+            <img src={this.currentPair?.network?.logo} class="h-full w-full" />
           </span>
-          <span class="font-700 text-xs">{this.currentPair?.tokenPair[0].symbol}</span>
+          <span class="font-700 text-xs">{this.currentPair?.network?.name}</span>
           <ArrowRightOutlined class="h-3 mx-1 text-color3 w-3" />
-          <span class="rounded-full bg-bg2 h-4 mr-1 w-4 overflow-hidden">
-            <img src={this.currentPair?.tokenPair[1].logo} class="h-full w-full" />
+          <span class="bg-white rounded-full h-4 mr-1 w-4 overflow-hidden">
+            <img src={this.currentPair?.dex?.logo} class="h-full w-full" />
           </span>
-          <span class="font-700 text-xs">{this.currentPair?.tokenPair[1].symbol}</span>
+          <span class="font-700 text-xs">{this.currentPair?.dex?.name}</span>
           <div class="flex-1"></div>
           <ArrowDownDoubleOutlined
             class={`cursor-pointer h-5 text-color1 hover:text-color3 transform transition ${
