@@ -1,5 +1,6 @@
-import { defineComponent, ref, inject } from 'vue'
+import { defineComponent, computed, inject } from 'vue'
 import style from './HeaderTagFilter.module.css'
+import { useCategory } from '@/hooks'
 import { DataListParamsKey } from '@/pages/index'
 
 export default defineComponent({
@@ -10,37 +11,20 @@ export default defineComponent({
     }
   },
   setup(props, ctx) {
+    const categoryHook = useCategory()
     const DataListParams = inject(DataListParamsKey)
 
-    const tagData = ref([
+    const tagData = computed(() => [
       {
         name: 'All',
         value: undefined
       },
-      {
-        name: 'Defi',
-        value: 'Defi'
-      },
-      {
-        name: 'DEX',
-        value: 'DEX'
-      },
-      {
-        name: 'NFT',
-        value: 'NFT'
-      },
-      {
-        name: 'Gaming',
-        value: 'Gaming'
-      },
-      {
-        name: 'Layer-1',
-        value: 'Layer-1'
-      },
-      {
-        name: 'Metaverse',
-        value: 'Metaverse'
-      }
+      ...categoryHook.list.value.map(item => {
+        return {
+          name: item,
+          value: item
+        }
+      })
     ])
 
     return {
