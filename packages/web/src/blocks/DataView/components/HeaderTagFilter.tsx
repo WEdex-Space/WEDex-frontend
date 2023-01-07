@@ -41,10 +41,10 @@ export default defineComponent({
               style.subNavItem,
               `${
                 this.DataListParams &&
-                item.value &&
-                this.DataListParams.categoires?.indexOf(item.value) !== -1
+                ((!this.DataListParams.categoires?.length && !item.value) ||
+                (item.value && this.DataListParams.categoires?.indexOf(item.value) !== -1)
                   ? style.subNavItemCur
-                  : ''
+                  : '')
               }`
             ]}
             onClick={() =>

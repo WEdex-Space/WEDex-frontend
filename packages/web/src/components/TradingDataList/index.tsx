@@ -134,7 +134,7 @@ export default defineComponent({
         })
 
         // dynamic Col with mainNav
-        switch (Number(DataListParams?.type)) {
+        switch (Number(DataListParams?.channelType)) {
           case 1:
             // Hot pairs
             extendColumns.push({

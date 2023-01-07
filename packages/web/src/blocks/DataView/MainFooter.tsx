@@ -2,6 +2,7 @@ import { USelect } from '@wedex/components'
 import { CustomOutlined, ExportOutlined } from '@wedex/icons'
 import { defineComponent, ref, inject, Ref, watch, onBeforeUnmount } from 'vue'
 import CustomizeFilter from './components/CustomizeFilter'
+import { setChannelFilter } from '@/blocks/DataView/MainHeader'
 import { DataListParamsKey } from '@/pages/index'
 import { useSocketStore } from '@/stores'
 import { timeRangeToSocketMap } from '@/utils/trading'
@@ -79,10 +80,19 @@ export default defineComponent({
     }
   },
   render() {
+    const updateTimeRealy = () => {
+      if (this.DataListParams?.channelType && this.DataListParams?.timeInterval) {
+        Object.assign(
+          this.DataListParams,
+          setChannelFilter(this.DataListParams.channelType, this.DataListParams.timeInterval)
+        )
+      }
+    }
+
     return this.currentExpand === 'left' && this.DataListParams ? (
       <div class="border-color-border flex border-t-1 h-10 text-xs text-color3 ">
         <ul class="flex flex-1 items-center">
-          {[2, 3, 6].indexOf(this.DataListParams?.type || 0) !== -1 && (
+          {[2, 3, 6].indexOf(this.DataListParams?.channelType || 0) !== -1 && (
             <>
               <li class={footerListCellClass}>
                 Tokens: <span class="text-color1">{this.stats?.tokens || '--'}</span>
@@ -125,9 +135,10 @@ export default defineComponent({
             size="small"
             value={this.DataListParams.timeInterval}
             options={this.rangeData}
-            onUpdate:value={value =>
+            onUpdate:value={value => {
               this.DataListParams && (this.DataListParams.timeInterval = value)
-            }
+              updateTimeRealy()
+            }}
           ></USelect>
         </div>
         <CustomizeFilter

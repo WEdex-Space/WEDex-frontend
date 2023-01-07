@@ -1,10 +1,11 @@
 import { UPopover, UForm, UFormItem, UButton, UInputNumber, USelect } from '@wedex/components'
-import { defineComponent, ref, inject } from 'vue'
-// eslint-disable-next-line import/order
-import { DataListParamsKey, DataListParamsKeys } from '@/pages/index'
-import './CustomizeFilter.css'
+import { defineComponent, ref, inject, watch } from 'vue'
 import CustomizeTimeRadio from './CustomizeTimeRadio'
+import { setChannelFilter } from '@/blocks/DataView/MainHeader'
 import { NetworkSelector, DexSelector } from '@/components/MultiSelector'
+// eslint-disable-next-line import/order
+import { DataListParamsKey, DataListParamsKeys, DataListParamsType } from '@/pages/index'
+import './CustomizeFilter.css'
 import { useGlobalConfigStore } from '@/stores'
 import {
   formatCurrency,
@@ -22,7 +23,19 @@ export default defineComponent({
     const isVisible = ref(false)
     const tipRef = ref()
     const TxnsType = ref<'total' | 'buy' | 'sell'>('total')
-    const SortOrderType = ref<'Descending' | 'Descending'>('Descending')
+
+    const localFormData = ref<DataListParamsType>({ ...(DataListParams || {}) })
+
+    const rankTypeOptions = ref([
+      {
+        label: 'Descending',
+        value: 1
+      },
+      {
+        label: 'Ascending',
+        value: -1
+      }
+    ])
 
     const closeSelfModal = () => {
       tipRef.value && tipRef.value.setShow?.(false)
@@ -31,23 +44,131 @@ export default defineComponent({
 
     const handleSave = () => {
       console.log('handleSave')
+
+      DataListParams &&
+        Object.keys(localFormData.value).map(key => {
+          DataListParams[key as DataListParamsKeys] = localFormData.value[
+            key as DataListParamsKeys
+          ] as any
+        })
+
       closeSelfModal()
     }
+
+    watch(
+      () => isVisible.value,
+      () => {
+        if (isVisible.value) {
+          localFormData.value = {
+            ...(DataListParams || {})
+          }
+        }
+      }
+    )
+
+    const TxnsTypeOptions = [
+      {
+        label: 'All types',
+        value: 'total'
+      },
+      {
+        label: 'Buy',
+        value: 'buy'
+      },
+      {
+        label: 'Sell',
+        value: 'sell'
+      }
+    ]
+
+    const getTxnsKeyByTxnsType = (type: string, suffix?: string) => {
+      let key = ''
+      switch (type) {
+        case 'total':
+          key = 'txns'
+          break
+        case 'buy':
+          key = 'txnsBuys'
+          break
+        case 'sell':
+          key = 'txnsSells'
+          break
+        default:
+      }
+      return (key + suffix) as DataListParamsKeys
+    }
+
+    // TxnsType
+    watch(
+      () => TxnsType.value,
+      () => {
+        const historyMax =
+          localFormData.value.txnsMax ||
+          localFormData.value.txnsBuysMax ||
+          localFormData.value.txnsSellsMax ||
+          0
+        const historyMin =
+          localFormData.value.txnsMin ||
+          localFormData.value.txnsBuysMin ||
+          localFormData.value.txnsSellsMin ||
+          0
+
+        if (historyMax) {
+          const updateParam: any = {}
+          updateParam[getTxnsKeyByTxnsType(TxnsType.value, 'Max')] = historyMax
+
+          Object.assign(
+            localFormData.value,
+            {
+              txnsMax: undefined,
+              txnsBuysMax: undefined,
+              txnsSellsMax: undefined
+            },
+            updateParam
+          )
+        }
+
+        if (historyMin) {
+          const updateParam: any = {}
+          updateParam[getTxnsKeyByTxnsType(TxnsType.value, 'Min')] = historyMin
+          Object.assign(
+            localFormData.value,
+            {
+              txnsMin: undefined,
+              txnsBuysMin: undefined,
+              txnsSellsMin: undefined
+            },
+            updateParam
+          )
+        }
+      }
+    )
 
     return {
       globalConfigStore,
       TxnsType,
-      SortOrderType,
+      rankTypeOptions,
       isVisible,
-      DataListParams,
+      localFormData,
       tipRef,
+      TxnsTypeOptions,
+      getTxnsKeyByTxnsType,
       handleSave,
       closeSelfModal
     }
   },
   render() {
     const setParamValue = (key: DataListParamsKeys, value: any) => {
-      this.DataListParams && (this.DataListParams[key] = value)
+      this.localFormData[key] = value
+    }
+
+    const updateTimeRealy = () => {
+      if (this.localFormData.channelType && this.localFormData.timeInterval) {
+        Object.assign(
+          this.localFormData,
+          setChannelFilter(this.localFormData.channelType, this.localFormData.timeInterval)
+        )
+      }
     }
 
     return (
@@ -66,21 +187,24 @@ export default defineComponent({
               <UForm size="small" label-placement="left" label-width="auto" class="CustomizeFilter">
                 <UFormItem label="Networks">
                   <NetworkSelector
-                    value={this.DataListParams?.chainIds}
+                    value={this.localFormData.chainIds}
                     onChange={value => setParamValue('chainIds', value)}
                   />
                 </UFormItem>
                 <UFormItem label="DEXes">
                   <DexSelector
-                    value={this.DataListParams?.dexs}
-                    chainIds={this.DataListParams?.chainIds}
+                    value={this.localFormData.dexs}
+                    chainIds={this.localFormData.chainIds}
                     onChange={value => setParamValue('dexs', value)}
                   />
                 </UFormItem>
                 <UFormItem label="Time">
                   <CustomizeTimeRadio
-                    value={this.DataListParams?.timeInterval}
-                    onChange={value => setParamValue('timeInterval', value)}
+                    value={this.localFormData.timeInterval}
+                    onChange={value => {
+                      setParamValue('timeInterval', value)
+                      updateTimeRealy()
+                    }}
                   />
                 </UFormItem>
                 <UFormItem label="Txns">
@@ -89,20 +213,7 @@ export default defineComponent({
                       <USelect
                         value={this.TxnsType}
                         class="flex-1"
-                        options={[
-                          {
-                            label: 'All types',
-                            value: 'total'
-                          },
-                          {
-                            label: 'Buy',
-                            value: 'buy'
-                          },
-                          {
-                            label: 'Sell',
-                            value: 'sell'
-                          }
-                        ]}
+                        options={this.TxnsTypeOptions}
                         onUpdate:value={value => (this.TxnsType = value)}
                       />
                       <div class="flex-1"></div>
@@ -110,25 +221,37 @@ export default defineComponent({
                     <div class="flex gap-2">
                       <UInputNumber
                         class="flex-1"
-                        value={this.DataListParams?.txnsMin || 0}
+                        value={
+                          (this.localFormData[
+                            this.getTxnsKeyByTxnsType(this.TxnsType, 'Min')
+                          ] as number) || 0
+                        }
                         min={0}
                         parse={parseCurrency}
                         format={formatCurrency}
                         v-slots={{
                           prefix: () => 'Min'
                         }}
-                        onUpdate:value={value => setParamValue('txnsMin', value)}
+                        onUpdate:value={value =>
+                          setParamValue(`${this.getTxnsKeyByTxnsType(this.TxnsType, 'Min')}`, value)
+                        }
                       />
                       <UInputNumber
                         class="flex-1"
-                        value={this.DataListParams?.txnsMax || 0}
+                        value={
+                          (this.localFormData[
+                            this.getTxnsKeyByTxnsType(this.TxnsType, 'Max')
+                          ] as number) || 0
+                        }
                         min={0}
                         parse={parseCurrency}
                         format={formatCurrency}
                         v-slots={{
                           prefix: () => 'Max'
                         }}
-                        onUpdate:value={value => setParamValue('txnsMax', value)}
+                        onUpdate:value={value =>
+                          setParamValue(`${this.getTxnsKeyByTxnsType(this.TxnsType, 'Max')}`, value)
+                        }
                       />
                     </div>
                   </div>
@@ -137,7 +260,7 @@ export default defineComponent({
                   <div class="flex w-full gap-2">
                     <UInputNumber
                       class="flex-1"
-                      value={this.DataListParams?.liquidityMin || 0}
+                      value={this.localFormData.liquidityMin || 0}
                       min={0}
                       parse={parseCurrencyWithUnit}
                       format={formatCurrencyWithUnit}
@@ -148,7 +271,7 @@ export default defineComponent({
                     />
                     <UInputNumber
                       class="flex-1"
-                      value={this.DataListParams?.liquidityMax || 0}
+                      value={this.localFormData.liquidityMax || 0}
                       min={0}
                       parse={parseCurrencyWithUnit}
                       format={formatCurrencyWithUnit}
@@ -163,7 +286,7 @@ export default defineComponent({
                   <div class="flex w-full gap-2">
                     <UInputNumber
                       class="flex-1"
-                      value={this.DataListParams?.volumeMin || 0}
+                      value={this.localFormData.volumeMin || 0}
                       min={0}
                       parse={parseCurrencyWithUnit}
                       format={formatCurrencyWithUnit}
@@ -174,7 +297,7 @@ export default defineComponent({
                     />
                     <UInputNumber
                       class="flex-1"
-                      value={this.DataListParams?.volumeMax || 0}
+                      value={this.localFormData.volumeMax || 0}
                       min={0}
                       parse={parseCurrencyWithUnit}
                       format={formatCurrencyWithUnit}
@@ -189,7 +312,7 @@ export default defineComponent({
                   <div class="flex w-full gap-2">
                     <UInputNumber
                       class="flex-1"
-                      value={this.DataListParams?.trendMin || 0}
+                      value={this.localFormData.trendMin || 0}
                       min={0}
                       max={100}
                       v-slots={{
@@ -200,7 +323,7 @@ export default defineComponent({
                     />
                     <UInputNumber
                       class="flex-1"
-                      value={this.DataListParams?.trendMax || 0}
+                      value={this.localFormData.trendMax || 0}
                       min={0}
                       max={100}
                       v-slots={{
@@ -215,7 +338,7 @@ export default defineComponent({
                   <div class="flex w-full gap-2">
                     <UInputNumber
                       class="flex-1"
-                      value={this.DataListParams?.pairAgeMin || 0}
+                      value={this.localFormData.pairAgeMin || 0}
                       min={0}
                       v-slots={{
                         prefix: () => 'Min',
@@ -225,7 +348,7 @@ export default defineComponent({
                     />
                     <UInputNumber
                       class="flex-1"
-                      value={this.DataListParams?.pairAgeMax || 0}
+                      value={this.localFormData.pairAgeMax || 0}
                       min={0}
                       v-slots={{
                         prefix: () => 'Max',
@@ -238,19 +361,10 @@ export default defineComponent({
                 <UFormItem label="Rank by">
                   <div class="flex w-full gap-2">
                     <USelect
-                      value={this.SortOrderType}
+                      value={this.localFormData.rankType}
                       class="flex-1"
-                      options={[
-                        {
-                          label: 'Descending',
-                          value: 'Descending'
-                        },
-                        {
-                          label: 'Ascending',
-                          value: 'Ascending'
-                        }
-                      ]}
-                      onUpdate:value={value => (this.SortOrderType = value)}
+                      options={this.rankTypeOptions}
+                      onUpdate:value={value => setParamValue('rankType', value)}
                     />
                     <div class="flex-1"></div>
                   </div>

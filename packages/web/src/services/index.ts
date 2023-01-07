@@ -115,184 +115,6 @@ export const services = {
       ...extract('GET', args, ['ad', 'chainIds', 'keyword'], [])
     })
   },
-  'MultiChart@get-multi-chart-tab-list'(args: {
-    /**
-     * @description pagination select current page, default: 1
-     */
-    page?: number
-    /**
-     * @description pagination size, default: 20
-     */
-    size?: number
-  }) {
-    return requestAdapter<
-      ApiDocuments.proto_PageData & {
-        list?: ApiDocuments.proto_MultiChartTabResponse[]
-      }
-    >({
-      url: replacePath('/multi-chart-tabs', args),
-      method: 'GET',
-      ...extract('GET', args, ['page', 'size'], [])
-    })
-  },
-  'MultiChart@create-multi-chart-tab'(args: ApiDocuments.proto_MultiChartTabCreateRequest) {
-    return requestAdapter<ApiDocuments.proto_MessageResponse>({
-      url: replacePath('/multi-chart-tabs', args),
-      method: 'POST',
-      ...extract('POST', args, [], [])
-    })
-  },
-  'MultiChart@update-multi-chart-tab'(
-    args: {
-      /**
-       * @description tab id
-       */
-      tabId: string
-    } & ApiDocuments.proto_MultiChartTabUpdateRequest
-  ) {
-    return requestAdapter<ApiDocuments.proto_MessageResponse>({
-      url: replacePath('/multi-chart-tabs/{tabId}', args),
-      method: 'PUT',
-      ...extract('PUT', args, [], ['tabId'])
-    })
-  },
-  'MultiChart@get-multi-chart-pair-list'(
-    args: {
-      /**
-       * @description tab id
-       */
-      tabId: string
-    } & {
-      /**
-       * @description pagination select current page, default: 1
-       */
-      page?: number
-      /**
-       * @description pagination size, default: 20
-       */
-      size?: number
-    }
-  ) {
-    return requestAdapter<
-      ApiDocuments.proto_PageData & {
-        list?: ApiDocuments.proto_MultiChartPairResponse[]
-      }
-    >({
-      url: replacePath('/multi-chart-tabs/{tabId}/pairs', args),
-      method: 'GET',
-      ...extract('GET', args, ['page', 'size'], ['tabId'])
-    })
-  },
-  'MultiChart@create-multi-chart-pair'(
-    args: {
-      /**
-       * @description multi chart tab id
-       */
-      tabId: string
-    } & ApiDocuments.proto_MultiChartPairCreateRequest
-  ) {
-    return requestAdapter<ApiDocuments.proto_MessageResponse>({
-      url: replacePath('/multi-chart-tabs/{tabId}/pairs', args),
-      method: 'POST',
-      ...extract('POST', args, [], ['tabId'])
-    })
-  },
-  'MultiChart@delete-multi-chart-pair'(args: {
-    /**
-     * @description multi-chart-tab id
-     */
-    tabId: string
-    /**
-     * @description multi-chart-tab-pair id
-     */
-    pairId: string
-  }) {
-    return requestAdapter<ApiDocuments.proto_MessageResponse>({
-      url: replacePath('/multi-chart-tabs/{tabId}/pairs/{pairId}', args),
-      method: 'DELETE',
-      ...extract('DELETE', args, [], ['tabId', 'pairId'])
-    })
-  },
-  'Notebook@get-notebook-list'(args: {
-    /**
-     * @description pagination select current page, default: 1
-     */
-    page?: number
-    /**
-     * @description pagination size, default: 20
-     */
-    size?: number
-  }) {
-    return requestAdapter<
-      ApiDocuments.proto_PageData & {
-        list?: ApiDocuments.proto_NotebookResponse[]
-      }
-    >({
-      url: replacePath('/notebooks', args),
-      method: 'GET',
-      ...extract('GET', args, ['page', 'size'], [])
-    })
-  },
-  'Notebook@create-notebook'(args: ApiDocuments.proto_NotebookCreateRequest) {
-    return requestAdapter<ApiDocuments.proto_MessageResponse>({
-      url: replacePath('/notebooks', args),
-      method: 'POST',
-      ...extract('POST', args, [], [])
-    })
-  },
-  'Notebook@update-notebook'(
-    args: {
-      /**
-       * @description notebook id
-       */
-      notebookId: string
-    } & ApiDocuments.proto_NotebookUpdateRequest
-  ) {
-    return requestAdapter<ApiDocuments.proto_MessageResponse>({
-      url: replacePath('/notebooks/{notebookId}', args),
-      method: 'PUT',
-      ...extract('PUT', args, [], ['notebookId'])
-    })
-  },
-  'Notebook@delete-notebook'(args: {
-    /**
-     * @description notebook id
-     */
-    notebookId: string
-  }) {
-    return requestAdapter<ApiDocuments.proto_MessageResponse>({
-      url: replacePath('/notebooks/{notebookId}', args),
-      method: 'DELETE',
-      ...extract('DELETE', args, [], ['notebookId'])
-    })
-  },
-  'Notification@get-notification-list'(args: {
-    /**
-     * @description pagination select current page, default: 1
-     */
-    page?: number
-    /**
-     * @description pagination size, default: 20
-     */
-    size?: number
-  }) {
-    return requestAdapter<
-      ApiDocuments.proto_PageData & {
-        list?: ApiDocuments.proto_NotificationResponse[]
-      }
-    >({
-      url: replacePath('/notifications', args),
-      method: 'GET',
-      ...extract('GET', args, ['page', 'size'], [])
-    })
-  },
-  'Notification@create-notification'(args: ApiDocuments.proto_NotificationCreateRequest) {
-    return requestAdapter<ApiDocuments.proto_MessageResponse>({
-      url: replacePath('/notifications', args),
-      method: 'POST',
-      ...extract('POST', args, [], [])
-    })
-  },
   'Pair@get-pair-list'(args: {
     /**
      * @description pagination select current page, default: 1
@@ -307,11 +129,11 @@ export const services = {
      */
     categoires?: string[]
     /**
-     * @description chain id
+     * @description chain ids
      */
     chainIds?: number[]
     /**
-     * @description dex id
+     * @description dex ids
      */
     dexs?: string[]
     /**
@@ -328,6 +150,10 @@ export const services = {
      * @description hour
      */
     pairAgeMin?: number
+    /**
+     * @description pair ids
+     */
+    pairIds?: string[]
     /**
      * @description query rank by; field, According to the data structure, splicing field strings with dots
      */
@@ -348,8 +174,12 @@ export const services = {
      * @description %  100% = 1
      */
     trendMin?: number
+    txnsBuysMax?: number
+    txnsBuysMin?: number
     txnsMax?: number
     txnsMin?: number
+    txnsSellsMax?: number
+    txnsSellsMin?: number
     volumeMax?: number
     volumeMin?: number
   }) {
@@ -374,13 +204,18 @@ export const services = {
           'liquidityMin',
           'pairAgeMax',
           'pairAgeMin',
+          'pairIds',
           'rankBy',
           'rankType',
           'timeInterval',
           'trendMax',
           'trendMin',
+          'txnsBuysMax',
+          'txnsBuysMin',
           'txnsMax',
           'txnsMin',
+          'txnsSellsMax',
+          'txnsSellsMin',
           'volumeMax',
           'volumeMin'
         ],
@@ -498,104 +333,6 @@ export const services = {
       url: replacePath('/upload', args),
       method: 'POST',
       ...extract('POST', args, [], [])
-    })
-  },
-  'Watch@get-watch-list'(args: {
-    /**
-     * @description pagination select current page, default: 1
-     */
-    page?: number
-    /**
-     * @description pagination size, default: 20
-     */
-    size?: number
-  }) {
-    return requestAdapter<
-      ApiDocuments.proto_PageData & {
-        list?: ApiDocuments.proto_WatchResponse[]
-      }
-    >({
-      url: replacePath('/watchs', args),
-      method: 'GET',
-      ...extract('GET', args, ['page', 'size'], [])
-    })
-  },
-  'Watch@create-watch'(args: ApiDocuments.proto_WatchCreateRequest) {
-    return requestAdapter<ApiDocuments.proto_MessageResponse>({
-      url: replacePath('/watchs', args),
-      method: 'POST',
-      ...extract('POST', args, [], [])
-    })
-  },
-  'Watch@update-watch'(
-    args: {
-      /**
-       * @description watch id
-       */
-      watchId: string
-    } & ApiDocuments.proto_WatchUpdateRequest
-  ) {
-    return requestAdapter<ApiDocuments.proto_MessageResponse>({
-      url: replacePath('/watchs/{watchId}', args),
-      method: 'PUT',
-      ...extract('PUT', args, [], ['watchId'])
-    })
-  },
-  'Watch@get-watch-pair-list'(
-    args: {
-      /**
-       * @description watch id
-       */
-      watchId: string
-    } & {
-      /**
-       * @description pagination select current page, default: 1
-       */
-      page?: number
-      /**
-       * @description pagination size, default: 20
-       */
-      size?: number
-    }
-  ) {
-    return requestAdapter<
-      ApiDocuments.proto_PageData & {
-        list?: ApiDocuments.proto_WatchPairResponse[]
-      }
-    >({
-      url: replacePath('/watchs/{watchId}/pairs', args),
-      method: 'GET',
-      ...extract('GET', args, ['page', 'size'], ['watchId'])
-    })
-  },
-  'Watch@create-watch-pair'(
-    args: {
-      /**
-       * @description watch id
-       */
-      watchId: string
-    } & ApiDocuments.proto_WatchPairCreateRequest
-  ) {
-    return requestAdapter<ApiDocuments.proto_MessageResponse>({
-      url: replacePath('/watchs/{watchId}/pairs', args),
-      method: 'POST',
-      ...extract('POST', args, [], ['watchId'])
-    })
-  },
-  'Watch@delete-watch-pair'(args: {
-    /**
-     * @description watch id
-     */
-    watchId: string
-    /**
-     * @description watch pair id
-     */
-    pairId: string
-  }) {
-    return requestAdapter<ApiDocuments.proto_MessageResponse>({
-      url: replacePath('/watchs/{watchId}/pairs/{pairId}', args),
-      method: 'DELETE',
-      ...extract('DELETE', args, [], ['watchId', 'pairId'])
     })
   }
 }

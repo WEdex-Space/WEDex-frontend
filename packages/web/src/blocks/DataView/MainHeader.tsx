@@ -14,10 +14,50 @@ import HeaderRankFilter from './components/HeaderRankFilter'
 import HeaderTagFilter from './components/HeaderTagFilter'
 import HeaderTopFilter from './components/HeaderTopFilter'
 import TrendTypeSelector from './components/TrendTypeSelector'
-
 import style from './style.module.css'
 import { NetworkSelector, DexSelector } from '@/components/MultiSelector'
 import { DataListParamsKey } from '@/pages/index'
+import { timeRangeToSocketMap } from '@/utils/trading'
+
+export const setChannelFilter = (channelType: number, timeInterval: string) => {
+  // set channel filter
+  let newRankBy = ''
+  let newRankType = 0
+
+  switch (channelType) {
+    case 1:
+      newRankBy = `pairReportIM.${timeRangeToSocketMap(timeInterval)}.views`
+      newRankType = -1
+      break
+    case 2:
+      newRankBy = `lastTxAt`
+      newRankType = -1
+      break
+    case 3:
+      newRankBy = `createdAt`
+      newRankType = -1
+      break
+    case 4:
+      // trend
+      newRankBy = `pairReportIM.${timeRangeToSocketMap(timeInterval)}.priceChangeAbs`
+      newRankType = -1
+      break
+    case 5:
+      newRankBy = `pairReportIM.${timeRangeToSocketMap(timeInterval)}.priceChange`
+      newRankType = -1
+      break
+    case 6:
+      newRankBy = `pairReportIM.${timeRangeToSocketMap(timeInterval)}.volume.total`
+      newRankType = -1
+      break
+    default:
+  }
+
+  return {
+    rankBy: newRankBy,
+    rankType: newRankType
+  }
+}
 
 export default defineComponent({
   name: 'MainHeader',
@@ -66,32 +106,8 @@ export default defineComponent({
       }
     ])
 
-    const DEXesData = ref([
-      {
-        id: 1,
-        name: 'DEXes1'
-      },
-      {
-        id: 2,
-        name: 'DEXes2'
-      },
-      {
-        id: 3,
-        name: 'DEXes3'
-      },
-      {
-        id: 4,
-        name: 'DEXes4'
-      },
-      {
-        id: 5,
-        name: 'DEXes5'
-      }
-    ])
-
     return {
       mainNavs,
-      DEXesData,
       DataListParams,
       currentExpand
     }
@@ -100,8 +116,13 @@ export default defineComponent({
     const handleMainNavClick = (item: any) => {
       if (item.link) {
         window.open(item.link)
-      } else if (this.DataListParams) {
-        this.DataListParams.type = item.value
+      } else if (this.DataListParams && this.DataListParams.timeInterval) {
+        const updateParams = {
+          ...setChannelFilter(item.value, this.DataListParams.timeInterval),
+          channelType: item.value
+        }
+        console.log(item.value, updateParams)
+        Object.assign(this.DataListParams, updateParams)
       }
     }
 
@@ -119,7 +140,9 @@ export default defineComponent({
           <ul class="h-full py-3 whitespace-nowrap overflow-x-scroll overflow-y-hidden ">
             {this.mainNavs.map(item => (
               <li
-                class={`${this.DataListParams?.type === item.value ? style.mainNavItemCur : ''}`}
+                class={`${
+                  this.DataListParams?.channelType === item.value ? style.mainNavItemCur : ''
+                }`}
                 onClick={() => handleMainNavClick(item)}
               >
                 {item.icon}
@@ -130,10 +153,10 @@ export default defineComponent({
         </div>
         {/* subNav */}
         <div class={style.subNav}>
-          {this.DataListParams && this.DataListParams.type === 4 && (
+          {this.DataListParams && this.DataListParams.channelType === 4 && (
             <TrendTypeSelector class="mr-4" />
           )}
-          {this.DataListParams && this.DataListParams.type === 5 && (
+          {this.DataListParams && this.DataListParams.channelType === 5 && (
             <HeaderGainerFilter class="mr-4" />
           )}
           {/* Networks selector */}
@@ -143,7 +166,7 @@ export default defineComponent({
             onChange={value => this.DataListParams && (this.DataListParams.chainIds = value)}
           />
           {/* DEXes selector */}
-          {this.DataListParams?.type !== 6 && (
+          {this.DataListParams?.channelType !== 6 && (
             <DexSelector
               class="mr-4"
               value={this.DataListParams?.dexs}
@@ -152,13 +175,13 @@ export default defineComponent({
             />
           )}
 
-          {this.DataListParams && this.DataListParams.type === 1 && (
+          {this.DataListParams && this.DataListParams.channelType === 1 && (
             <HeaderTopFilter class="mr-4" />
           )}
 
-          {this.DataListParams?.type !== 6 && <HeaderTagFilter class="mr-4 __list" />}
+          {this.DataListParams?.channelType !== 6 && <HeaderTagFilter class="mr-4 __list" />}
 
-          {this.DataListParams && this.DataListParams.type === 6 && (
+          {this.DataListParams && this.DataListParams.channelType === 6 && (
             <div class="flex items-center">
               <span class="text-color3">Rank By:</span>
               <HeaderRankFilter class="mr-4" />

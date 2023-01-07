@@ -56,10 +56,14 @@ export type DataListParamsType = {
   trendMin?: number
   txnsMax?: number
   txnsMin?: number
+  txnsBuysMax?: number
+  txnsBuysMin?: number
+  txnsSellsMax?: number
+  txnsSellsMin?: number
   volumeMax?: number
   volumeMin?: number
   // custom
-  type?: number
+  channelType?: number
   sortMethod?: string
   trendType?: number
   disablePaginate?: boolean
@@ -83,9 +87,13 @@ export type DataListParamsKeys =
   | 'trendMin'
   | 'txnsMax'
   | 'txnsMin'
+  | 'txnsBuysMax'
+  | 'txnsBuysMin'
+  | 'txnsSellsMax'
+  | 'txnsSellsMin'
   | 'volumeMax'
   | 'volumeMin'
-  | 'type'
+  | 'channelType'
   | 'disablePaginate'
 
 const LandingPage = defineComponent({
@@ -132,15 +140,19 @@ const LandingPage = defineComponent({
         immediate: true
       }
     )
+    // TODO All Pairs filter
     const DataListParams = ref<DataListParamsType>({
       chainIds: [],
-      type: 2,
       dexs: [],
       page: 1,
-      size: 20,
+      size: 50,
+      timeInterval: '24h',
+      categoires: [],
+      channelType: 2,
+      rankType: -1,
+      rankBy: 'lastTxAt',
       disablePaginate: false,
-      trendType: 0,
-      timeInterval: '24h'
+      trendType: 0
     })
 
     provide(DataListParamsKey, DataListParams.value)

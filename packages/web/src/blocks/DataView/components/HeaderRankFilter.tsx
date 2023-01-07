@@ -1,6 +1,7 @@
-import { defineComponent, ref, inject } from 'vue'
+import { defineComponent, inject, computed } from 'vue'
 import style from './HeaderTagFilter.module.css'
 import { DataListParamsKey } from '@/pages/index'
+import { timeRangeToSocketMap } from '@/utils/trading'
 
 export default defineComponent({
   name: 'HeaderRankFilter',
@@ -12,16 +13,22 @@ export default defineComponent({
   setup(props, ctx) {
     const DataListParams = inject(DataListParamsKey)
 
-    const tagData = ref([
-      {
-        name: 'Volume',
-        value: '4'
-      },
-      {
-        name: 'Txns',
-        value: '5'
-      }
-    ])
+    const tagData = computed(() =>
+      DataListParams?.timeInterval
+        ? [
+            {
+              name: 'Volume',
+              value: `pairReportIM.${timeRangeToSocketMap(
+                DataListParams.timeInterval
+              )}.volume.total`
+            },
+            {
+              name: 'Txns',
+              value: `pairReportIM.${timeRangeToSocketMap(DataListParams.timeInterval)}.txns.total`
+            }
+          ]
+        : []
+    )
 
     return {
       tagData,
@@ -31,11 +38,7 @@ export default defineComponent({
   render() {
     const handleClick = (item: any) => {
       if (this.DataListParams) {
-        if (this.DataListParams.rankBy === item.value) {
-          this.DataListParams.rankBy = undefined
-        } else {
-          this.DataListParams.rankBy = item.value
-        }
+        this.DataListParams.rankBy = item.value
       }
     }
 

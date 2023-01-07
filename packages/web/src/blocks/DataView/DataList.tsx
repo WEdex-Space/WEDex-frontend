@@ -1,4 +1,4 @@
-import { message, UPagination } from '@wedex/components'
+import { message, UPagination, loadingBar } from '@wedex/components'
 import { defineComponent, ref, inject, Ref, onBeforeUnmount, watch } from 'vue'
 import {
   default as TradingDataList,
@@ -38,35 +38,16 @@ export default defineComponent({
     }
 
     const dataList = ref<TradingDataItem[]>([])
-
-    const queryParam = ref<{
-      page?: number
-      size?: number
-      chainIds?: number[]
-      dexs?: string[]
-      keyword?: string
-      liquidityMax?: number
-      liquidityMin?: number
-      pairAgeMax?: number
-      pairAgeMin?: number
-      rankBy?: string
-      rankType?: number
-      timeInterval?: string
-      trendMax?: number
-      trendMin?: number
-      txnsMax?: number
-      txnsMin?: number
-      volumeMax?: number
-      volumeMin?: number
-    }>({
-      page: 1,
-      size: 50
-    })
-
+    const loading = ref(false)
     const totalPage = ref(0)
 
     const fetchData = async function () {
-      const { error, data } = await services['Pair@get-pair-list'](queryParam.value)
+      loading.value = true
+      const { error, data } = await services['Pair@get-pair-list'](
+        DataListParams as DataListParamsType
+      )
+      loading.value = false
+
       if (!error) {
         dataList.value = updatePairListWithSocketData(
           data.list.map((item: ApiDocuments.proto_PairBasicResponse, index: number) => {
@@ -136,11 +117,23 @@ export default defineComponent({
       }
     )
 
-    // init
-    fetchData()
-
-    // Pagination
-    watch(() => queryParam.value, fetchData)
+    // init && Pagination
+    watch(
+      () => DataListParams,
+      () => {
+        if (DataListParams) {
+          if (loading.value) {
+            console.warn('list is loading')
+          } else {
+            fetchData()
+          }
+        }
+      },
+      {
+        immediate: true,
+        deep: true
+      }
+    )
 
     onBeforeUnmount(() => {
       SocketStore.unsubscribe('trade-pair', [])
@@ -156,8 +149,19 @@ export default defineComponent({
       }
     }
 
+    // loading bar
+    watch(
+      () => loading.value,
+      value => {
+        if (value) {
+          loadingBar.start()
+        } else {
+          loadingBar.finish()
+        }
+      }
+    )
+
     return {
-      queryParam,
       totalPage,
       currentExpand,
       dataList,
@@ -180,7 +184,7 @@ export default defineComponent({
         />
         {this.DataListParams && !this.DataListParams.disablePaginate && (
           <UPagination
-            v-model:page={this.queryParam.page}
+            v-model:page={this.DataListParams.page}
             pageCount={this.totalPage}
             style={{ margin: '10px auto' }}
           />
