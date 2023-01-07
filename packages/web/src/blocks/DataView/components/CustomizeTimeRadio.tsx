@@ -16,19 +16,19 @@ export default defineComponent({
       },
       {
         name: '1H',
-        value: '1H'
+        value: '1h'
       },
       {
         name: '4H',
-        value: '4H'
+        value: '4h'
       },
       {
         name: '6H',
-        value: '6H'
+        value: '6h'
       },
       {
         name: '24H',
-        value: '24H'
+        value: '24h'
       }
     ])
 

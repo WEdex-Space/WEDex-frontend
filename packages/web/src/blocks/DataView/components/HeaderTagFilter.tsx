@@ -40,12 +40,19 @@ export default defineComponent({
             class={[
               style.subNavItem,
               `${
-                this.DataListParams && this.DataListParams.tag === item.value
+                this.DataListParams &&
+                item.value &&
+                this.DataListParams.categoires?.indexOf(item.value) !== -1
                   ? style.subNavItemCur
                   : ''
               }`
             ]}
-            onClick={() => this.DataListParams && (this.DataListParams.tag = item.value)}
+            onClick={() =>
+              this.DataListParams &&
+              (item.value
+                ? (this.DataListParams.categoires = [item.value])
+                : (this.DataListParams.categoires = []))
+            }
           >
             {item.name}
           </li>

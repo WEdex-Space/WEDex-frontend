@@ -34,6 +34,63 @@ export const services = {
       ...extract('GET', args, [], [])
     })
   },
+  'CustomFunction@get-custom-func-list'(
+    args: {
+      /**
+       * @description custom-func
+       */
+      function: string
+    } & {
+      /**
+       * @description query rank by; field, According to the data structure, splicing field strings with dots
+       */
+      rankBy?: string
+      /**
+       * @description query rank type; 1 asc, -1 desc
+       */
+      rankType?: number
+    }
+  ) {
+    return requestAdapter<
+      ApiDocuments.proto_ListData & {
+        list?: {}[]
+      }
+    >({
+      url: replacePath('/customs/{function}', args),
+      method: 'GET',
+      ...extract('GET', args, ['rankBy', 'rankType'], ['function'])
+    })
+  },
+  'CustomFunction@save-custom-func'(
+    args: {
+      /**
+       * @description custom-func
+       */
+      function: string
+    } & {}
+  ) {
+    return requestAdapter<ApiDocuments.proto_MessageResponse>({
+      url: replacePath('/customs/{function}', args),
+      method: 'POST',
+      ...extract('POST', args, [], ['function'])
+    })
+  },
+  'CustomFunction@delete-custom-func-item'(args: {
+    /**
+     * @description Delete custom-func
+     */
+    function: string
+    /**
+     * @description Delete custom-func item id
+     */
+    id: string
+  }) {
+    return requestAdapter<ApiDocuments.proto_MessageResponse>({
+      url: replacePath('/customs/{function}/{id}', args),
+      method: 'DELETE',
+      ...extract('DELETE', args, [], ['function', 'id'])
+    })
+  },
   'DEX@get-dex-list'(args: {
     /**
      * @description ad, advertise
@@ -272,11 +329,11 @@ export const services = {
      */
     pairAgeMin?: number
     /**
-     * @description sort by cloumn struct, example: sort by 5 minutes vloume =&gt; &quot;pairReportIM.last5m.vloume.total&quot;
+     * @description query rank by; field, According to the data structure, splicing field strings with dots
      */
     rankBy?: string
     /**
-     * @description 1 asc, -1 desc
+     * @description query rank type; 1 asc, -1 desc
      */
     rankType?: number
     /**

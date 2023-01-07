@@ -43,6 +43,7 @@ export type DataListParamsType = {
   size?: number
   chainIds?: number[]
   dexs?: string[]
+  categoires?: string[]
   keyword?: string
   liquidityMax?: number
   liquidityMin?: number
@@ -59,12 +60,33 @@ export type DataListParamsType = {
   volumeMin?: number
   // custom
   type?: number
-  tag?: string
   sortMethod?: string
   trendType?: number
   disablePaginate?: boolean
 }
 export const DataListParamsKey = Symbol() as InjectionKey<DataListParamsType>
+export type DataListParamsKeys =
+  | 'page'
+  | 'size'
+  | 'chainIds'
+  | 'dexs'
+  | 'categoires'
+  | 'keyword'
+  | 'liquidityMax'
+  | 'liquidityMin'
+  | 'pairAgeMax'
+  | 'pairAgeMin'
+  | 'rankBy'
+  | 'rankType'
+  | 'timeInterval'
+  | 'trendMax'
+  | 'trendMin'
+  | 'txnsMax'
+  | 'txnsMin'
+  | 'volumeMax'
+  | 'volumeMin'
+  | 'type'
+  | 'disablePaginate'
 
 const LandingPage = defineComponent({
   name: 'LandingPage',
