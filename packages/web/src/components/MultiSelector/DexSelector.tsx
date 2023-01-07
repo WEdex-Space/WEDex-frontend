@@ -1,10 +1,11 @@
-import { defineComponent, PropType, ref, watch, computed } from 'vue'
+import { defineComponent, PropType, ref, watch, computed, inject } from 'vue'
 import {
   default as MultiSelector,
   MultiSelectorOptionType,
   MultiSelectorValueType
 } from '@/components/MultiSelector'
 import Overlap from '@/components/Overlap'
+import { DataListParamsKey } from '@/pages/index'
 import { services } from '@/services'
 import type { ApiDocuments } from '@/services/a2s.namespace'
 
@@ -13,27 +14,22 @@ export default defineComponent({
   props: {
     value: {
       type: Array as PropType<MultiSelectorValueType[]>
-    },
-    chainIds: {
-      type: Array as PropType<number[]>
-    },
-    keyword: {
-      type: String
     }
   },
   emits: ['change'],
   setup(props, ctx) {
-    const list = ref<ApiDocuments.proto_DEXResponse[]>([])
+    const DataListParams = inject(DataListParamsKey)
 
+    const list = ref<ApiDocuments.proto_DEXResponse[]>([])
+    const queryParam = ref({
+      ad: !DataListParams?.chainIds?.length,
+      chainIds: DataListParams?.chainIds || []
+    })
     const loading = ref(false)
     const getDexList = async () => {
-      if (!list.value.length && !loading.value) {
+      if (!loading.value) {
         loading.value = true
-        const { error, data } = await services['DEX@get-dex-list']({
-          ad: !props.chainIds?.length && !props.keyword,
-          chainIds: props.chainIds,
-          keyword: props.keyword
-        })
+        const { error, data } = await services['DEX@get-dex-list'](queryParam.value)
         if (!error) {
           list.value = data?.list || []
         } else {
@@ -43,13 +39,25 @@ export default defineComponent({
       }
     }
 
+    // init
+    getDexList()
+    // listener
     watch(
-      [props.chainIds, props.keyword],
+      () => DataListParams,
       () => {
-        getDexList()
+        if (DataListParams) {
+          console.log('watch DataListParams', queryParam.value.chainIds, DataListParams.chainIds)
+          if (queryParam.value.chainIds.join(',') !== DataListParams.chainIds?.join(',')) {
+            queryParam.value = {
+              ad: !DataListParams?.chainIds?.length,
+              chainIds: DataListParams?.chainIds || []
+            }
+            getDexList()
+          }
+        }
       },
       {
-        immediate: true
+        deep: true
       }
     )
 
@@ -72,6 +80,7 @@ export default defineComponent({
     }
 
     return {
+      queryParam,
       options,
       handleChange
     }

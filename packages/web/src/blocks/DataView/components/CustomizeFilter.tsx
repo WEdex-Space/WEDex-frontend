@@ -98,7 +98,7 @@ export default defineComponent({
       return (key + suffix) as DataListParamsKeys
     }
 
-    // TxnsType
+    // when change TxnsType, update the txns[max/min] input key
     watch(
       () => TxnsType.value,
       () => {

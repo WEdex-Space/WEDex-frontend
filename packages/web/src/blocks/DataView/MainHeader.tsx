@@ -170,7 +170,6 @@ export default defineComponent({
             <DexSelector
               class="mr-4"
               value={this.DataListParams?.dexs}
-              chainIds={this.DataListParams?.chainIds}
               onChange={value => this.DataListParams && (this.DataListParams.dexs = value)}
             />
           )}
