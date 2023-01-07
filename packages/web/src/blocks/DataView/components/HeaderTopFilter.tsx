@@ -1,6 +1,6 @@
-import { defineComponent, ref, inject } from 'vue'
+import { defineComponent, ref, inject, watch } from 'vue'
 import style from './HeaderTagFilter.module.css'
-import { DataListParamsKey } from '@/pages/index'
+import { DataListParamsKey, DefaultPageSize } from '@/pages/index'
 
 export default defineComponent({
   name: 'HeaderTopFilter',
@@ -27,38 +27,38 @@ export default defineComponent({
       }
     ])
 
+    const currentIndex = ref<number | undefined>()
+
+    // set query filter
+    watch(
+      () => currentIndex.value,
+      () => {
+        if (DataListParams) {
+          if (currentIndex.value !== undefined) {
+            DataListParams.size = tagData.value[currentIndex.value].value
+            DataListParams.page = 1
+          } else {
+            DataListParams.size = DefaultPageSize
+          }
+
+          DataListParams.disablePaginate = currentIndex.value !== undefined
+        }
+      }
+    )
+
     return {
+      currentIndex,
       tagData,
       DataListParams
     }
   },
   render() {
-    const handleClick = (item: any) => {
-      if (this.DataListParams) {
-        if (this.DataListParams.size === item.value) {
-          this.DataListParams.size = 20
-          this.DataListParams.disablePaginate = false
-        } else {
-          this.DataListParams.page = 1
-          this.DataListParams.size = item.value
-          this.DataListParams.disablePaginate = true
-        }
-      }
-    }
-
     return (
       <ul class="flex items-center">
-        {this.tagData.map(item => (
+        {this.tagData.map((item, index: number) => (
           <li
-            class={[
-              style.subNavItem,
-              `${
-                this.DataListParams && this.DataListParams.size === item.value
-                  ? style.subNavItemCur
-                  : ''
-              }`
-            ]}
-            onClick={() => handleClick(item)}
+            class={[style.subNavItem, `${this.currentIndex === index ? style.subNavItemCur : ''}`]}
+            onClick={() => (this.currentIndex = this.currentIndex === index ? undefined : index)}
           >
             {item.name}
           </li>

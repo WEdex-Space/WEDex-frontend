@@ -26,27 +26,32 @@ export const setChannelFilter = (channelType: number, timeInterval: string) => {
 
   switch (channelType) {
     case 1:
+      // Hot pairs
       newRankBy = `pairReportIM.${timeRangeToSocketMap(timeInterval)}.views`
       newRankType = -1
       break
     case 2:
+      // All pairs
       newRankBy = `lastTxAt`
       newRankType = -1
       break
     case 3:
+      // New pairs
       newRankBy = `createdAt`
       newRankType = -1
       break
     case 4:
-      // trend
+      // Trends
       newRankBy = `pairReportIM.${timeRangeToSocketMap(timeInterval)}.priceChangeAbs`
       newRankType = -1
       break
     case 5:
+      // Gainers & Losers
       newRankBy = `pairReportIM.${timeRangeToSocketMap(timeInterval)}.priceChange`
       newRankType = -1
       break
     case 6:
+      // Ranking
       newRankBy = `pairReportIM.${timeRangeToSocketMap(timeInterval)}.volume.total`
       newRankType = -1
       break

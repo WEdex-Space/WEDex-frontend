@@ -4,40 +4,6 @@ import DataView from '@/blocks/DataView'
 import ExtentionBar from '@/blocks/ExtentionBar'
 import { TradingDataItem } from '@/components/TradingDataList'
 
-/**
-  chainId: any[]
-  type: number | null
-  DEXe: any[]
-  tag: string | null
-  sortMethod: string | null
-  page: number
-  size: number
-  disablePaginate: boolean
-  trendType: number | null
-  rankBy: number | null
-  timeRange: string
- * */
-
-/**
-page?: number
-size?: number
-chainIds?: number[]
-dexs?: string[]
-keyword?: string
-liquidityMax?: number
-liquidityMin?: number
-pairAgeMax?: number
-pairAgeMin?: number
-rankBy?: string
-rankType?: number
-timeInterval?: string
-trendMax?: number
-trendMin?: number
-txnsMax?: number
-txnsMin?: number
-volumeMax?: number
-volumeMin?: number
- * */
 export type DataListParamsType = {
   page?: number
   size?: number
@@ -96,6 +62,8 @@ export type DataListParamsKeys =
   | 'channelType'
   | 'disablePaginate'
 
+export const DefaultPageSize = 50
+
 const LandingPage = defineComponent({
   name: 'LandingPage',
   setup(props, ctx) {
@@ -140,12 +108,12 @@ const LandingPage = defineComponent({
         immediate: true
       }
     )
-    // TODO All Pairs filter
+    // Pairslist filter
     const DataListParams = ref<DataListParamsType>({
       chainIds: [],
       dexs: [],
       page: 1,
-      size: 50,
+      size: DefaultPageSize,
       timeInterval: '24h',
       categoires: [],
       channelType: 2,
