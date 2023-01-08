@@ -115,112 +115,26 @@ export const services = {
       ...extract('GET', args, ['ad', 'chainIds', 'keyword'], [])
     })
   },
-  'Pair@get-pair-list'(args: {
-    /**
-     * @description pagination select current page, default: 1
-     */
-    page?: number
-    /**
-     * @description pagination size, default: 20
-     */
-    size?: number
-    /**
-     * @description categoires
-     */
-    categoires?: string[]
-    /**
-     * @description chain ids
-     */
-    chainIds?: number[]
-    /**
-     * @description dex ids
-     */
-    dexs?: string[]
-    /**
-     * @description query keyword
-     */
-    keyword?: string
-    liquidityMax?: number
-    liquidityMin?: number
-    /**
-     * @description hour
-     */
-    pairAgeMax?: number
-    /**
-     * @description hour
-     */
-    pairAgeMin?: number
-    /**
-     * @description pair ids
-     */
-    pairIds?: string[]
-    /**
-     * @description query rank by; field, According to the data structure, splicing field strings with dots
-     */
-    rankBy?: string
-    /**
-     * @description query rank type; 1 asc, -1 desc
-     */
-    rankType?: number
-    /**
-     * @description 1m,5m,15m,1h,4h,6h,24h
-     */
-    timeInterval?: string
-    /**
-     * @description %  100% = 1
-     */
-    trendMax?: number
-    /**
-     * @description %  100% = 1
-     */
-    trendMin?: number
-    txnsBuysMax?: number
-    txnsBuysMin?: number
-    txnsMax?: number
-    txnsMin?: number
-    txnsSellsMax?: number
-    txnsSellsMin?: number
-    volumeMax?: number
-    volumeMin?: number
-  }) {
+  'Pair@get-pair-list'(
+    args: {
+      /**
+       * @description pagination select current page, default: 1
+       */
+      page?: number
+      /**
+       * @description pagination size, default: 20
+       */
+      size?: number
+    } & ApiDocuments.proto_QueryPairRequest
+  ) {
     return requestAdapter<
       ApiDocuments.proto_PageData & {
         list?: ApiDocuments.proto_PairBasicResponse[]
       }
     >({
       url: replacePath('/pairs', args),
-      method: 'GET',
-      ...extract(
-        'GET',
-        args,
-        [
-          'page',
-          'size',
-          'categoires',
-          'chainIds',
-          'dexs',
-          'keyword',
-          'liquidityMax',
-          'liquidityMin',
-          'pairAgeMax',
-          'pairAgeMin',
-          'pairIds',
-          'rankBy',
-          'rankType',
-          'timeInterval',
-          'trendMax',
-          'trendMin',
-          'txnsBuysMax',
-          'txnsBuysMin',
-          'txnsMax',
-          'txnsMin',
-          'txnsSellsMax',
-          'txnsSellsMin',
-          'volumeMax',
-          'volumeMin'
-        ],
-        []
-      )
+      method: 'POST',
+      ...extract('POST', args, ['page', 'size'], [])
     })
   },
   'Pair@get-pair-info'(args: {

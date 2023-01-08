@@ -194,7 +194,6 @@ export default defineComponent({
                 <UFormItem label="DEXes">
                   <DexSelector
                     value={this.localFormData.dexs}
-                    chainIds={this.localFormData.chainIds}
                     onChange={value => setParamValue('dexs', value)}
                   />
                 </UFormItem>
@@ -312,25 +311,25 @@ export default defineComponent({
                   <div class="flex w-full gap-2">
                     <UInputNumber
                       class="flex-1"
-                      value={this.localFormData.trendMin || 0}
+                      value={this.localFormData.priceChangeMin || 0}
                       min={0}
                       max={100}
                       v-slots={{
                         prefix: () => 'Min',
                         suffix: () => '%'
                       }}
-                      onUpdate:value={value => setParamValue('trendMin', value)}
+                      onUpdate:value={value => setParamValue('priceChangeMin', value)}
                     />
                     <UInputNumber
                       class="flex-1"
-                      value={this.localFormData.trendMax || 0}
+                      value={this.localFormData.priceChangeMax || 0}
                       min={0}
                       max={100}
                       v-slots={{
                         prefix: () => 'Max',
                         suffix: () => '%'
                       }}
-                      onUpdate:value={value => setParamValue('trendMax', value)}
+                      onUpdate:value={value => setParamValue('priceChangeMax', value)}
                     />
                   </div>
                 </UFormItem>

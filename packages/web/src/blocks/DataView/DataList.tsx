@@ -3,7 +3,7 @@ import { defineComponent, ref, inject, Ref, onBeforeUnmount, watch } from 'vue'
 import {
   default as TradingDataList,
   TradingDataItem,
-  getControlSlotFilterValue
+  getSortControlValueBySortType
 } from '@/components/TradingDataList'
 import { usePair } from '@/hooks'
 import { DataListParamsKey, DataListParamsType } from '@/pages/index'
@@ -20,19 +20,21 @@ export default defineComponent({
     const DataListParams = inject<DataListParamsType>(DataListParamsKey)
     const currentExpand = inject<Ref<'left' | 'center' | 'right'>>('currentExpand')
 
-    const loopSwitchSortValue = (sortType: string) => {
+    const loopSwitchSortValue = (finnalSortBy: string) => {
       if (DataListParams) {
         const valueArray = ['down', 'up', null]
         const currentValue = valueArray.indexOf(
-          getControlSlotFilterValue(sortType, DataListParams.sortMethod)
+          getSortControlValueBySortType(
+            DataListParams.sortBy === finnalSortBy ? DataListParams.sortType : undefined
+          )
         )
         if (currentValue !== -1) {
           const nextIndex =
             currentValue + 1 >= valueArray.length
               ? currentValue + 1 - valueArray.length
               : currentValue + 1
-          const nextMethod = nextIndex === 2 ? undefined : `${sortType}-${valueArray[nextIndex]}`
-          DataListParams.sortMethod = nextMethod
+          DataListParams.sortBy = nextIndex === 2 ? undefined : finnalSortBy
+          DataListParams.sortType = [-1, 1, undefined][nextIndex]
         }
       }
     }
@@ -43,9 +45,24 @@ export default defineComponent({
 
     const fetchData = async function () {
       loading.value = true
-      const { error, data } = await services['Pair@get-pair-list'](
-        DataListParams as DataListParamsType
-      )
+      const finnalParams = {
+        ...DataListParams,
+        ranks: [
+          {
+            rankBy: DataListParams?.rankBy,
+            rankType: DataListParams?.rankType
+          },
+          ...(DataListParams?.sortBy && DataListParams.sortType
+            ? [
+                {
+                  rankBy: DataListParams.sortBy,
+                  rankType: DataListParams.sortType
+                }
+              ]
+            : [])
+        ]
+      }
+      const { error, data } = await services['Pair@get-pair-list'](finnalParams)
       loading.value = false
 
       if (!error) {

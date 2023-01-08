@@ -15,11 +15,11 @@ export type DataListParamsType = {
   liquidityMin?: number
   pairAgeMax?: number
   pairAgeMin?: number
-  rankBy?: string
-  rankType?: number
   timeInterval?: string
-  trendMax?: number
-  trendMin?: number
+  priceChangeAbsMax?: number
+  priceChangeAbsMin?: number
+  priceChangeMax?: number
+  priceChangeMin?: number
   txnsMax?: number
   txnsMin?: number
   txnsBuysMax?: number
@@ -28,11 +28,18 @@ export type DataListParamsType = {
   txnsSellsMin?: number
   volumeMax?: number
   volumeMin?: number
+  ranks?: {
+    rankBy?: string
+    rankType?: number
+  }[]
   // custom
-  channelType?: number
-  sortMethod?: string
-  trendType?: number
-  disablePaginate?: boolean
+  channelType?: number // main nav type
+  rankBy?: string // main rank label
+  rankType?: number // main rank type
+  sortBy?: string // sub rank label
+  sortType?: number // sub rank type
+  trendType?: number // trand -> trendType
+  disablePaginate?: boolean // show paginate
 }
 export const DataListParamsKey = Symbol() as InjectionKey<DataListParamsType>
 export type DataListParamsKeys =
@@ -46,11 +53,11 @@ export type DataListParamsKeys =
   | 'liquidityMin'
   | 'pairAgeMax'
   | 'pairAgeMin'
-  | 'rankBy'
-  | 'rankType'
   | 'timeInterval'
-  | 'trendMax'
-  | 'trendMin'
+  | 'priceChangeAbsMax'
+  | 'priceChangeAbsMin'
+  | 'priceChangeMax'
+  | 'priceChangeMin'
   | 'txnsMax'
   | 'txnsMin'
   | 'txnsBuysMax'
@@ -59,7 +66,13 @@ export type DataListParamsKeys =
   | 'txnsSellsMin'
   | 'volumeMax'
   | 'volumeMin'
+  | 'ranks'
+  | 'rankBy'
+  | 'rankType'
+  | 'sortBy'
+  | 'sortType'
   | 'channelType'
+  | 'trendType'
   | 'disablePaginate'
 
 export const DefaultPageSize = 50

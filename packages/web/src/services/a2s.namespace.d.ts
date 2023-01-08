@@ -66,6 +66,16 @@ export declare namespace ApiDocuments {
     sells?: number
     total?: number
   }
+  export interface model_SearchRanks extends BasicDto {
+    /**
+     * @description query rank by; field, According to the data structure, splicing field strings with dots
+     */
+    rankBy?: string
+    /**
+     * @description query rank type; 1 asc, -1 desc
+     */
+    rankType?: number
+  }
   export interface proto_ChainResponse extends BasicDto {
     _id?: string
     chainId?: number
@@ -249,6 +259,58 @@ export declare namespace ApiDocuments {
     token1PriceUSD?: number
     transactionFee?: number
     transactionHash?: string
+  }
+  export interface proto_QueryPairRequest extends BasicDto {
+    /**
+     * @description categoires
+     */
+    categoires?: string[]
+    /**
+     * @description chain ids
+     */
+    chainIds?: number[]
+    /**
+     * @description dex ids
+     */
+    dexs?: string[]
+    /**
+     * @description query keyword
+     */
+    keyword?: string
+    liquidityMax?: number
+    liquidityMin?: number
+    /**
+     * @description hour
+     */
+    pairAgeMax?: number
+    /**
+     * @description hour
+     */
+    pairAgeMin?: number
+    /**
+     * @description pair ids
+     */
+    pairIds?: string[]
+    priceChangeAbsMax?: number
+    priceChangeAbsMin?: number
+    priceChangeMax?: number
+    priceChangeMin?: number
+    /**
+     * @description multi-rank
+     */
+    ranks?: ApiDocuments.model_SearchRanks[]
+    /**
+     * @description 1m,5m,15m,1h,4h,6h,24h
+     */
+    timeInterval?: string
+    txnsBuysMax?: number
+    txnsBuysMin?: number
+    txnsMax?: number
+    txnsMin?: number
+    txnsSellsMax?: number
+    txnsSellsMin?: number
+    volumeMax?: number
+    volumeMin?: number
   }
   export interface proto_ShareSetRequest extends BasicDto {
     description: string

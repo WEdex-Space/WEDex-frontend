@@ -124,6 +124,8 @@ export default defineComponent({
       } else if (this.DataListParams && this.DataListParams.timeInterval) {
         const updateParams = {
           ...setChannelFilter(item.value, this.DataListParams.timeInterval),
+          sortType: undefined,
+          sortBy: undefined,
           channelType: item.value
         }
         console.log(item.value, updateParams)
