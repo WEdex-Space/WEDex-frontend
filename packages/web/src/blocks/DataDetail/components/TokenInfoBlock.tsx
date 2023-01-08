@@ -102,23 +102,12 @@ export default defineComponent({
               </div>
               {/* social */}
               <div class="flex mt-2 py-2 gap-2">
-                {this.info.currentToken.socials
-                  .map((social: any) => {
-                    const socialInfo =
-                      this.info.currentToken.socialTools.find(
-                        (item: any) => item._id === social.socialToolId
-                      ) || {}
-                    return {
-                      ...social,
-                      ...socialInfo
-                    }
-                  })
-                  .map((item: any) => (
-                    <a href={item.value} target="_blank" class={socialTagClass}>
-                      <SocialIcon icon={item.name} class={socialIconClass} />
-                      {item.name}
-                    </a>
-                  ))}
+                {this.info.currentToken.socials.map((item: any) => (
+                  <a href={item.value} target="_blank" class={socialTagClass}>
+                    <SocialIcon icon={item.name} class={socialIconClass} />
+                    {item.name || '--'}
+                  </a>
+                ))}
               </div>
             </>
           ) : null}
