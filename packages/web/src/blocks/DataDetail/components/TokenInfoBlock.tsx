@@ -5,9 +5,10 @@ import SocialIcon from '@/components/SocialIcon'
 import { getNetByChainId } from '@/constants'
 import { usePair } from '@/hooks'
 import { formatCurrency } from '@/utils/numberFormat'
+import { socialLinkTransform } from '@/utils/social'
 
 const socialTagClass =
-  'min-w-25 h-6 flex items-center px-2 text-color1 border-1 border-color-border rounded-sm hover:bg-primary-bg hover:text-primary hover:border-primary-bg cursor-pointer'
+  'capitalize min-w-25 h-6 flex items-center px-2 text-color1 border-1 border-color-border rounded-sm hover:bg-primary-bg hover:text-primary hover:border-primary-bg cursor-pointer'
 const socialIconClass = 'w-4 h-4 mr-2'
 
 export default defineComponent({
@@ -101,11 +102,11 @@ export default defineComponent({
                 {this.info.currentToken.description}
               </div>
               {/* social */}
-              <div class="flex mt-2 py-2 gap-2">
-                {this.info.currentToken.socials.map((item: any) => (
-                  <a href={item.value} target="_blank" class={socialTagClass}>
-                    <SocialIcon icon={item.name} class={socialIconClass} />
-                    {item.name || '--'}
+              <div class="flex flex-wrap mt-2 py-2 gap-2">
+                {this.info.currentToken.links.map((item: any) => (
+                  <a href={socialLinkTransform(item.value)} target="_blank" class={socialTagClass}>
+                    <SocialIcon icon={item.key} class={socialIconClass} />
+                    {item.key || '--'}
                   </a>
                 ))}
               </div>

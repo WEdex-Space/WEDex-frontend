@@ -35,14 +35,14 @@ export default defineComponent({
     const asyncComponent = function (type: string) {
       return (
         {
-          Website: <WebsiteFilled class={`w-full h-full`} />,
-          Discord: <DiscordFilled class={`w-full h-full`} />,
-          Facebook: <FacebookFilled class={`w-full h-full`} />,
-          Telegram: <TelegramFilled class={`w-full h-full`} />,
-          Twitter: <TwitterFilled class={`w-full h-full`} />,
-          Email: <EmailFilled class={`w-full h-full`} />,
-          Youtube: <YoutubeFilled class={`w-full h-full`} />,
-          Github: <GithubFilled class={`w-full h-full`} />
+          website: <WebsiteFilled class={`w-full h-full`} />,
+          discord: <DiscordFilled class={`w-full h-full`} />,
+          facebook: <FacebookFilled class={`w-full h-full`} />,
+          telegram: <TelegramFilled class={`w-full h-full`} />,
+          twitter: <TwitterFilled class={`w-full h-full`} />,
+          email: <EmailFilled class={`w-full h-full`} />,
+          youtube: <YoutubeFilled class={`w-full h-full`} />,
+          github: <GithubFilled class={`w-full h-full`} />
         }[type] || <WebsiteFilled class={`w-full h-full`} />
       )
     }
@@ -57,7 +57,7 @@ export default defineComponent({
       <div title={this.address || this.icon}>
         {this.address ? (
           <>
-            {this.icon === 'Discord' && !!validateDiscordUsername(this.address) ? (
+            {this.icon === 'discord' && !!validateDiscordUsername(this.address) ? (
               <span
                 onClick={e => {
                   e.stopPropagation()
@@ -76,7 +76,7 @@ export default defineComponent({
                 </UTooltip>
               </span>
             ) : (
-              <a href={`${this.icon === 'Email' ? 'mailto:' : ''}${this.address}`} target="_blank">
+              <a href={`${this.icon === 'email' ? 'mailto:' : ''}${this.address}`} target="_blank">
                 {this.asyncComponent(this.icon)}
               </a>
             )}
