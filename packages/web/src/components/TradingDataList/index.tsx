@@ -275,15 +275,18 @@ export default defineComponent({
             },
             ...extendColumns,
             {
-              title: customRenderSortTitle('Price', 'pairReportIM.priceW0'),
-              key: 'priceW0',
+              title: customRenderSortTitle(
+                'Price',
+                getFullSortByString('price', DataListParams.timeInterval as string)
+              ),
+              key: 'price',
               align: 'right',
               render: (data: TradingDataItem, index: number) => {
                 return data.price ? `$${formatBigNumber(data.price)}` : '--'
               }
             },
             {
-              title: customRenderSortTitle('5m', getFullSortByString('price', '5m')),
+              title: customRenderSortTitle('5m', getFullSortByString('priceChange', '5m')),
               key: '5m',
               align: 'right',
               render: (data: TradingDataItem, index: number) => {
@@ -297,7 +300,7 @@ export default defineComponent({
               }
             },
             {
-              title: customRenderSortTitle('1h', getFullSortByString('price', '1h')),
+              title: customRenderSortTitle('1h', getFullSortByString('priceChange', '1h')),
               key: '1h',
               align: 'right',
               render: (data: TradingDataItem, index: number) => {
@@ -311,7 +314,7 @@ export default defineComponent({
               }
             },
             {
-              title: customRenderSortTitle('4h', getFullSortByString('price', '4h')),
+              title: customRenderSortTitle('4h', getFullSortByString('priceChange', '4h')),
               key: '4h',
               align: 'right',
               render: (data: TradingDataItem, index: number) => {
@@ -325,7 +328,7 @@ export default defineComponent({
               }
             },
             {
-              title: customRenderSortTitle('6h', getFullSortByString('price', '6h')),
+              title: customRenderSortTitle('6h', getFullSortByString('priceChange', '6h')),
               key: '6h',
               align: 'right',
               render: (data: TradingDataItem, index: number) => {
@@ -339,7 +342,7 @@ export default defineComponent({
               }
             },
             {
-              title: customRenderSortTitle('24h', getFullSortByString('price', '24h')),
+              title: customRenderSortTitle('24h', getFullSortByString('priceChange', '24h')),
               key: '24h',
               align: 'right',
               render: (data: TradingDataItem, index: number) => {

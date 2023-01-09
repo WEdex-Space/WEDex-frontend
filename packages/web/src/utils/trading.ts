@@ -15,7 +15,7 @@ export const updatePairListWithSocketData = (
     if (item.id === newIMData.pairId) {
       return {
         ...item,
-        price: newIMData.priceW0,
+        price: getTimeDataFromSocketValue(newIMData, timeInterval)?.price,
         '5m': getTimeDataFromSocketValue(newIMData, '5m')?.priceChange,
         '1h': getTimeDataFromSocketValue(newIMData, '1h')?.priceChange,
         '4h': getTimeDataFromSocketValue(newIMData, '4h')?.priceChange,
