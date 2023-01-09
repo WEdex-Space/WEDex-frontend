@@ -1,6 +1,113 @@
 import { USelect } from '@wedex/components'
 import { defineComponent, ref, inject } from 'vue'
-import { DataListParamsKey } from '@/pages/index'
+import { DataListParamsKey, DataListParamsType } from '@/pages/index'
+
+export const getTrendTypeUpdate = (trendType: number) => {
+  const updateParams: DataListParamsType = {
+    trendType: trendType,
+    rankBy: undefined,
+    rankType: -1
+  }
+
+  switch (trendType) {
+    case 1:
+      // Price Change
+      // TODO filters
+      updateParams.filters = [
+        {
+          timeInterval: '5m',
+          priceChangeAbsMin: 0.1
+        },
+        {
+          timeInterval: '1h',
+          priceChangeAbsMin: 0.1
+        },
+        {
+          timeInterval: '4h',
+          priceChangeAbsMin: 0.1
+        },
+        {
+          timeInterval: '6h',
+          priceChangeAbsMin: 0.1
+        }
+      ]
+      break
+    case 2:
+      // price up
+      // TODO filters
+      updateParams.filters = [
+        {
+          timeInterval: '5m',
+          priceChangeMin: 0.1
+        },
+        {
+          timeInterval: '1h',
+          priceChangeMin: 0.1
+        },
+        {
+          timeInterval: '4h',
+          priceChangeMin: 0.1
+        },
+        {
+          timeInterval: '6h',
+          priceChangeMin: 0.1
+        }
+      ]
+      break
+    case 3:
+      // price down
+      updateParams.filters = [
+        {
+          timeInterval: '5m',
+          priceChangeMax: -0.1
+        },
+        {
+          timeInterval: '1h',
+          priceChangeMax: -0.1
+        },
+        {
+          timeInterval: '4h',
+          priceChangeMax: -0.1
+        },
+        {
+          timeInterval: '6h',
+          priceChangeMax: -0.1
+        }
+      ]
+      break
+    case 4:
+      // Trading volume
+      // TODO volumnChange
+      updateParams.filters = [
+        {
+          timeInterval: '5m',
+          volumeChangeMin: 0.1
+        },
+        {
+          timeInterval: '1h',
+          volumeChangeMin: 0.1
+        },
+        {
+          timeInterval: '4h',
+          volumeChangeMin: 0.1
+        },
+        {
+          timeInterval: '6h',
+          volumeChangeMin: 0.1
+        }
+      ]
+
+      break
+    case 5:
+      // recently added
+      updateParams.filters = undefined
+      updateParams.rankBy = `createdAt`
+      updateParams.rankType = -1
+      break
+    default:
+  }
+  return updateParams
+}
 
 export default defineComponent({
   name: 'TrendTypeSelector',
@@ -10,13 +117,9 @@ export default defineComponent({
     }
   },
   setup(props, ctx) {
-    const DataListParams = inject(DataListParamsKey)
+    const DataListParams = inject<DataListParamsType>(DataListParamsKey)
 
     const optionsData = ref([
-      {
-        label: 'All Trend Types',
-        value: 0
-      },
       {
         label: 'Price Change',
         value: 1
@@ -39,25 +142,27 @@ export default defineComponent({
       }
     ])
 
-    return {
-      optionsData,
-      DataListParams
-    }
-  },
-  render() {
-    const handleUpdate = (value: any) => {
-      if (this.DataListParams) {
-        this.DataListParams.trendType = value
+    const handleUpdate = (trendType: number) => {
+      if (DataListParams) {
+        const updateParams = getTrendTypeUpdate(trendType)
+        Object.assign(DataListParams, updateParams)
       }
     }
 
+    return {
+      optionsData,
+      DataListParams,
+      handleUpdate
+    }
+  },
+  render() {
     return (
       <USelect
         class={`mr-4 w-40 selectTransparent`}
         size="small"
         value={this.DataListParams?.trendType}
         options={this.optionsData.map(item => Object.assign({ style: 'font-size: 12px' }, item))}
-        onUpdate:value={value => handleUpdate(value)}
+        onUpdate:value={value => this.handleUpdate(value)}
       ></USelect>
     )
   }

@@ -15,53 +15,54 @@ import HeaderTagFilter from './components/HeaderTagFilter'
 import HeaderTopFilter from './components/HeaderTopFilter'
 import TrendTypeSelector from './components/TrendTypeSelector'
 import style from './style.module.css'
+import { getTrendTypeUpdate } from '@/blocks/DataView/components/TrendTypeSelector'
 import { NetworkSelector, DexSelector } from '@/components/MultiSelector'
-import { DataListParamsKey } from '@/pages/index'
+import { DataListParamsKey, DataListParamsType } from '@/pages/index'
 import { timeRangeToSocketMap } from '@/utils/trading'
 
 export const setChannelFilter = (channelType: number, timeInterval: string) => {
   // set channel filter
-  let newRankBy = ''
-  let newRankType = 0
+  let updateParams: DataListParamsType = {
+    rankBy: '',
+    rankType: 0
+  }
 
   switch (channelType) {
     case 1:
       // Hot pairs
-      newRankBy = `pairReportIM.${timeRangeToSocketMap(timeInterval)}.views`
-      newRankType = -1
+      updateParams.rankBy = `pairReportIM.${timeRangeToSocketMap(timeInterval)}.views`
+      updateParams.rankType = -1
       break
     case 2:
       // All pairs
-      newRankBy = `lastTxAt`
-      newRankType = -1
+      updateParams.rankBy = `lastTxAt`
+      updateParams.rankType = -1
       break
     case 3:
       // New pairs
-      newRankBy = `createdAt`
-      newRankType = -1
+      updateParams.rankBy = `createdAt`
+      updateParams.rankType = -1
       break
     case 4:
       // Trends
-      newRankBy = `pairReportIM.${timeRangeToSocketMap(timeInterval)}.priceChangeAbs`
-      newRankType = -1
+      // newRankBy = `pairReportIM.${timeRangeToSocketMap(timeInterval)}.priceChangeAbs`
+      // newRankType = -1
+      updateParams = getTrendTypeUpdate(1)
       break
     case 5:
       // Gainers & Losers
-      newRankBy = `pairReportIM.${timeRangeToSocketMap(timeInterval)}.priceChange`
-      newRankType = -1
+      updateParams.rankBy = `pairReportIM.${timeRangeToSocketMap(timeInterval)}.priceChange`
+      updateParams.rankType = -1
       break
     case 6:
       // Ranking
-      newRankBy = `pairReportIM.${timeRangeToSocketMap(timeInterval)}.volume.total`
-      newRankType = -1
+      updateParams.rankBy = `pairReportIM.${timeRangeToSocketMap(timeInterval)}.volume.total`
+      updateParams.rankType = -1
       break
     default:
   }
 
-  return {
-    rankBy: newRankBy,
-    rankType: newRankType
-  }
+  return updateParams
 }
 
 export default defineComponent({
