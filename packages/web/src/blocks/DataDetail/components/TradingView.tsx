@@ -1,73 +1,39 @@
 import { useElementSize } from '@vueuse/core'
 import { storage } from '@wedex/utils'
-import { defineComponent, ref, onMounted } from 'vue'
+import { defineComponent, ref, onMounted, computed } from 'vue'
 import { DataFeed } from '../datafeed'
-import { fetchSymbols, IApiSymbol } from '../services'
+import { usePair } from '@/hooks'
 import { services } from '@/services'
 import { useGlobalConfigStore } from '@/stores'
-
-const Resolution = {
-  '1': { name: '1m' },
-  '5': { name: '5m' },
-  '30': { name: '30m' },
-  '60': { name: '1h' },
-  '240': { name: '4h' },
-  '360': { name: '6h' },
-  '1440': { name: '24h' }
-}
+import { Resolution } from '@/utils/trading'
 
 export default defineComponent({
   name: 'TradingView',
   props: {
     pairId: {
-      type: String
+      type: String,
+      required: true
     }
   },
-  setup() {
+  setup(props) {
+    const Pair = usePair()
     const globalConfigStore = useGlobalConfigStore()
     const interval = ref<keyof typeof Resolution>('5')
     const container = ref()
     const widget = ref<TradingView.IChartingLibraryWidget>()
     const datafeed = ref<DataFeed>()
-    const info = ref<IApiSymbol>()
-    const infoRef = ref(info)
     const { width } = useElementSize(container)
 
-    const init = async () => {
-      const res = await fetchSymbols()
-      if (!Array.isArray(res)) return
-      const obj: Record<string, IApiSymbol> = {}
-      for (let i = 0; i < res.length; i++) {
-        const item = res[i]
-        if (
-          item.state === 'online' &&
-          item['quote-currency'] === 'usdt' &&
-          !/\d/.test(item['base-currency'])
-        ) {
-          obj[item['base-currency']] = item
-        }
-      }
-      const arr = Object.keys(obj).sort()
-      const newList = arr.map(k => obj[k])
-      const newInfo = newList.find(e => {
-        return e.symbol === 'btcusdt'
-      })
-      info.value = newInfo || newList[0]
-      initDatafeed(newInfo || newList[0])
-      initTradingView(newInfo || newList[0])
-    }
+    const display_name = computed(
+      () => `${Pair.current?.value?.tokenPair.map(e => e.symbol.toLocaleUpperCase()).join('/')}`
+    )
 
-    const initDatafeed = (data?: IApiSymbol) => {
-      const currentInfo = data || info.value
-      if (!currentInfo) return
-      const display_name = `${currentInfo['base-currency'].toLocaleUpperCase()}/${currentInfo[
-        'quote-currency'
-      ].toLocaleUpperCase()}`
+    const initDatafeed = () => {
       const supported_resolutions = Object.keys(Resolution) as never
       datafeed.value = new DataFeed({
         SymbolInfo: {
-          name: display_name,
-          full_name: display_name,
+          name: display_name.value,
+          full_name: display_name.value,
           description: '',
           type: 'stock',
           session: '24x7',
@@ -75,9 +41,9 @@ export default defineComponent({
           listed_exchange: '',
           timezone: 'Asia/Shanghai',
           format: 'price',
-          pricescale: Math.pow(10, currentInfo['price-precision']),
+          pricescale: Math.pow(10, 6), //currentInfo['price-precision']
           minmov: 1,
-          volume_precision: currentInfo['value-precision'],
+          // volume_precision: currentInfo['value-precision'],
           has_intraday: true,
           supported_resolutions: supported_resolutions,
           has_weekly_and_monthly: true,
@@ -98,7 +64,6 @@ export default defineComponent({
       onError: TradingView.ErrorCallback
     ) => {
       const bars: TradingView.Bar[] = []
-      const size = window.innerWidth
       if (!periodParams.firstDataRequest) {
         onResult(bars, { noData: true })
         return
@@ -108,12 +73,12 @@ export default defineComponent({
         interval.value = resolution as keyof typeof Resolution
       }
       const { error, data } = await services['Pair@get-kline-list']({
-        pairId: '63a7d22e900600006d001823',
+        pairId: props.pairId,
         type: Resolution[interval.value].name,
-        size: size > 2000 ? 2000 : size
+        size: Math.min(2000, width.value)
       })
 
-      const res = !error && infoRef.value ? data.list : null
+      const res = !error ? data.list : null
       if (!Array.isArray(res)) {
         onResult(bars, { noData: true })
         return
@@ -136,14 +101,12 @@ export default defineComponent({
       onResult(bars)
     }
 
-    const initTradingView = (data?: IApiSymbol) => {
-      console.log('initTradingView width=', width.value)
+    const initTradingView = () => {
       // remove local theme
       storage('local').remove('tradingview.current_theme.name')
 
-      const currentInfo = data || info.value
       widget.value = new window.TradingView.widget({
-        symbol: currentInfo?.symbol,
+        symbol: display_name.value,
         interval: interval.value as never,
         container: container.value!,
         autosize: true,
@@ -167,7 +130,10 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      setTimeout(init, 0)
+      setTimeout(() => {
+        initDatafeed()
+        initTradingView()
+      }, 100)
     })
 
     return {

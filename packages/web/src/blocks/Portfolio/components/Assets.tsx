@@ -22,7 +22,7 @@ export default defineComponent({
       networksOptions.value = [
         {
           label: 'All Networks',
-          value: null
+          value: undefined
         },
         ...allNetworks
           .filter(item => !!item.shortName)

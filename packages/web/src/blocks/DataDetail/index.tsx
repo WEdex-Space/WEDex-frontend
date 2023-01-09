@@ -103,7 +103,7 @@ export default defineComponent({
         {...this.targetEventProp}
       >
         <DetailHeader />
-        {this.widgetLoaded ? (
+        {this.widgetLoaded && this.currentPair?.id ? (
           <TradingView
             style={{ height: this.tradingViewHeight + 'px' }}
             pairId={this.currentPair?.id}

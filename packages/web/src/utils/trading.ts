@@ -40,15 +40,20 @@ export const getTimeDataFromSocketValue = (value: SocketDataValue, timeInterval?
     : null
 }
 
+export const Resolution: Record<string, any> = {
+  '1': { name: '1m', label: 'last1m' },
+  '5': { name: '5m', label: 'last5m' },
+  '15': { name: '30m', label: 'last15m' },
+  '30': { name: '30m', label: 'last30m' },
+  '60': { name: '1h', label: 'last1h' },
+  '240': { name: '4h', label: 'last4h' },
+  '360': { name: '6h', label: 'last6h' },
+  '1440': { name: '24h', label: 'last24h' }
+}
+
 export const timeRangeToSocketMap = (key: string) => {
-  return {
-    '1m': 'last1m',
-    '5m': 'last5m',
-    '15m': 'last15m',
-    '30m': 'last30m',
-    '1h': 'last1h',
-    '4h': 'last4h',
-    '6h': 'last6h',
-    '24h': 'last24h'
-  }[key.toLowerCase()]
+  const targetKey = Object.keys(Resolution).find(
+    mins => Resolution[mins].name === key.toLowerCase()
+  )
+  return targetKey ? Resolution[targetKey].label : undefined
 }
