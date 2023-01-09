@@ -64,19 +64,16 @@ export default defineComponent({
       }
     }
 
-    watch(
-      () => currentExpand?.value,
-      () => {
-        timer.value && clearTimeout(timer.value)
-        if (currentExpand?.value === 'center') {
-          timer.value = setTimeout(() => {
-            widgetLoaded.value = true
-          }, 300)
-        } else {
-          widgetLoaded.value = false
-        }
+    watch([() => currentExpand?.value, () => Pair.detail.value], () => {
+      timer.value && clearTimeout(timer.value)
+      if (currentExpand?.value === 'center') {
+        timer.value = setTimeout(() => {
+          widgetLoaded.value = true
+        }, 300)
+      } else {
+        widgetLoaded.value = false
       }
-    )
+    })
 
     onMounted(() => {
       tradingViewHeight.value = Math.floor(window.innerHeight * 0.45)
@@ -103,11 +100,8 @@ export default defineComponent({
         {...this.targetEventProp}
       >
         <DetailHeader />
-        {this.widgetLoaded && this.currentPair?.id ? (
-          <TradingView
-            style={{ height: this.tradingViewHeight + 'px' }}
-            pairId={this.currentPair?.id}
-          />
+        {this.widgetLoaded ? (
+          <TradingView style={{ height: this.tradingViewHeight + 'px' }} />
         ) : null}
         {this.widgetLoaded ? (
           <div class="border-color-border border-t-1 flex-1 overflow-hidden relative">

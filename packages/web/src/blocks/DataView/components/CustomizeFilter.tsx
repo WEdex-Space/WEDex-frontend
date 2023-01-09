@@ -43,8 +43,6 @@ export default defineComponent({
     }
 
     const handleSave = () => {
-      console.log('handleSave')
-
       DataListParams &&
         Object.keys(localFormData.value).map(key => {
           DataListParams[key as DataListParamsKeys] = localFormData.value[
@@ -219,6 +217,7 @@ export default defineComponent({
                     </div>
                     <div class="flex gap-2">
                       <UInputNumber
+                        precision={0}
                         class="flex-1"
                         value={
                           (this.localFormData[
@@ -236,6 +235,7 @@ export default defineComponent({
                         }
                       />
                       <UInputNumber
+                        precision={0}
                         class="flex-1"
                         value={
                           (this.localFormData[
@@ -258,6 +258,7 @@ export default defineComponent({
                 <UFormItem label="Liquidity">
                   <div class="flex w-full gap-2">
                     <UInputNumber
+                      precision={2}
                       class="flex-1"
                       value={this.localFormData.liquidityMin || 0}
                       min={0}
@@ -269,6 +270,7 @@ export default defineComponent({
                       onUpdate:value={value => setParamValue('liquidityMin', value)}
                     />
                     <UInputNumber
+                      precision={2}
                       class="flex-1"
                       value={this.localFormData.liquidityMax || 0}
                       min={0}
@@ -284,6 +286,7 @@ export default defineComponent({
                 <UFormItem label="Volume">
                   <div class="flex w-full gap-2">
                     <UInputNumber
+                      precision={2}
                       class="flex-1"
                       value={this.localFormData.volumeMin || 0}
                       min={0}
@@ -295,6 +298,7 @@ export default defineComponent({
                       onUpdate:value={value => setParamValue('volumeMin', value)}
                     />
                     <UInputNumber
+                      precision={2}
                       class="flex-1"
                       value={this.localFormData.volumeMax || 0}
                       min={0}
@@ -310,10 +314,9 @@ export default defineComponent({
                 <UFormItem label="Change">
                   <div class="flex w-full gap-2">
                     <UInputNumber
+                      precision={2}
                       class="flex-1"
                       value={this.localFormData.priceChangeMin || 0}
-                      min={0}
-                      max={100}
                       v-slots={{
                         prefix: () => 'Min',
                         suffix: () => '%'
@@ -321,10 +324,9 @@ export default defineComponent({
                       onUpdate:value={value => setParamValue('priceChangeMin', value)}
                     />
                     <UInputNumber
+                      precision={2}
                       class="flex-1"
                       value={this.localFormData.priceChangeMax || 0}
-                      min={0}
-                      max={100}
                       v-slots={{
                         prefix: () => 'Max',
                         suffix: () => '%'
@@ -336,6 +338,7 @@ export default defineComponent({
                 <UFormItem label="Pair age">
                   <div class="flex w-full gap-2">
                     <UInputNumber
+                      precision={0}
                       class="flex-1"
                       value={this.localFormData.pairAgeMin || 0}
                       min={0}
@@ -346,6 +349,7 @@ export default defineComponent({
                       onUpdate:value={value => setParamValue('pairAgeMin', value)}
                     />
                     <UInputNumber
+                      precision={0}
                       class="flex-1"
                       value={this.localFormData.pairAgeMax || 0}
                       min={0}

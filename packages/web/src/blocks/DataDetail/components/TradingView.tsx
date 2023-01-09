@@ -9,12 +9,6 @@ import { Resolution } from '@/utils/trading'
 
 export default defineComponent({
   name: 'TradingView',
-  props: {
-    pairId: {
-      type: String,
-      required: true
-    }
-  },
   setup(props) {
     const Pair = usePair()
     const globalConfigStore = useGlobalConfigStore()
@@ -64,7 +58,7 @@ export default defineComponent({
       onError: TradingView.ErrorCallback
     ) => {
       const bars: TradingView.Bar[] = []
-      if (!periodParams.firstDataRequest) {
+      if (!periodParams.firstDataRequest || !Pair.current?.value?.id) {
         onResult(bars, { noData: true })
         return
       }
@@ -73,7 +67,7 @@ export default defineComponent({
         interval.value = resolution as keyof typeof Resolution
       }
       const { error, data } = await services['Pair@get-kline-list']({
-        pairId: props.pairId,
+        pairId: Pair.current.value.id,
         type: Resolution[interval.value].name,
         size: Math.min(2000, width.value)
       })

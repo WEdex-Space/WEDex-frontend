@@ -1,6 +1,6 @@
 import { USelect } from '@wedex/components'
 import { CustomOutlined, ExportOutlined } from '@wedex/icons'
-import { defineComponent, ref, inject, Ref, watch, onBeforeUnmount } from 'vue'
+import { defineComponent, ref, inject, Ref, watch, onBeforeUnmount, computed } from 'vue'
 import CustomizeFilter from './components/CustomizeFilter'
 import { setChannelFilter } from '@/blocks/DataView/MainHeader'
 import { DataListParamsKey } from '@/pages/index'
@@ -71,12 +71,55 @@ export default defineComponent({
       SocketStore.unsubscribe('list-stats')
     })
 
+    const customeConditions = computed(() => {
+      let result = 0
+      if (DataListParams?.chainIds?.length) {
+        result++
+      }
+      if (DataListParams?.dexs?.length) {
+        result++
+      }
+      if (DataListParams?.txnsMax || DataListParams?.txnsBuysMax || DataListParams?.txnsSellsMax) {
+        result++
+      }
+      if (DataListParams?.txnsMin || DataListParams?.txnsBuysMin || DataListParams?.txnsSellsMin) {
+        result++
+      }
+      if (DataListParams?.liquidityMin) {
+        result++
+      }
+      if (DataListParams?.liquidityMax) {
+        result++
+      }
+      if (DataListParams?.volumeMin) {
+        result++
+      }
+      if (DataListParams?.volumeMax) {
+        result++
+      }
+      if (DataListParams?.priceChangeMin) {
+        result++
+      }
+      if (DataListParams?.priceChangeMax) {
+        result++
+      }
+      if (DataListParams?.pairAgeMin) {
+        result++
+      }
+      if (DataListParams?.pairAgeMax) {
+        result++
+      }
+
+      return result
+    })
+
     return {
       DataListParams,
       currentExpand,
       formData,
       rangeData,
-      stats
+      stats,
+      customeConditions
     }
   },
   render() {
@@ -149,6 +192,11 @@ export default defineComponent({
                   class={`${footerCellIconClass} ${isVisible ? 'text-primary' : ''}`}
                 />
                 Customize
+                {this.customeConditions ? (
+                  <span class="rounded-full bg-color3 text-xs text-center ml-1 min-w-3 px-[2px] text-bg2 leading-3 inline-block">
+                    {this.customeConditions}
+                  </span>
+                ) : null}
               </div>
             )
           }}
