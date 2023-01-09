@@ -12,8 +12,8 @@ export const getTrendTypeUpdate = (trendType: number) => {
   switch (trendType) {
     case 1:
       // Price Change
-      // TODO filters
-      updateParams.filters = [
+      // TODO or
+      updateParams.or = [
         {
           timeInterval: '5m',
           priceChangeAbsMin: 0.1
@@ -34,8 +34,8 @@ export const getTrendTypeUpdate = (trendType: number) => {
       break
     case 2:
       // price up
-      // TODO filters
-      updateParams.filters = [
+      // TODO or
+      updateParams.or = [
         {
           timeInterval: '5m',
           priceChangeMin: 0.1
@@ -56,7 +56,7 @@ export const getTrendTypeUpdate = (trendType: number) => {
       break
     case 3:
       // price down
-      updateParams.filters = [
+      updateParams.or = [
         {
           timeInterval: '5m',
           priceChangeMax: -0.1
@@ -78,7 +78,7 @@ export const getTrendTypeUpdate = (trendType: number) => {
     case 4:
       // Trading volume
       // TODO volumnChange
-      updateParams.filters = [
+      updateParams.or = [
         {
           timeInterval: '5m',
           volumeChangeMin: 0.1
@@ -100,7 +100,7 @@ export const getTrendTypeUpdate = (trendType: number) => {
       break
     case 5:
       // recently added
-      updateParams.filters = undefined
+      updateParams.or = undefined
       updateParams.rankBy = `createdAt`
       updateParams.rankType = -1
       break

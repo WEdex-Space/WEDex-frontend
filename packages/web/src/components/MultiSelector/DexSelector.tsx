@@ -14,6 +14,9 @@ export default defineComponent({
   props: {
     value: {
       type: Array as PropType<MultiSelectorValueType[]>
+    },
+    showItems: {
+      type: Number
     }
   },
   emits: ['change'],
@@ -64,7 +67,7 @@ export default defineComponent({
     const options = computed(() => [
       {
         label: 'All DEXes',
-        value: null
+        value: undefined
       },
       ...list.value.map(item => {
         return {

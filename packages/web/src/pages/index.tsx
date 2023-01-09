@@ -32,6 +32,23 @@ export type DataListParamsType = {
     rankBy?: string
     rankType?: number
   }[]
+  or?: {
+    priceChangeAbsMax?: number
+    priceChangeAbsMin?: number
+    priceChangeMax?: number
+    priceChangeMin?: number
+    timeInterval?: string
+    txnsBuysMax?: number
+    txnsBuysMin?: number
+    txnsMax?: number
+    txnsMin?: number
+    txnsSellsMax?: number
+    txnsSellsMin?: number
+    volumeChangeMax?: number
+    volumeChangeMin?: number
+    volumeMax?: number
+    volumeMin?: number
+  }[]
   // custom
   channelType?: number // main nav type
   rankBy?: string // main rank label
@@ -67,6 +84,7 @@ export type DataListParamsKeys =
   | 'volumeMax'
   | 'volumeMin'
   | 'ranks'
+  | 'or'
   | 'rankBy'
   | 'rankType'
   | 'sortBy'

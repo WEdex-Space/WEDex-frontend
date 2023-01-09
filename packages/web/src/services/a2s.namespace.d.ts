@@ -60,11 +60,32 @@ export declare namespace ApiDocuments {
     txns?: ApiDocuments.model_PairReportIMTimeDataInfo
     views?: number
     volume?: ApiDocuments.model_PairReportIMTimeDataInfo
+    volumeChange?: ApiDocuments.model_PairReportIMTimeDataInfo
   }
   export interface model_PairReportIMTimeDataInfo extends BasicDto {
     buys?: number
     sells?: number
     total?: number
+  }
+  export interface model_SearchPairLastTime extends BasicDto {
+    priceChangeAbsMax?: number
+    priceChangeAbsMin?: number
+    priceChangeMax?: number
+    priceChangeMin?: number
+    /**
+     * @description 1m,5m,15m,1h,4h,6h,24h
+     */
+    timeInterval?: string
+    txnsBuysMax?: number
+    txnsBuysMin?: number
+    txnsMax?: number
+    txnsMin?: number
+    txnsSellsMax?: number
+    txnsSellsMin?: number
+    volumeChangeMax?: number
+    volumeChangeMin?: number
+    volumeMax?: number
+    volumeMin?: number
   }
   export interface model_SearchRanks extends BasicDto {
     /**
@@ -188,7 +209,7 @@ export declare namespace ApiDocuments {
     _id?: string
     chainId?: number
     dexId?: string
-    happenAt?: string
+    happenAt?: number
     liquidity?: number
     makers?: number
     makersBuys?: number
@@ -280,6 +301,10 @@ export declare namespace ApiDocuments {
     liquidityMax?: number
     liquidityMin?: number
     /**
+     * @description or filters
+     */
+    or?: ApiDocuments.model_SearchPairLastTime[]
+    /**
      * @description hour
      */
     pairAgeMax?: number
@@ -309,6 +334,8 @@ export declare namespace ApiDocuments {
     txnsMin?: number
     txnsSellsMax?: number
     txnsSellsMin?: number
+    volumeChangeMax?: number
+    volumeChangeMin?: number
     volumeMax?: number
     volumeMin?: number
   }

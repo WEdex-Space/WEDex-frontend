@@ -66,33 +66,35 @@ export default defineComponent({
       loading.value = false
 
       if (!error) {
-        dataList.value = updatePairListWithSocketData(
-          data.list.map((item: ApiDocuments.proto_PairBasicResponse, index: number) => {
-            const dexSort: any[] = [item.tokenW0Info, item.tokenW1Info]
-            const pairs = [item.tokenW0 || '', item.tokenW1 || ''].map(
-              (contractAddress: string) => {
-                const targetIndex = dexSort.findIndex(
-                  item => item.contractAddress === contractAddress
+        dataList.value = Array.isArray(data.list)
+          ? updatePairListWithSocketData(
+              data.list.map((item: ApiDocuments.proto_PairBasicResponse, index: number) => {
+                const dexSort: any[] = [item.tokenW0Info, item.tokenW1Info]
+                const pairs = [item.tokenW0 || '', item.tokenW1 || ''].map(
+                  (contractAddress: string) => {
+                    const targetIndex = dexSort.findIndex(
+                      item => item.contractAddress === contractAddress
+                    )
+                    return targetIndex !== -1 ? dexSort[targetIndex] : {}
+                  }
                 )
-                return targetIndex !== -1 ? dexSort[targetIndex] : {}
-              }
+                return {
+                  pairReportIM: item.pairReportIM,
+                  dex: item.dex,
+                  network: item.network,
+                  id: item._id || '--',
+                  index,
+                  tokenPair: pairs,
+                  Liquidity: item.pairReportIM?.liquidity,
+                  FDV: item.pairReportIM?.fdv,
+                  MKTCap: item.pairReportIM?.mktCap,
+                  createdAt: item.createdAt ? item.createdAt * 1000 : 0
+                }
+              }),
+              undefined,
+              DataListParams?.timeInterval
             )
-            return {
-              pairReportIM: item.pairReportIM,
-              dex: item.dex,
-              network: item.network,
-              id: item._id || '--',
-              index,
-              tokenPair: pairs,
-              Liquidity: item.pairReportIM?.liquidity,
-              FDV: item.pairReportIM?.fdv,
-              MKTCap: item.pairReportIM?.mktCap,
-              createdAt: item.createdAt ? item.createdAt * 1000 : 0
-            }
-          }),
-          undefined,
-          DataListParams?.timeInterval
-        )
+          : []
 
         totalPage.value = data.total
       }

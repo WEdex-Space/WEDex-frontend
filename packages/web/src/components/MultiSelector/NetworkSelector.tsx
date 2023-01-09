@@ -24,7 +24,7 @@ export default defineComponent({
     const networksOptions = computed<MultiSelectorOptionType[]>(() => [
       {
         label: 'All Networks',
-        value: null
+        value: undefined
       },
       ...networkHook.list.value.map(item => {
         return {

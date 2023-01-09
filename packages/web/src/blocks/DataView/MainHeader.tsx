@@ -124,10 +124,11 @@ export default defineComponent({
         window.open(item.link)
       } else if (this.DataListParams && this.DataListParams.timeInterval) {
         const updateParams = {
-          ...setChannelFilter(item.value, this.DataListParams.timeInterval),
+          or: undefined,
           sortType: undefined,
           sortBy: undefined,
-          channelType: item.value
+          channelType: item.value,
+          ...setChannelFilter(item.value, this.DataListParams.timeInterval)
         }
         console.log(item.value, updateParams)
         Object.assign(this.DataListParams, updateParams)

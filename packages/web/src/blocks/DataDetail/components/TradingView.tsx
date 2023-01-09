@@ -2,19 +2,18 @@ import { useElementSize } from '@vueuse/core'
 import { storage } from '@wedex/utils'
 import { defineComponent, ref, onMounted } from 'vue'
 import { DataFeed } from '../datafeed'
-import { fetchKLine, fetchSymbols, IApiSymbol } from '../services'
+import { fetchSymbols, IApiSymbol } from '../services'
+import { services } from '@/services'
 import { useGlobalConfigStore } from '@/stores'
 
 const Resolution = {
-  '1': { server: '1min', name: '1m' },
-  '5': { server: '5min', name: '5m' },
-  '30': { server: '30min', name: '30m' },
-  '60': { server: '60min', name: '1h' },
-  '240': { server: '4hour', name: '4h' },
-  '360': { server: '6hour', name: '6h' },
-  '1440': { server: '1day', name: '1D' },
-  '10080': { server: '1week', name: '1W' },
-  '302400': { server: '1mon', name: '1M' }
+  '1': { name: '1m' },
+  '5': { name: '5m' },
+  '30': { name: '30m' },
+  '60': { name: '1h' },
+  '240': { name: '4h' },
+  '360': { name: '6h' },
+  '1440': { name: '24h' }
 }
 
 export default defineComponent({
@@ -108,13 +107,13 @@ export default defineComponent({
         // unsubscribeKLine();
         interval.value = resolution as keyof typeof Resolution
       }
-      const res = infoRef.value
-        ? await fetchKLine(
-            infoRef.value?.symbol,
-            Resolution[interval.value].server,
-            size > 2000 ? 2000 : size
-          )
-        : null
+      const { error, data } = await services['Pair@get-kline-list']({
+        pairId: '63a7d22e900600006d001823',
+        type: Resolution[interval.value].name,
+        size: size > 2000 ? 2000 : size
+      })
+
+      const res = !error && infoRef.value ? data.list : null
       if (!Array.isArray(res)) {
         onResult(bars, { noData: true })
         return
@@ -122,12 +121,12 @@ export default defineComponent({
       for (let i = 0; i < res.length; i++) {
         const item = res[i]
         bars.push({
-          time: item.id * 1000,
-          open: item.open,
-          high: item.high,
-          low: item.low,
-          close: item.close,
-          volume: item.vol
+          time: item.happenAt * 1000,
+          open: item.priceStart,
+          high: item.priceMax,
+          low: item.priceMin,
+          close: item.priceEnd,
+          volume: item.volume
         })
       }
       bars.sort((l, r) => (l.time > r.time ? 1 : -1))

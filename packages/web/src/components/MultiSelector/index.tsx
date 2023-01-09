@@ -3,7 +3,7 @@ import { ArrowDownOutlined } from '@wedex/icons'
 import { defineComponent, PropType, ref, computed, watch } from 'vue'
 import { useGlobalConfigStore } from '@/stores'
 
-export type MultiSelectorValueType = string | number | null
+export type MultiSelectorValueType = number | string
 export type MultiSelectorOptionType = {
   label: string
   value?: MultiSelectorValueType
@@ -41,7 +41,7 @@ export default defineComponent({
   setup(props, ctx) {
     const globalConfigStore = useGlobalConfigStore()
     const tipRef = ref()
-    const optionSelectedMap = ref<{ [key: string | number]: any }>({})
+    const optionSelectedMap = ref<{ [key: MultiSelectorValueType]: any }>({})
     const searchKeywords = ref('')
 
     const optionSelect = computed(() => {
@@ -71,7 +71,7 @@ export default defineComponent({
 
     const syncPropValue = () => {
       if (props.value?.length) {
-        const result: { [key: string | number]: any } = {}
+        const result: { [key: MultiSelectorValueType]: any } = {}
         props.value.map(key => {
           const targetIndex = props.options.findIndex(opt => String(opt.value) === String(key))
           if (key !== null && targetIndex !== -1) {
