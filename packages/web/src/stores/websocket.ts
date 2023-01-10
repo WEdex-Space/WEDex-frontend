@@ -66,12 +66,15 @@ export const useSocketStore = defineStore('websocket', {
                 // trigger liseners
                 const listenersKey = Object.keys(this.listeners)
                 listenersKey.forEach((key: string) => {
-                  if (key === received_msg.data.type) {
+                  if (
+                    key.split('__').length === 2 &&
+                    key.split('__')[1] === received_msg.data.type
+                  ) {
                     this.listeners[key].map(fun => fun(received_msg))
                   } else if (
-                    key.split('__').length === 2 &&
-                    key.split('__')[0] === received_msg.data?.type &&
-                    key.split('__')[1] === received_msg.data?.value?.pairId
+                    key.split('__').length === 3 &&
+                    key.split('__')[1] === received_msg.data?.type &&
+                    key.split('__')[2] === received_msg.data?.value?.pairId
                   ) {
                     this.listeners[key].map(fun => fun(received_msg))
                   }
@@ -107,16 +110,22 @@ export const useSocketStore = defineStore('websocket', {
         topic: 'ping'
       })
     },
-    addLisener(key: string, callback?: (msg: SocketMsgType) => void, suffix?: string) {
+    addLisener(
+      key: string,
+      callback?: (msg: SocketMsgType) => void,
+      suffix?: string,
+      namespace?: string
+    ) {
       if (this.SOCKET) {
         if (key && typeof callback === 'function') {
+          const finnalKey = `${namespace || 'main'}__${key}`
           if (suffix) {
-            this.listeners[key + '__' + suffix] = [callback]
+            this.listeners[finnalKey + '__' + suffix] = [callback]
           } else {
-            if (!Array.isArray(this.listeners[key])) {
-              this.listeners[key] = []
+            if (!Array.isArray(this.listeners[finnalKey])) {
+              this.listeners[finnalKey] = []
             }
-            this.listeners[key].push(callback)
+            this.listeners[finnalKey].push(callback)
           }
         }
         console.warn('addLisener:', key, suffix, JSON.stringify(this.listeners))
@@ -124,12 +133,13 @@ export const useSocketStore = defineStore('websocket', {
         console.warn('The socket is not ready to receive messages', this.SOCKET.readyState)
       }
     },
-    removeLisener(key: string, suffix?: string) {
+    removeLisener(key: string, suffix?: string, namespace?: string) {
       if (key) {
+        const finnalKey = `${namespace || 'main'}__${key}`
         if (suffix) {
-          delete this.listeners[key + '__' + suffix]
+          delete this.listeners[finnalKey + '__' + suffix]
         } else {
-          delete this.listeners[key]
+          delete this.listeners[finnalKey]
         }
         console.warn('removeLisener:', this.listeners)
       }
@@ -153,26 +163,25 @@ export const useSocketStore = defineStore('websocket', {
       type: string,
       value?: any,
       callback?: (msg: SocketMsgType) => void,
-      target_id?: number
+      namespace?: string
     ) {
       if (Array.isArray(value)) {
         value.map(val => {
-          this.addLisener(type, callback, val)
+          this.addLisener(type, callback, val, namespace)
         })
       } else {
-        this.addLisener(type, callback, value)
+        this.addLisener(type, callback, value, namespace)
       }
 
       this.send({
         topic: 'subscribe',
         data: {
           type,
-          value,
-          target_id
+          value
         }
       })
     },
-    unsubscribe(type: string, value?: any) {
+    unsubscribe(type: string, value?: any, namespace?: string) {
       this.send({
         topic: 'unsubscribe',
         data: {
@@ -182,10 +191,10 @@ export const useSocketStore = defineStore('websocket', {
       })
       if (Array.isArray(value) && value.length) {
         value.map(val => {
-          this.removeLisener(type, val)
+          this.removeLisener(type, val, namespace)
         })
       } else {
-        this.removeLisener(type, value)
+        this.removeLisener(type, value, namespace)
       }
     }
   }
