@@ -1,3 +1,4 @@
+import { useTimeAgo } from '@vueuse/core'
 import { UInput } from '@wedex/components'
 import {
   PlusOutlined,
@@ -6,69 +7,52 @@ import {
   DeleteOutlined,
   EditOutlined
 } from '@wedex/icons'
+import { pluralize } from 'inflected'
 import { defineComponent, ref, PropType } from 'vue'
 import Draggable from 'vuedraggable'
-import { watchListType } from '@/blocks/WatchList/index'
+import { watchListItem } from '@/blocks/WatchList/index'
 
 export default defineComponent({
   name: 'ListEdit',
   props: {
     list: {
-      type: Array as PropType<watchListType[]>,
-      default() {
-        return [
-          {
-            name: 'Mainlist',
-            value: ''
-          }
-        ]
-      }
+      type: Array as PropType<watchListItem[]>,
+      default: () => []
     }
   },
-  emits: ['change', 'cancel'],
+  emits: ['create', 'edit', 'delete', 'sort', 'cancel'],
   setup(props, ctx) {
-    const editList = ref<watchListType[]>([...props.list])
+    // create list
+    const createList = ref<watchListItem[]>([])
 
     const editIndex = ref<number | null>(null)
 
-    const handleEdit = (item: watchListType) => {
-      console.log('handleEdit', item)
-    }
-
-    const handleRemove = (item: watchListType) => {
+    const handleRemove = (item: watchListItem) => {
       console.log('handleRemove', item)
+      ctx.emit('delete', item)
     }
 
-    const handleSave = (item: watchListType) => {
+    const handleSave = (item: watchListItem) => {
       console.log('handleSave', item)
-      // TODO send put request
-      if (!item.value) {
+      if (!item.id) {
         // create
+        ctx.emit('create', item)
         createList.value.splice(0, 1)
       } else {
         // edit
+        ctx.emit('edit', item)
         editIndex.value = null
       }
     }
 
-    const handleCancelEdit = (item: watchListType) => {
+    const handleCancelEdit = (item: watchListItem) => {
       console.log('handleCancelEdit')
-      if (!item.value) {
-        // create
-        createList.value.splice(0, 1)
-      } else {
-        // edit
-        editIndex.value = null
-      }
+      createList.value.splice(0, 1)
+      editIndex.value = null
     }
-
-    // create list
-    const createList = ref<watchListType[]>([])
 
     return {
       editIndex,
-      editList,
-      handleEdit,
       handleRemove,
       handleSave,
       handleCancelEdit,
@@ -87,11 +71,12 @@ export default defineComponent({
         </div>
 
         <Draggable
-          list={this.editList}
+          list={this.list}
           itemKey="value"
           tag="ul"
           class="text-xs"
           handle=".my-handle"
+          onSort={() => this.$emit('sort', this.list)}
           v-slots={{
             item: ({ element, index }: { element: any; index: number }) => (
               <li class={`h-12 border-b-1 border-color-border flex items-center`}>
@@ -103,9 +88,9 @@ export default defineComponent({
                     <UInput
                       placeholder="List name"
                       size="tiny"
-                      value={element.name}
+                      value={element.title}
                       autofocus
-                      on-update:value={(value: string) => (element.name = value)}
+                      on-update:value={(value: string) => (element.title = value)}
                       onKeyup={(e: any) =>
                         e.key === 'Enter'
                           ? this.handleSave(element)
@@ -118,8 +103,11 @@ export default defineComponent({
                 ) : (
                   <>
                     <div class="flex-1 overflow-hidden">
-                      <div class="font-700 text-color1">{element.name}</div>
-                      <div class="text-color3">{index} pair, updated 25 minutes ago</div>
+                      <div class="font-700 text-color1">{element.title}</div>
+                      <div class="text-color3">
+                        {element.list?.length} {element.list?.length ? pluralize('pair') : 'pair'},
+                        updated {useTimeAgo(element.updateTime).value}
+                      </div>
                     </div>
                     <span
                       class="cursor-pointer px-2 text-color3 leading-0 hover:text-color2"
@@ -152,9 +140,9 @@ export default defineComponent({
                 <UInput
                   placeholder="List name"
                   size="tiny"
-                  value={item.name}
+                  value={item.title}
                   autofocus
-                  on-update:value={(value: string) => (item.name = value)}
+                  on-update:value={(value: string) => (item.title = value)}
                   onKeyup={(e: any) =>
                     e.key === 'Enter'
                       ? this.handleSave(item)
@@ -162,6 +150,7 @@ export default defineComponent({
                       ? this.handleCancelEdit(item)
                       : null
                   }
+                  onBlur={() => !item.title && this.handleCancelEdit(item)}
                 />
               </div>
             </li>
@@ -172,7 +161,10 @@ export default defineComponent({
           <div class="flex-1"></div>
           <div
             class={`flex items-center ${this.createList.length ? 'cursor-not-allowed' : ''}`}
-            onClick={() => !this.createList.length && this.createList.push({ name: '', value: '' })}
+            onClick={() =>
+              !this.createList.length &&
+              this.createList.push({ title: '', index: this.list.length })
+            }
           >
             <PlusOutlined class="h-3 mr-1 w-3" />
             Add new list

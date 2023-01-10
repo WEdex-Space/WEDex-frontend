@@ -103,7 +103,7 @@ export default defineComponent({
     watch(
       () => dataList.value,
       (newList, prevList) => {
-        console.warn('watch dataList', newList, prevList)
+        console.warn('pairList', newList, prevList)
         // socket subscribe
         SocketStore.init().then(socket => {
           const newPairs = newList.filter(

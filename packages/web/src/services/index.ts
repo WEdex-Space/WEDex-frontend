@@ -34,6 +34,20 @@ export const services = {
       ...extract('GET', args, [], [])
     })
   },
+  'CustomFunction@sync-custom-func-items'(
+    args: {
+      /**
+       * @description custom-func
+       */
+      function: string
+    } & ApiDocuments.proto_SyncListRequest
+  ) {
+    return requestAdapter<ApiDocuments.proto_MessageResponse>({
+      url: replacePath('/customs/sync/{function}', args),
+      method: 'POST',
+      ...extract('POST', args, [], ['function'])
+    })
+  },
   'CustomFunction@get-custom-func-list'(
     args: {
       /**
@@ -61,18 +75,36 @@ export const services = {
       ...extract('GET', args, ['rankBy', 'rankType'], ['function'])
     })
   },
-  'CustomFunction@save-custom-func'(
+  'CustomFunction@create-custom-func'(
     args: {
       /**
        * @description custom-func
        */
       function: string
-    } & {}
+    } & ApiDocuments.proto_SyncItemRequest
   ) {
-    return requestAdapter<ApiDocuments.proto_MessageResponse>({
+    return requestAdapter<ApiDocuments.proto_IDResponse>({
       url: replacePath('/customs/{function}', args),
       method: 'POST',
       ...extract('POST', args, [], ['function'])
+    })
+  },
+  'CustomFunction@update-custom-func'(
+    args: {
+      /**
+       * @description custom-func
+       */
+      function: string
+      /**
+       * @description custom-func item id
+       */
+      id: string
+    } & ApiDocuments.proto_SyncItemRequest
+  ) {
+    return requestAdapter<ApiDocuments.proto_IDResponse>({
+      url: replacePath('/customs/{function}/{id}', args),
+      method: 'PUT',
+      ...extract('PUT', args, [], ['function', 'id'])
     })
   },
   'CustomFunction@delete-custom-func-item'(args: {

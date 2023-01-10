@@ -182,18 +182,36 @@ export const useSocketStore = defineStore('websocket', {
       })
     },
     unsubscribe(type: string, value?: any, namespace?: string) {
-      this.send({
-        topic: 'unsubscribe',
-        data: {
-          type,
-          value
-        }
-      })
       if (Array.isArray(value) && value.length) {
         value.map(val => {
-          this.removeLisener(type, val, namespace)
+          // if the data [type&val] is in using, then no need to unsubscribe
+          const isInUse = Object.keys(this.listeners).find((key: string) => {
+            return (
+              key.split('__').length === 3 &&
+              key.split('__')[0] !== (namespace || 'main') &&
+              key.split('__')[1] === type &&
+              key.split('__')[2] === val
+            )
+          })
+          if (!isInUse) {
+            this.send({
+              topic: 'unsubscribe',
+              data: {
+                type,
+                value
+              }
+            })
+            this.removeLisener(type, val, namespace)
+          }
         })
       } else {
+        this.send({
+          topic: 'unsubscribe',
+          data: {
+            type,
+            value
+          }
+        })
         this.removeLisener(type, value, namespace)
       }
     }

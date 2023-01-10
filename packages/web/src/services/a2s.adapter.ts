@@ -14,7 +14,7 @@ function getHeaders(): any {
   const userStore = useUserStore()
   return userStore.token
     ? {
-        'X-COMUNION-AUTHORIZATION': userStore.token
+        Authorization: userStore.token
       }
     : {}
 }

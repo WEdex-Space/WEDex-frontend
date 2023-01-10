@@ -120,6 +120,12 @@ export declare namespace ApiDocuments {
     router01?: string
     router02?: string
   }
+  export interface proto_IDResponse extends BasicDto {
+    /**
+     * @description ID
+     */
+    _id?: string
+  }
   export interface proto_JwtAuthorizationResponse extends BasicDto {
     /**
      * @description Token
@@ -347,6 +353,18 @@ export declare namespace ApiDocuments {
   }
   export interface proto_ShareSetResponse extends BasicDto {
     shareCode: string
+  }
+  export interface proto_SyncItemRequest extends BasicDto {
+    /**
+     * @description item
+     */
+    item?: {}
+  }
+  export interface proto_SyncListRequest extends BasicDto {
+    /**
+     * @description list
+     */
+    list?: {}[]
   }
   export interface proto_UploadResponse extends BasicDto {
     url: string

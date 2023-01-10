@@ -1,9 +1,10 @@
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { useUserStore, useWalletStore } from '@/stores'
 
 export default defineComponent({
   name: 'SyncLink',
-  setup(props) {
+  emits: ['linkState'],
+  setup(props, ctx) {
     const userStore = useUserStore()
     const walletStore = useWalletStore()
     const loading = ref(false)
@@ -17,6 +18,16 @@ export default defineComponent({
       }
       loading.value = false
     }
+
+    watch(
+      () => userStore.logged,
+      value => {
+        ctx.emit('linkState', value)
+      },
+      {
+        immediate: true
+      }
+    )
 
     return {
       loading,

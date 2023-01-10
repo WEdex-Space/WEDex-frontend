@@ -3,55 +3,36 @@ import { PlusOutlined } from '@wedex/icons'
 import { defineComponent, ref, PropType } from 'vue'
 import style from '@/blocks/DataView/components/HeaderTagFilter.module.css'
 
-import { watchListType } from '@/blocks/WatchList/index'
+import { watchListItem } from '@/blocks/WatchList/index'
 
 export default defineComponent({
   name: 'HeaderTagFilter',
   props: {
-    value: {
-      type: String,
-      default: ''
+    current: {
+      type: Number
     },
     list: {
-      type: Array as PropType<any[]>,
-      default() {
-        return [
-          {
-            name: 'Mainlist',
-            value: ''
-          }
-        ]
-      }
+      type: Array as PropType<watchListItem[]>,
+      default: () => []
     }
   },
-  emits: ['change'],
+  emits: ['indexChange', 'createList'],
   setup(props, ctx) {
-    const currentValue = ref(props.list[0].value)
-
-    const handleClick = (value: any) => {
-      currentValue.value = value
-      ctx.emit('change', value)
-    }
-
     // create list
-    const createList = ref<watchListType[]>([])
+    const createList = ref<watchListItem[]>([])
 
-    const handleSave = (item: watchListType) => {
-      console.log('handleSave', item)
-      // TODO send put request
-      createList.value.splice(0, 1)
+    const handleSave = (item: watchListItem) => {
+      ctx.emit('createList', item)
+      handleCancelEdit(item)
     }
 
-    const handleCancelEdit = (item: watchListType) => {
-      console.log('handleCancelEdit')
+    const handleCancelEdit = (item: watchListItem) => {
       createList.value.splice(0, 1)
     }
 
     const listWrapRef = ref()
 
     return {
-      currentValue,
-      handleClick,
       createList,
       handleSave,
       handleCancelEdit,
@@ -60,21 +41,18 @@ export default defineComponent({
   },
   render() {
     return (
-      <div class="flex py-2 px-1 items-center">
+      <div class="flex px-1 items-center">
         <div class="flex-1 overflow-hidden">
           <ul
-            class="whitespace-nowrap overflow-x-scroll overflow-y-hidden"
+            class="py-2 whitespace-nowrap overflow-x-scroll  overflow-y-hidden"
             ref={ref => (this.listWrapRef = ref)}
           >
-            {this.list.map(item => (
+            {this.list.map((item, index) => (
               <li
-                class={[
-                  style.subNavItem,
-                  `${this.currentValue === item.value ? style.subNavItemCur : ''}`
-                ]}
-                onClick={() => this.handleClick(item.value)}
+                class={[style.subNavItem, `${this.current === index ? style.subNavItemCur : ''}`]}
+                onClick={() => this.$emit('indexChange', index)}
               >
-                {item.name}
+                {item.title}
               </li>
             ))}
             {this.createList.map(item => (
@@ -82,9 +60,9 @@ export default defineComponent({
                 <UInput
                   placeholder="List name"
                   size="tiny"
-                  value={item.name}
+                  value={item.title}
                   autofocus
-                  on-update:value={(value: string) => (item.name = value)}
+                  on-update:value={(value: string) => (item.title = value)}
                   onKeyup={(e: any) =>
                     e.key === 'Enter'
                       ? this.handleSave(item)
@@ -92,6 +70,7 @@ export default defineComponent({
                       ? this.handleCancelEdit(item)
                       : null
                   }
+                  onBlur={() => !item.title && this.handleCancelEdit(item)}
                 />
               </li>
             ))}
@@ -102,7 +81,7 @@ export default defineComponent({
           class="cursor-pointer h-5 text-color3 w-5 hover:text-color1"
           onClick={() => {
             if (!this.createList.length) {
-              this.createList.push({ name: '', value: '' })
+              this.createList.push({ title: '', index: this.list.length })
               setTimeout(() => {
                 this.listWrapRef.scrollLeft = this.listWrapRef.offsetWidth
               }, 0)

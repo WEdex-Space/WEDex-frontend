@@ -1,72 +1,177 @@
 import { ExpandOutlined, ReduceRightOutlined, SettingOutlined } from '@wedex/icons'
-import { defineComponent, inject, Ref, computed, ref, onMounted } from 'vue'
+import { defineComponent, inject, Ref, computed, ref, watch } from 'vue'
 import Empty from './components/Empty'
 import ListBar from './components/ListBar'
 import ListEdit from './components/ListEdit'
 import SyncLink from '@/components/SyncLink'
 import { default as TradingDataList, TradingDataItem } from '@/components/TradingDataList'
+import { useCustomDataSync } from '@/hooks'
+import { DataListParamsKey, DataListParamsType } from '@/pages/index'
+import { services } from '@/services'
+import type { ApiDocuments } from '@/services/a2s.namespace'
+import { useSocketStore } from '@/stores'
+import { updatePairListWithSocketData } from '@/utils/trading'
 
-export type watchListType = {
-  name: string
-  value: string
+export type watchListItem = {
+  id?: number
+  index: number
+  title: string
+  list?: {
+    pairId: string
+  }[]
 }
+
+export const WatchListFunctionKey = 'watchlist-data'
 
 export default defineComponent({
   name: 'WatchList',
   setup() {
+    const CustomData = useCustomDataSync(WatchListFunctionKey)
+    const SocketStore = useSocketStore()
+    const DataListParams = inject<DataListParamsType>(DataListParamsKey)
     const currentExpand = inject<Ref<'left' | 'center' | 'right'>>('currentExpand')
     const isExpand = computed(() => currentExpand?.value === 'right')
 
+    const userLinkState = ref(false)
+
+    const watchTable: Ref<watchListItem[] | undefined> = CustomData.list
+
+    watch(
+      () => watchTable.value,
+      list => {
+        console.log('watchTable', list)
+        if (Array.isArray(list) && !list.length) {
+          CustomData.add({
+            title: 'Mainlist',
+            index: 0,
+            list: []
+          })
+        }
+      },
+      {
+        immediate: true
+      }
+    )
+
+    const currentListIndex = ref<number>(0)
+
+    const watchItems = computed(() => {
+      return watchTable.value
+        ? watchTable.value[currentListIndex.value]?.list?.filter(e => !!e.pairId)
+        : []
+    })
+
     const editListMode = ref(false)
 
-    const dataList = ref<TradingDataItem[]>([])
+    const pairDataList = ref<TradingDataItem[]>([])
 
-    const fetchData = function () {
-      const data = new Array(10).fill({}).map((item, index) => {
-        return {
-          id: item._id,
-          index,
-          tokenPair: [],
-          views: item.views,
-          createdAt: item.createdAt
+    const fetchPairData = async function () {
+      if (!watchItems.value || !watchItems.value.length) {
+        pairDataList.value = []
+      } else {
+        const { error, data } = await services['Pair@get-pair-list']({
+          pairIds: watchItems.value?.map(e => e.pairId),
+          size: 999
+        })
+        if (!error) {
+          pairDataList.value = Array.isArray(data.list)
+            ? updatePairListWithSocketData(
+                data.list.map((item: ApiDocuments.proto_PairBasicResponse, index: number) => {
+                  const dexSort: any[] = [item.tokenW0Info, item.tokenW1Info]
+                  const pairs = [item.tokenW0 || '', item.tokenW1 || ''].map(
+                    (contractAddress: string) => {
+                      const targetIndex = dexSort.findIndex(
+                        item => item.contractAddress === contractAddress
+                      )
+                      return targetIndex !== -1 ? dexSort[targetIndex] : {}
+                    }
+                  )
+                  return {
+                    pairReportIM: item.pairReportIM,
+                    dex: item.dex,
+                    network: item.network,
+                    id: item._id || '--',
+                    index,
+                    tokenPair: pairs,
+                    Liquidity: item.pairReportIM?.liquidity,
+                    FDV: item.pairReportIM?.fdv,
+                    MKTCap: item.pairReportIM?.mktCap,
+                    createdAt: item.createdAt ? item.createdAt * 1000 : 0
+                  }
+                }),
+                undefined,
+                DataListParams?.timeInterval
+              )
+            : []
         }
-      })
-      dataList.value = data
-      // test
-      // setTimeout(fetchData, 5000 * Math.random())
+      }
     }
 
-    onMounted(() => {
-      fetchData()
-    })
+    watch(
+      () => watchItems.value,
+      () => {
+        fetchPairData()
+      }
+    )
+
+    watch(
+      () => pairDataList.value,
+      (newList, prevList) => {
+        // socket subscribe
+        SocketStore.init().then(socket => {
+          const newPairs = newList.filter(
+            newItem => (prevList || []).map(e => e.id).indexOf(newItem.id) === -1
+          )
+          if (newPairs.length) {
+            SocketStore.subscribe(
+              'trade-pair',
+              newPairs.map(item => item.id),
+              msg => {
+                console.log('subscribe trade-pair', msg)
+                pairDataList.value = updatePairListWithSocketData(
+                  pairDataList.value,
+                  msg.data.value,
+                  DataListParams?.timeInterval
+                )
+              },
+              'watchlist'
+            )
+          }
+          const oldPairs = (prevList || []).filter(
+            oldItem => newList.map(e => e.id).indexOf(oldItem.id) === -1
+          )
+          if (oldPairs.length) {
+            SocketStore.unsubscribe(
+              'trade-pair',
+              oldPairs.map(item => item.id),
+              'watchlist'
+            )
+          }
+
+          console.warn('watchlist: ', newPairs, oldPairs)
+        })
+      },
+      {
+        immediate: true
+      }
+    )
 
     const handleRowClick = (row: any) => {
       console.log('handleRowClick', row, currentExpand)
       currentExpand && (currentExpand.value = 'center')
     }
 
-    const watchLists = ref<watchListType[]>([
-      {
-        name: 'Mainlist',
-        value: '0'
-      },
-      {
-        name: 'list 1',
-        value: '1'
-      },
-      {
-        name: 'list 2',
-        value: '2'
-      }
-    ])
-
     return {
+      userLinkState,
       isExpand,
       currentExpand,
       editListMode,
-      dataList,
+      currentListIndex,
+      watchTable,
+      watchItems,
+      pairDataList,
       handleRowClick,
-      watchLists
+      CustomData
     }
   },
   render() {
@@ -104,18 +209,30 @@ export default defineComponent({
         {/* list */}
         {}
         {this.editListMode ? (
-          <ListEdit list={this.watchLists} onCancel={() => (this.editListMode = false)} />
+          <ListEdit
+            list={this.watchTable}
+            onCreate={item => this.CustomData.add(item)}
+            onEdit={item => this.CustomData.update(item)}
+            onDelete={item => this.CustomData.remove(item)}
+            onSort={data => console.log('TODO', data)}
+            onCancel={() => (this.editListMode = false)}
+          />
         ) : (
           <div class="flex-1 overflow-y-auto">
-            <ListBar list={this.watchLists} onChange={value => null} />
-            {this.dataList.length ? (
+            <ListBar
+              current={this.currentListIndex}
+              list={this.watchTable}
+              onIndexChange={value => (this.currentListIndex = value)}
+              onCreateList={item => this.CustomData.add(item)}
+            />
+            {this.pairDataList.length ? (
               <TradingDataList
                 mode="watchlist"
                 tableProps={{
                   flexHeight: false
                 }}
                 isStretch={this.currentExpand === 'right'}
-                dataList={this.dataList}
+                dataList={this.pairDataList}
                 onRowClick={row => {
                   this.handleRowClick(row)
                 }}
@@ -123,7 +240,7 @@ export default defineComponent({
             ) : (
               <Empty />
             )}
-            <SyncLink />
+            <SyncLink onLinkState={value => (this.userLinkState = value)} />
           </div>
         )}
       </div>

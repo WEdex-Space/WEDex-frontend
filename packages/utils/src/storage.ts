@@ -1,4 +1,4 @@
-export type SupportSaveType = string | number | boolean | object
+export type SupportSaveType = string | number | boolean | object | any[]
 
 const scopeMap: {
   [key: string]: 'sessionStorage' | 'localStorage'

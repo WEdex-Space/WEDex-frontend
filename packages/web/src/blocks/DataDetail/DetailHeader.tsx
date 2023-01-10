@@ -1,8 +1,9 @@
 import { UPopover } from '@wedex/components'
 import { StarOutlined, StarFilled } from '@wedex/icons'
 import { defineComponent, ref, inject, Ref, computed } from 'vue'
+import { WatchListFunctionKey } from '@/blocks/WatchList/index'
 import DynamicNumber from '@/components/DynamicNumber'
-import { usePair } from '@/hooks'
+import { usePair, useCustomDataSync } from '@/hooks'
 import { DataListParamsKey } from '@/pages/index'
 import { formatBigNumber, formatCurrencyWithUnit } from '@/utils/numberFormat'
 import { getTimeDataFromSocketValue } from '@/utils/trading'
@@ -15,16 +16,19 @@ export default defineComponent({
     const currentExpand = inject<Ref<'left' | 'center' | 'right'>>('currentExpand')
     const tipRef = ref()
     // TODO watchlist
-    const watchLists = ref([
-      {
-        name: 'MainList'
-      },
-      {
-        name: 'List2'
-      }
-    ])
+    const CustomData = useCustomDataSync(WatchListFunctionKey)
 
-    const closeWatchModal = () => {
+    const addToWatchList = (item: any, isInList?: boolean) => {
+      if (isInList) {
+        item.list = item.list.filter((e: any) => e.pairId !== Pair.current?.value?.id)
+      } else {
+        item.list = (item.list || []).concat({
+          pairId: Pair.current?.value?.id
+        })
+      }
+
+      CustomData.update(item)
+
       tipRef.value && tipRef.value.setShow?.(false)
     }
 
@@ -128,8 +132,8 @@ export default defineComponent({
       Pair,
       currentExpand,
       tipRef,
-      watchLists,
-      closeWatchModal,
+      CustomData,
+      addToWatchList,
       headerCellData
     }
   },
@@ -158,27 +162,39 @@ export default defineComponent({
           raw={true}
           arrowStyle={{ background: '#2C3138' }}
           v-slots={{
-            trigger: () => (
-              <StarOutlined class="cursor-pointer h-6 text-color3 w-6 hover:text-primary" />
-            ),
+            trigger: () => {
+              const isInWatch = this.CustomData.findListByPiarid(
+                this.Pair.current?.value?.id
+              )?.length
+              return isInWatch ? (
+                <StarFilled class="cursor-pointer font-700 h-6 text-primary text-color3 w-6 hover:text-primary" />
+              ) : (
+                <StarOutlined class={`cursor-pointer h-6 text-color3 w-6 hover:text-primary`} />
+              )
+            },
             default: () => (
               <div class="border border-color-border rounded bg-bg2 text-xs p-2 text-color3 w-40">
                 <ul>
-                  {this.watchLists.map((item, index) => (
-                    <li
-                      class={`h-8 flex items-center cursor-pointer hover:text-primary ${
-                        index % 2 === 0 ? 'text-primary font-700' : ''
-                      }`}
-                      onClick={this.closeWatchModal}
-                    >
-                      {index % 2 === 0 ? (
-                        <StarFilled class="h-4 mr-1 w-4" />
-                      ) : (
-                        <StarOutlined class="h-4 mr-1 w-4" />
-                      )}
-                      {item.name}
-                    </li>
-                  ))}
+                  {(this.CustomData.list.value || []).map((item: any, index: number) => {
+                    const isInList = this.CustomData.findListByPiarid(
+                      this.Pair.current?.value?.id
+                    )?.find((e: any) => e.id === item.id)
+                    return (
+                      <li
+                        class={`h-8 flex items-center cursor-pointer hover:text-primary ${
+                          isInList ? 'text-primary font-700' : ''
+                        }`}
+                        onClick={() => this.addToWatchList(item, isInList)}
+                      >
+                        {isInList ? (
+                          <StarFilled class="h-4 mr-1 w-4" />
+                        ) : (
+                          <StarOutlined class="h-4 mr-1 w-4" />
+                        )}
+                        {item.title}
+                      </li>
+                    )
+                  })}
                 </ul>
               </div>
             )
