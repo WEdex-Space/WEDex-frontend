@@ -1,60 +1,29 @@
-import { defineComponent, ref, onMounted } from 'vue'
+import { USpin } from '@wedex/components'
+import { defineComponent, ref, Ref } from 'vue'
 import Editer from './components/Editer'
 import List from './components/List'
+import { useCustomDataSync } from '@/hooks'
 
 export type NotebookType = {
-  content: string
   id?: number
-  createTime?: number
+  content: string
+  updateTime?: number
 }
+
+export const FunctionKey = 'notebook-data'
 
 export default defineComponent({
   name: 'Notebook',
   setup() {
     const currentEdit = ref<NotebookType | null>(null)
-    const dataList = ref<NotebookType[]>([])
+    const CustomData = useCustomDataSync(FunctionKey)
 
-    const fetchData = () => {
-      dataList.value = new Array(4).fill(null).map(e => {
-        // test
-        const random = Math.floor(Math.random() * 1e5)
-        return {
-          content: `${random} lb;kgds ssfsdf pp ljlsd ksjflsd s fpsk sd; s ds s fds  yio;.kjq`,
-          id: random,
-          createTime: new Date().getTime() - random
-        }
-      })
-    }
-
-    onMounted(() => {
-      fetchData()
-    })
-
-    const handleSave = (item: NotebookType) => {
-      console.log('handleSave', item)
-      // TODO send request
-      if (item.id) {
-        // edit
-      } else {
-        // create
-      }
-      currentEdit.value = null
-    }
-
-    const handleDelete = () => {
-      console.log('handleDelete')
-      if (currentEdit.value?.id) {
-        // TODO send request
-      }
-
-      currentEdit.value = null
-    }
+    const dataList: Ref<NotebookType[] | undefined> = CustomData.list
 
     return {
       currentEdit,
       dataList,
-      handleSave,
-      handleDelete
+      CustomData
     }
   },
   render() {
@@ -64,20 +33,32 @@ export default defineComponent({
           <strong class="flex-1 mx-5">Notebook</strong>
         </div>
         <div class="flex-1 overflow-y-auto">
-          {this.currentEdit ? (
-            <Editer
-              data={this.currentEdit}
-              onSave={(item: NotebookType) => this.handleSave(item)}
-              onCancel={() => (this.currentEdit = null)}
-              onDelete={this.handleDelete}
-            />
-          ) : (
-            <List
-              data={this.dataList}
-              onCreate={() => (this.currentEdit = { content: '' })}
-              onEdit={item => (this.currentEdit = item)}
-            />
-          )}
+          <USpin show={this.CustomData.loading.value}>
+            {this.currentEdit ? (
+              <Editer
+                data={this.currentEdit}
+                onCreate={item => {
+                  this.CustomData.add(item)
+                  this.currentEdit = null
+                }}
+                onEdit={item => {
+                  this.CustomData.update(item)
+                  this.currentEdit = null
+                }}
+                onDelete={item => {
+                  this.CustomData.remove(item)
+                  this.currentEdit = null
+                }}
+                onCancel={() => (this.currentEdit = null)}
+              />
+            ) : (
+              <List
+                data={this.dataList}
+                onCreate={() => (this.currentEdit = { content: '' })}
+                onEdit={item => (this.currentEdit = item)}
+              />
+            )}
+          </USpin>
         </div>
       </div>
     )

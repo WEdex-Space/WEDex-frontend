@@ -11,17 +11,24 @@ export default defineComponent({
       require: true
     }
   },
-  emits: ['save', 'cancel', 'delete'],
+  emits: ['create', 'edit', 'cancel', 'delete'],
   setup(props, ctx) {
     const inputValue = ref<string>(props.data?.content || '')
     const inputRef = ref()
     const isCreate = computed(() => !props.data?.id)
 
     const handleSave = () => {
-      ctx.emit('save', {
-        ...props.data,
-        content: inputValue.value
-      })
+      if (props.data?.id) {
+        ctx.emit('edit', {
+          ...props.data,
+          content: inputValue.value
+        })
+      } else {
+        ctx.emit('create', {
+          ...props.data,
+          content: inputValue.value
+        })
+      }
     }
 
     onMounted(() => {
@@ -39,7 +46,7 @@ export default defineComponent({
     return (
       <div class=" p-3">
         <div class="text-xs py-2 text-color3 select-none">
-          {!this.isCreate && unref(useDateFormat(this.data?.createTime, 'MM/DD/YYYY HH:mm:ss'))}
+          {!this.isCreate && unref(useDateFormat(this.data?.updateTime, 'MM/DD/YYYY HH:mm:ss'))}
         </div>
         <UInput
           ref={ref => (this.inputRef = ref)}
@@ -58,7 +65,7 @@ export default defineComponent({
               quaternary
               size="small"
               class="px-5"
-              onClick={() => this.$emit('delete')}
+              onClick={() => this.$emit('delete', this.data)}
             >
               Delete
             </UButton>

@@ -1,7 +1,7 @@
 import { UPopover } from '@wedex/components'
 import { StarOutlined, StarFilled } from '@wedex/icons'
 import { defineComponent, ref } from 'vue'
-import { WatchListFunctionKey } from '@/blocks/WatchList/index'
+import { FunctionKey } from '@/blocks/WatchList/index'
 import { useCustomDataSync } from '@/hooks'
 
 export default defineComponent({
@@ -18,7 +18,7 @@ export default defineComponent({
   },
   setup(props) {
     const tipRef = ref()
-    const watchListStore = useCustomDataSync(WatchListFunctionKey)
+    const watchListStore = useCustomDataSync(FunctionKey)
 
     const addToWatchList = (item: any, isInList?: boolean) => {
       if (isInList) {

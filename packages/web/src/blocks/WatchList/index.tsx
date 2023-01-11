@@ -20,20 +20,19 @@ export type watchListItem = {
   list?: {
     pairId: string
   }[]
+  updateTime?: number
 }
 
-export const WatchListFunctionKey = 'watchlist-data'
+export const FunctionKey = 'watchlist-data'
 
 export default defineComponent({
   name: 'WatchList',
   setup() {
-    const CustomData = useCustomDataSync(WatchListFunctionKey)
+    const CustomData = useCustomDataSync(FunctionKey)
     const SocketStore = useSocketStore()
     const DataListParams = inject<DataListParamsType>(DataListParamsKey)
     const currentExpand = inject<Ref<'left' | 'center' | 'right'>>('currentExpand')
     const isExpand = computed(() => currentExpand?.value === 'right')
-
-    const userLinkState = ref(false)
 
     const watchTable: Ref<watchListItem[] | undefined> = CustomData.list
 
@@ -163,7 +162,6 @@ export default defineComponent({
     }
 
     return {
-      userLinkState,
       isExpand,
       currentExpand,
       editListMode,
@@ -243,7 +241,7 @@ export default defineComponent({
             ) : (
               <Empty />
             )}
-            <SyncLink onLinkState={value => (this.userLinkState = value)} />
+            <SyncLink />
           </div>
         )}
       </div>

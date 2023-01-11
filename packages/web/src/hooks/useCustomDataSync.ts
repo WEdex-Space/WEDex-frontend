@@ -136,30 +136,28 @@ export function useCustomDataSync(functionKey: string) {
   }
 
   const syncCreateItems = (items: any[], callback?: () => void) => {
-    if (!loading.value) {
-      loading.value = true
-      const updateTime = new Date().getTime()
-      services['CustomFunction@sync-custom-func-items']({
-        function: functionKey,
-        list: items.map(e => {
-          e.updateTime = updateTime
-          return e
-        })
+    loading.value = true
+    const updateTime = new Date().getTime()
+    services['CustomFunction@sync-custom-func-items']({
+      function: functionKey,
+      list: items.map(e => {
+        e.updateTime = updateTime
+        return e
       })
-        .then(res => {
-          loading.value = false
-          if (res && res.data) {
-            typeof callback === 'function' && callback()
-            // update list
-            fetchData()
-          } else {
-            console.warn('custom api addItems errir', res)
-          }
-        })
-        .catch(() => {
-          loading.value = false
-        })
-    }
+    })
+      .then(res => {
+        loading.value = false
+        if (res && res.data) {
+          typeof callback === 'function' && callback()
+          // update list
+          fetchData()
+        } else {
+          console.warn('custom api addItems errir', res)
+        }
+      })
+      .catch(() => {
+        loading.value = false
+      })
   }
 
   const syncUpdateItms = (items: any[]) => {

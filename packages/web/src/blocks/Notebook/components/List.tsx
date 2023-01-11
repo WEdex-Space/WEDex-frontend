@@ -33,7 +33,7 @@ export default defineComponent({
             >
               <div class="mb-1 text-color1 truncate">{item.content}</div>
               <span class="text-xs text-color3">
-                {unref(useDateFormat(item.createTime, 'MM/DD/YYYY'))}
+                {unref(useDateFormat(item.updateTime, 'MM/DD/YYYY'))}
               </span>
             </li>
           ))}
