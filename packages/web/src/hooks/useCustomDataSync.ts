@@ -67,8 +67,8 @@ export function useCustomDataSync(functionKey: string) {
         item
       })
         .then(res => {
+          loading.value = false
           if (res && res.data) {
-            loading.value = false
             store.value[functionKey] = res.data.list
             // update list
             fetchData()
