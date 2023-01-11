@@ -72,7 +72,7 @@ export default defineComponent({
       ...list.value.map(item => {
         return {
           label: item.name as string,
-          value: item._id,
+          value: item.id,
           icon: item.logo
         }
       })

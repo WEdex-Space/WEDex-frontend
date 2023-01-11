@@ -3,12 +3,15 @@ import { TradingDataItem } from '@/components/TradingDataList'
 import { services } from '@/services'
 
 const getDetail = async (pairId: string) => {
-  const { error, data } = await services['Pair@get-pair-info']({
-    pairId
-  })
-  if (!error) {
-    return data
+  if (pairId) {
+    const { error, data } = await services['Pair@get-pair-info']({
+      pairId
+    })
+    if (!error) {
+      return data
+    }
   }
+
   return Promise.reject()
 }
 

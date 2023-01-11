@@ -15,7 +15,6 @@ export default defineComponent({
     const Pair = usePair()
     const currentExpand = inject<Ref<'left' | 'center' | 'right'>>('currentExpand')
     const tipRef = ref()
-    // TODO watchlist
     const CustomData = useCustomDataSync(WatchListFunctionKey)
 
     const addToWatchList = (item: any, isInList?: boolean) => {

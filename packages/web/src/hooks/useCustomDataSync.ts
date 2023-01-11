@@ -4,12 +4,11 @@ import { services } from '@/services'
 import { useUserStore } from '@/stores'
 
 const store = ref<Record<string, any>>({})
+const loading = ref(false)
+const userStore = useUserStore()
+const isLogged = computed(() => userStore.logged)
 
 export function useCustomDataSync(functionKey: string) {
-  const loading = ref(false)
-  const userStore = useUserStore()
-  const isLogged = computed(() => userStore.logged)
-
   // get list
   const fetchData = (callback?: () => void) => {
     if (!loading.value) {
@@ -43,6 +42,7 @@ export function useCustomDataSync(functionKey: string) {
         item
       })
         .then(res => {
+          loading.value = false
           if (res && res.data) {
             store.value[functionKey] = res.data.list
             // update list
@@ -68,6 +68,7 @@ export function useCustomDataSync(functionKey: string) {
       })
         .then(res => {
           if (res && res.data) {
+            loading.value = false
             store.value[functionKey] = res.data.list
             // update list
             fetchData()
@@ -90,6 +91,7 @@ export function useCustomDataSync(functionKey: string) {
         id
       })
         .then(res => {
+          loading.value = false
           if (res && res.data) {
             // update list
             fetchData()
@@ -163,14 +165,9 @@ export function useCustomDataSync(functionKey: string) {
   const syncUpdateItms = (items: any[]) => {
     if (!loading.value) {
       loading.value = true
-      const updateTime = new Date().getTime()
-      // TODO
-      services['CustomFunction@sync-custom-func-items']({
+      services['CustomFunction@save-custom-func-items']({
         function: functionKey,
-        list: items.map(e => {
-          e.updateTime = updateTime
-          return e
-        })
+        list: items
       })
         .then(res => {
           loading.value = false
@@ -216,7 +213,9 @@ export function useCustomDataSync(functionKey: string) {
     }
   )
 
+  // methods
   return {
+    loading,
     list: computed(() => store.value[functionKey]),
     add: (item: Record<string, any>) => {
       const updateTime = new Date().getTime()
@@ -234,7 +233,21 @@ export function useCustomDataSync(functionKey: string) {
       }
     },
     syncCreateItems,
-    syncUpdateItms,
+    sortItms: (list: { index: number } & Record<string, any>[]) => {
+      const updateTime = new Date().getTime()
+      const sortList = list.map((e: any, index: number) => {
+        e.index = index
+        e.updateTime = updateTime
+        return e
+      })
+      if (isLogged.value) {
+        syncUpdateItms(sortList)
+      } else {
+        sortList.forEach(item => {
+          editDataLocal({ ...item, updateTime })
+        })
+      }
+    },
     findListByPiarid: (pairId?: string) => {
       return store.value[functionKey]?.filter(
         (item: any) => !!item.list?.find((e: any) => e.pairId === pairId)

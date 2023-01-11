@@ -1,3 +1,4 @@
+import { USpin } from '@wedex/components'
 import { ExpandOutlined, ReduceRightOutlined, SettingOutlined } from '@wedex/icons'
 import { defineComponent, inject, Ref, computed, ref, watch } from 'vue'
 import Empty from './components/Empty'
@@ -90,7 +91,7 @@ export default defineComponent({
                     pairReportIM: item.pairReportIM,
                     dex: item.dex,
                     network: item.network,
-                    id: item._id || '--',
+                    id: item.id || '',
                     index,
                     tokenPair: pairs,
                     Liquidity: item.pairReportIM?.liquidity,
@@ -209,14 +210,16 @@ export default defineComponent({
         {/* list */}
         {}
         {this.editListMode ? (
-          <ListEdit
-            list={this.watchTable}
-            onCreate={item => this.CustomData.add(item)}
-            onEdit={item => this.CustomData.update(item)}
-            onDelete={item => this.CustomData.remove(item)}
-            onSort={data => console.log('TODO', data)}
-            onCancel={() => (this.editListMode = false)}
-          />
+          <USpin show={this.CustomData.loading.value}>
+            <ListEdit
+              list={this.watchTable}
+              onCreate={item => this.CustomData.add(item)}
+              onEdit={item => this.CustomData.update(item)}
+              onDelete={item => this.CustomData.remove(item)}
+              onSort={data => this.CustomData.sortItms(data)}
+              onCancel={() => (this.editListMode = false)}
+            />
+          </USpin>
         ) : (
           <div class="flex-1 overflow-y-auto">
             <ListBar

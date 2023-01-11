@@ -82,7 +82,7 @@ export default defineComponent({
                   pairReportIM: item.pairReportIM,
                   dex: item.dex,
                   network: item.network,
-                  id: item._id || '--',
+                  id: item.id || '',
                   index,
                   tokenPair: pairs,
                   Liquidity: item.pairReportIM?.liquidity,

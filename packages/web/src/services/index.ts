@@ -34,6 +34,20 @@ export const services = {
       ...extract('GET', args, [], [])
     })
   },
+  'CustomFunction@save-custom-func-items'(
+    args: {
+      /**
+       * @description custom-func
+       */
+      function: string
+    } & ApiDocuments.proto_SyncListRequest
+  ) {
+    return requestAdapter<ApiDocuments.proto_MessageResponse>({
+      url: replacePath('/customs/sync/{function}', args),
+      method: 'PUT',
+      ...extract('PUT', args, [], ['function'])
+    })
+  },
   'CustomFunction@sync-custom-func-items'(
     args: {
       /**
