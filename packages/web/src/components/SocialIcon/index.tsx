@@ -7,7 +7,11 @@ import {
   TwitterFilled,
   EmailFilled,
   YoutubeFilled,
-  GithubFilled
+  GithubFilled,
+  MediumFilled,
+  InstagramFilled,
+  BitcointalkFilled,
+  RedditFilled
 } from '@wedex/icons'
 import copy from 'copy-to-clipboard'
 import { defineComponent, ref } from 'vue'
@@ -36,12 +40,16 @@ export default defineComponent({
       return (
         {
           website: <WebsiteFilled class={`w-full h-full`} />,
+          medium: <MediumFilled class={`w-full h-full`} />,
           discord: <DiscordFilled class={`w-full h-full`} />,
+          instagram: <InstagramFilled class={`w-full h-full`} />,
           facebook: <FacebookFilled class={`w-full h-full`} />,
           telegram: <TelegramFilled class={`w-full h-full`} />,
+          bitcointalk: <BitcointalkFilled class={`w-full h-full`} />,
           twitter: <TwitterFilled class={`w-full h-full`} />,
           email: <EmailFilled class={`w-full h-full`} />,
           youtube: <YoutubeFilled class={`w-full h-full`} />,
+          reddit: <RedditFilled class={`w-full h-full`} />,
           github: <GithubFilled class={`w-full h-full`} />
         }[type] || <WebsiteFilled class={`w-full h-full`} />
       )
