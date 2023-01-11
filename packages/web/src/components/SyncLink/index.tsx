@@ -32,11 +32,11 @@ export default defineComponent({
     return {
       loading,
       walletLogin,
-      logged: userStore.logged
+      userStore
     }
   },
   render() {
-    return this.logged ? null : (
+    return this.userStore.logged ? null : (
       <div class="cursor-default flex text-xs py-4 text-color3 justify-end select-none">
         Sync to cloud,
         <span class="cursor-pointer text-primary px-2 hover:opacity-90" onClick={this.walletLogin}>
