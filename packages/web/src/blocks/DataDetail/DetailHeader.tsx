@@ -1,9 +1,7 @@
-import { UPopover } from '@wedex/components'
-import { StarOutlined, StarFilled } from '@wedex/icons'
-import { defineComponent, ref, inject, Ref, computed } from 'vue'
-import { WatchListFunctionKey } from '@/blocks/WatchList/index'
+import { defineComponent, inject, computed } from 'vue'
+import AddToWatchList from '@/components/AddToWatchList'
 import DynamicNumber from '@/components/DynamicNumber'
-import { usePair, useCustomDataSync } from '@/hooks'
+import { usePair } from '@/hooks'
 import { DataListParamsKey } from '@/pages/index'
 import { formatBigNumber, formatCurrencyWithUnit } from '@/utils/numberFormat'
 import { getTimeDataFromSocketValue } from '@/utils/trading'
@@ -13,23 +11,6 @@ export default defineComponent({
   setup() {
     const DataListParams = inject(DataListParamsKey)
     const Pair = usePair()
-    const currentExpand = inject<Ref<'left' | 'center' | 'right'>>('currentExpand')
-    const tipRef = ref()
-    const CustomData = useCustomDataSync(WatchListFunctionKey)
-
-    const addToWatchList = (item: any, isInList?: boolean) => {
-      if (isInList) {
-        item.list = item.list.filter((e: any) => e.pairId !== Pair.current?.value?.id)
-      } else {
-        item.list = (item.list || []).concat({
-          pairId: Pair.current?.value?.id
-        })
-      }
-
-      CustomData.update(item)
-
-      tipRef.value && tipRef.value.setShow?.(false)
-    }
 
     const headerCellData = computed(() => {
       const socketValue = Pair.current?.value?.pairReportIM
@@ -129,10 +110,6 @@ export default defineComponent({
 
     return {
       Pair,
-      currentExpand,
-      tipRef,
-      CustomData,
-      addToWatchList,
       headerCellData
     }
   },
@@ -154,51 +131,7 @@ export default defineComponent({
             </div>
           ))}
         </div>
-        <UPopover
-          ref={ref => (this.tipRef = ref)}
-          trigger="click"
-          placement="bottom"
-          raw={true}
-          arrowStyle={{ background: '#2C3138' }}
-          v-slots={{
-            trigger: () => {
-              const isInWatch = this.CustomData.findListByPiarid(
-                this.Pair.current?.value?.id
-              )?.length
-              return isInWatch ? (
-                <StarFilled class="cursor-pointer font-700 h-6 text-primary text-color3 w-6 hover:text-primary" />
-              ) : (
-                <StarOutlined class={`cursor-pointer h-6 text-color3 w-6 hover:text-primary`} />
-              )
-            },
-            default: () => (
-              <div class="border border-color-border rounded bg-bg2 text-xs p-2 text-color3 w-40">
-                <ul>
-                  {(this.CustomData.list.value || []).map((item: any, index: number) => {
-                    const isInList = this.CustomData.findListByPiarid(
-                      this.Pair.current?.value?.id
-                    )?.find((e: any) => e.id === item.id)
-                    return (
-                      <li
-                        class={`h-8 flex items-center cursor-pointer hover:text-primary ${
-                          isInList ? 'text-primary font-700' : ''
-                        }`}
-                        onClick={() => this.addToWatchList(item, isInList)}
-                      >
-                        {isInList ? (
-                          <StarFilled class="h-4 mr-1 w-4" />
-                        ) : (
-                          <StarOutlined class="h-4 mr-1 w-4" />
-                        )}
-                        {item.title}
-                      </li>
-                    )
-                  })}
-                </ul>
-              </div>
-            )
-          }}
-        />
+        {this.Pair.current?.value?.id && <AddToWatchList pairId={this.Pair.current?.value?.id} />}
       </div>
     )
   }

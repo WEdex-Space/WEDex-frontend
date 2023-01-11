@@ -1,8 +1,8 @@
 import { UTable } from '@wedex/components'
-import { StarOutlined } from '@wedex/icons'
-import { defineComponent, inject, computed, PropType } from 'vue'
+import { defineComponent, inject, computed, PropType, ref } from 'vue'
 import ControlSlot from './ControlSlot'
 import type { ControlSlotValueType } from './ControlSlot'
+import AddToWatchList from '@/components/AddToWatchList'
 import DynamicNumber from '@/components/DynamicNumber'
 import Overlap from '@/components/Overlap'
 import { DataListParamsKey } from '@/pages/index'
@@ -122,6 +122,8 @@ export default defineComponent({
       )
     }
 
+    const watchRef = ref()
+
     const TokenColProp = computed(() => {
       let align = 'left'
       let width = 0
@@ -153,8 +155,11 @@ export default defineComponent({
           fixed: 'left',
           render: (data: TradingDataItem, index: number) => {
             return (
-              <div class="flex text-color3 justify-end items-center">
-                <StarOutlined class="cursor-pointer h-4 mr-1 w-4 hover:text-primary" />
+              <div
+                class="flex text-color3 justify-end items-center"
+                ref={ref => (watchRef.value = ref)}
+              >
+                <AddToWatchList pairId={data.id} starClass="h-4 w-4 mr-1" />
                 <div>{`${index + 1}`}</div>
               </div>
             )
@@ -452,7 +457,8 @@ export default defineComponent({
     })
 
     return {
-      columns
+      columns,
+      watchRef
     }
   },
   render() {
@@ -467,8 +473,11 @@ export default defineComponent({
         row-class-name="cursor-pointer"
         rowProps={(row: any) => {
           return {
-            onClick: () => {
-              this.$emit('rowClick', row)
+            onClick: e => {
+              console.log(e)
+              if (!this.watchRef.contains(e.target)) {
+                this.$emit('rowClick', row)
+              }
             }
           }
         }}
