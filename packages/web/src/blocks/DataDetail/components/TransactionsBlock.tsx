@@ -1,6 +1,5 @@
 import { UTable } from '@wedex/components'
 import { FilterOutlined } from '@wedex/icons'
-import { shortenAddress } from '@wedex/utils'
 import { defineComponent, ref, h, Component, computed, watch, onBeforeUnmount } from 'vue'
 import DateRangeFilterPopover from './DateRangeFilterPopover'
 import NumberRangeFilterPopover from './NumberRangeFilterPopover'
@@ -222,7 +221,7 @@ export default defineComponent({
                 return (
                   <div class="truncate underline">
                     <span class={data.type ? 'text-color-up' : 'text-color-down'}>
-                      {shortenAddress(data.maker)}
+                      {data.maker.slice(data.maker.length - 6)}
                     </span>
                   </div>
                 )
@@ -236,7 +235,7 @@ export default defineComponent({
                 return (
                   <div class="truncate underline">
                     <span class={data.type ? 'text-color-up' : 'text-color-down'}>
-                      {shortenAddress(data.txn)}
+                      {data.txn.slice(data.maker.length - 6)}
                     </span>
                   </div>
                 )

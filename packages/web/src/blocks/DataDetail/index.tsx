@@ -12,15 +12,13 @@ export default defineComponent({
     const currentExpand = inject<Ref<'left' | 'center' | 'right'>>('currentExpand')
     const widgetLoaded = ref(false)
     const timer = ref()
+
     const { x, y } = useMouse()
-
     const tradingViewHeight = ref(360)
-
     const targetMouseCache = ref({
       x: 0,
       y: 0
     })
-
     const targetActive = ref(false)
     const targetEventProp = {
       onMousedown: (e: any) => {

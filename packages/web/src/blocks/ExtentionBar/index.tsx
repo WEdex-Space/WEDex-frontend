@@ -104,7 +104,7 @@ export default defineComponent({
     return (
       <div class="border-color-border flex border-l-1">
         <div class="flex flex-col flex-1 overflow-hidden">
-          <div class="flex-1 overflow-hidden">
+          <div class="flex-1 min-h-14 overflow-hidden">
             {this.currentExtention && componentsMap[this.currentExtention].component}
           </div>
           {this.currentExpand === 'center' && <EmbeddedBlock pairId={this.currentPair?.id} />}

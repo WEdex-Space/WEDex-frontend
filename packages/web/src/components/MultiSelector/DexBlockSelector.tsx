@@ -128,8 +128,8 @@ export default defineComponent({
     }
   },
   render() {
-    const itemsClass = `cursor-pointer flex h-6 truncate px-2 items-center hover:text-color1 rounded-sm`
-    const itemsHoverClass = `bg-bg3 text-color1`
+    const itemsClass = `cursor-pointer flex h-6 truncate px-2 items-center text-color1 rounded-sm hover:bg-bg3`
+    const itemsHoverClass = `bg-bg3`
 
     return (
       <div class="flex items-center">
