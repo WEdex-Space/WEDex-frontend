@@ -193,7 +193,7 @@ export default defineComponent({
             <ExpandOutlined class={iconClass} />
           )}
         </div>
-        <div class="border-color-border flex border-b-1 h-14 items-center overflow-hidden">
+        <div class="border-color-border flex border-b-1 h-16 items-center overflow-hidden">
           <strong class="flex-1 mx-5">WatchList</strong>
           <span
             class={`cursor-pointer px-1  text-color3 leading-0 hover:text-color1 ${

@@ -151,7 +151,7 @@ export default defineComponent({
           title: '#',
           key: 'index',
           align: 'right',
-          width: 70,
+          width: 60,
           fixed: 'left',
           render: (data: TradingDataItem, index: number) => {
             return (
@@ -159,8 +159,8 @@ export default defineComponent({
                 class="flex text-color3 justify-end items-center"
                 ref={ref => (watchRef.value = ref)}
               >
-                <AddToWatchList pairId={data.id} starClass="h-4 w-4 mr-1" />
-                <div>{`${index + 1}`}</div>
+                <AddToWatchList pairId={data.id} starClass="h-4 w-4" />
+                <div class="w-5">{`${index + 1}`}</div>
               </div>
             )
           }
@@ -180,9 +180,7 @@ export default defineComponent({
                 align: 'right',
                 render: (data: TradingDataItem, index: number) => {
                   return (
-                    <strong class="text-color1">
-                      {data.views ? formatCurrency(data.views) : 0}
-                    </strong>
+                    <span class="text-color1">{data.views ? formatCurrency(data.views) : 0}</span>
                   )
                 }
               })
@@ -198,9 +196,9 @@ export default defineComponent({
                 align: 'right',
                 render: (data: TradingDataItem, index: number) => {
                   return (
-                    <strong class="text-color1">
+                    <span class="text-color1">
                       {data.createdAt ? customTimeAgo(new Date().getTime() - data.createdAt) : '--'}
-                    </strong>
+                    </span>
                   )
                 }
               })
@@ -214,11 +212,11 @@ export default defineComponent({
                 width: 60,
                 render: (data: TradingDataItem, index: number) => {
                   return (
-                    <strong
+                    <span
                       class={`text-color1 ${data.TrendsUp ? 'text-color-up' : 'text-color-down'}`}
                     >
                       {data.TrendsUp ? 'Up' : 'Down'}
-                    </strong>
+                    </span>
                   )
                 }
               })
@@ -271,7 +269,7 @@ export default defineComponent({
                     >
                       <strong class="text-color1">{data.tokenPair[0]?.symbol || '--'}</strong>
                       {props.isStretch && (
-                        <strong class="text-color3">/ {data.tokenPair[1]?.symbol || '--'}</strong>
+                        <span class="text-color3">/ {data.tokenPair[1]?.symbol || '--'}</span>
                       )}
                     </div>
                   </div>
@@ -286,6 +284,7 @@ export default defineComponent({
               ),
               key: 'price',
               align: 'right',
+              width: props.isStretch ? undefined : 65,
               render: (data: TradingDataItem, index: number) => {
                 return data.price ? `$${formatBigNumber(data.price)}` : '--'
               }
@@ -294,10 +293,10 @@ export default defineComponent({
               title: customRenderSortTitle('5m', getFullSortByString('priceChange', '5m')),
               key: '5m',
               align: 'right',
+              width: props.isStretch ? undefined : 65,
               render: (data: TradingDataItem, index: number) => {
                 return (
                   <DynamicNumber
-                    class="font-semibold"
                     value={(data['5m'] || 0) * 100 + '%'}
                     symbol={data['5m'] && data['5m'] > 0 ? 1 : -1}
                   />
@@ -308,10 +307,10 @@ export default defineComponent({
               title: customRenderSortTitle('1h', getFullSortByString('priceChange', '1h')),
               key: '1h',
               align: 'right',
+              width: props.isStretch ? undefined : 65,
               render: (data: TradingDataItem, index: number) => {
                 return (
                   <DynamicNumber
-                    class="font-semibold"
                     value={(data['1h'] || 0) * 100 + '%'}
                     symbol={data['1h'] && data['1h'] > 0 ? 1 : -1}
                   />
@@ -325,7 +324,6 @@ export default defineComponent({
               render: (data: TradingDataItem, index: number) => {
                 return (
                   <DynamicNumber
-                    class="font-semibold"
                     value={(data['4h'] || 0) * 100 + '%'}
                     symbol={data['4h'] && data['4h'] > 0 ? 1 : -1}
                   />
@@ -339,7 +337,6 @@ export default defineComponent({
               render: (data: TradingDataItem, index: number) => {
                 return (
                   <DynamicNumber
-                    class="font-semibold"
                     value={(data['6h'] || 0) * 100 + '%'}
                     symbol={data['6h'] && data['6h'] > 0 ? 1 : -1}
                   />
@@ -353,7 +350,6 @@ export default defineComponent({
               render: (data: TradingDataItem, index: number) => {
                 return (
                   <DynamicNumber
-                    class="font-semibold"
                     value={(data['24h'] || 0) * 100 + '%'}
                     symbol={data['24h'] && data['24h'] > 0 ? 1 : -1}
                   />
@@ -369,9 +365,7 @@ export default defineComponent({
               align: 'right',
               render: (data: TradingDataItem, index: number) => {
                 return (
-                  <strong class="text-color1">
-                    {data.Txns ? formatCurrency(data.Txns) : '--'}
-                  </strong>
+                  <span class="text-color1">{data.Txns ? formatCurrency(data.Txns) : '--'}</span>
                 )
               }
             },
@@ -422,9 +416,9 @@ export default defineComponent({
               align: 'right',
               render: (data: TradingDataItem, index: number) => {
                 return (
-                  <strong class="text-color1">
+                  <span class="text-color1">
                     {data.Liquidity ? `$${formatBigNumber(data.Liquidity)}` : '--'}
-                  </strong>
+                  </span>
                 )
               }
             },
@@ -467,7 +461,15 @@ export default defineComponent({
         columns={this.columns}
         scroll-x={1350}
         data={this.dataList}
-        {...Object.assign({ flexHeight: true }, this.tableProps)}
+        {...Object.assign(
+          {
+            flexHeight: true
+          },
+          this.tableProps
+        )}
+        style={{
+          '--n-box-shadow-after': 'inset 12px 0 8px -12px rgba(255,255,255,.4)'
+        }}
         size="small"
         bordered={false}
         row-class-name="cursor-pointer"

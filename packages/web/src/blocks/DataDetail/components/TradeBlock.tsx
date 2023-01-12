@@ -113,7 +113,7 @@ export default defineComponent({
   render() {
     return (
       <>
-        <ul class="flex h-9 text-xs text-center px-3 items-center">
+        <ul class="flex h-9 text-xs text-center px-3 items-center select-none">
           {this.tradeTimeTypes.map(time => (
             <li
               class={`cursor-pointer flex-1 text-color1 hover:text-color2 ${

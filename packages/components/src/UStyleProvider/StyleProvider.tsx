@@ -120,7 +120,7 @@ const UStyleProvider = defineComponent({
       DataTable: {
         thColor: ColorOverrides.value.bg1,
         thPaddingSmall: '4px 8px',
-        tdPaddingSmall: '8px',
+        tdPaddingSmall: '10px 8px',
         fontSizeSmall: '12px'
       },
       Pagination: {

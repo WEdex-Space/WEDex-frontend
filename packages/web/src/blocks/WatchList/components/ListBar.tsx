@@ -44,7 +44,7 @@ export default defineComponent({
       <div class="flex px-1 items-center">
         <div class="flex-1 overflow-hidden">
           <ul
-            class="py-2 whitespace-nowrap overflow-x-scroll  overflow-y-hidden"
+            class="h-10 pt-2.5 whitespace-nowrap overflow-x-scroll  overflow-y-hidden"
             ref={ref => (this.listWrapRef = ref)}
           >
             {this.list.map((item, index) => (

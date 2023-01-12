@@ -14,7 +14,6 @@ import HeaderRankFilter from './components/HeaderRankFilter'
 import HeaderTagFilter from './components/HeaderTagFilter'
 import HeaderTopFilter from './components/HeaderTopFilter'
 import TrendTypeSelector from './components/TrendTypeSelector'
-import style from './style.module.css'
 import { getTrendTypeUpdate } from '@/blocks/DataView/components/TrendTypeSelector'
 import { NetworkSelector, DexSelector, DexBlockSelector } from '@/components/MultiSelector'
 import { DataListParamsKey, DataListParamsType } from '@/pages/index'
@@ -145,12 +144,14 @@ export default defineComponent({
           />
         )}
         {/* mainNav */}
-        <div class={`${style.mainNav} h-14`}>
-          <ul class="h-full py-3 whitespace-nowrap overflow-x-scroll overflow-y-hidden ">
+        <div class={`border-color-border border-b-1 px-2 select-none h-16`}>
+          <ul class="h-full pt-4.5 whitespace-nowrap overflow-x-scroll overflow-y-hidden ">
             {this.mainNavs.map(item => (
               <li
-                class={`${
-                  this.DataListParams?.channelType === item.value ? style.mainNavItemCur : ''
+                class={`rounded-sm cursor-pointer h-7 mr-4 px-2 leading-7 relative inline-block hover:text-primary ${
+                  this.DataListParams?.channelType === item.value
+                    ? 'bg-primary-bg text-primary'
+                    : ''
                 }`}
                 onClick={() => handleMainNavClick(item)}
               >
@@ -161,7 +162,7 @@ export default defineComponent({
           </ul>
         </div>
         {/* subNav */}
-        <div class={style.subNav}>
+        <div class={`flex h-10 text-xs px-3 text-color3 items-center`}>
           {this.DataListParams && this.DataListParams.channelType === 4 && (
             <TrendTypeSelector class="mr-4" />
           )}
@@ -187,7 +188,9 @@ export default defineComponent({
             <HeaderTopFilter class="mr-4" />
           )}
 
-          {this.DataListParams?.channelType !== 6 && <HeaderTagFilter class="mr-4 __list" />}
+          {this.DataListParams?.channelType !== 6 && (
+            <HeaderTagFilter class="mr-4 overflow-x-auto" />
+          )}
 
           {this.DataListParams && this.DataListParams.channelType === 6 && (
             <div class="flex items-center">
@@ -198,7 +201,7 @@ export default defineComponent({
         </div>
         {/* rank dex */}
         {this.DataListParams && this.DataListParams.channelType === 6 && (
-          <div class={`${style.subNav} !h-auto mb-2`}>
+          <div class={`flex text-xs px-5 text-color3 items-center h-auto mb-2`}>
             <DexBlockSelector
               class="mr-4"
               value={this.DataListParams?.dexs}

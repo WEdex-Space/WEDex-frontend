@@ -107,7 +107,7 @@ export default defineComponent({
           ></span>
         </div>
         <div class="flex-1 overflow-y-auto">
-          <div class="border-color-border flex bg-bg3 border-t-1 h-11 px-3 items-center">
+          <div class="border-color-border flex bg-bg3 border-t-1 h-11 px-3 items-center select-none">
             <span class="bg-white rounded-full h-4 mr-1 w-4 overflow-hidden">
               <img src={this.Pair.current?.value?.network?.logo} class="h-full w-full" />
             </span>
