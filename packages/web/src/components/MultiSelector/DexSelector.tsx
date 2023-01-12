@@ -14,9 +14,6 @@ export default defineComponent({
   props: {
     value: {
       type: Array as PropType<MultiSelectorValueType[]>
-    },
-    showItems: {
-      type: Number
     }
   },
   emits: ['change'],

@@ -16,7 +16,7 @@ import HeaderTopFilter from './components/HeaderTopFilter'
 import TrendTypeSelector from './components/TrendTypeSelector'
 import style from './style.module.css'
 import { getTrendTypeUpdate } from '@/blocks/DataView/components/TrendTypeSelector'
-import { NetworkSelector, DexSelector } from '@/components/MultiSelector'
+import { NetworkSelector, DexSelector, DexBlockSelector } from '@/components/MultiSelector'
 import { DataListParamsKey, DataListParamsType } from '@/pages/index'
 import { timeRangeToSocketMap } from '@/utils/trading'
 
@@ -196,6 +196,16 @@ export default defineComponent({
             </div>
           )}
         </div>
+        {/* rank dex */}
+        {this.DataListParams && this.DataListParams.channelType === 6 && (
+          <div class={`${style.subNav} !h-auto mb-2`}>
+            <DexBlockSelector
+              class="mr-4"
+              value={this.DataListParams?.dexs}
+              onChange={value => this.DataListParams && (this.DataListParams.dexs = value)}
+            />
+          </div>
+        )}
       </>
     )
   }

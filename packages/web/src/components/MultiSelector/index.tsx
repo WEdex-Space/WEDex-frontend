@@ -14,6 +14,8 @@ export { default as NetworkSelector } from './NetworkSelector'
 
 export { default as DexSelector } from './DexSelector'
 
+export { default as DexBlockSelector } from './DexBlockSelector'
+
 export default defineComponent({
   name: 'MultiSelector',
   props: {
