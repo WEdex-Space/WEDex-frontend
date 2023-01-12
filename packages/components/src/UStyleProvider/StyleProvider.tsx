@@ -34,6 +34,7 @@ const UStyleProvider = defineComponent({
             color1: '#fff',
             color2: '#EAECEF',
             color3: '#858E9B',
+            color4: '#E5E5E5',
             colorBorder: '#2C3138',
             colorHover: '#F0F0F0',
             colorUp: '#24F082',
@@ -50,13 +51,14 @@ const UStyleProvider = defineComponent({
             bg1: '#F5F5F5',
             bg2: '#FAFAFA',
             bg3: '#FCFCFC',
-            color1: '#000',
-            color2: '#1e2329',
-            color3: '#858E9B',
+            color1: '#222529',
+            color2: '#1E2329',
+            color3: '#707A8A',
+            color4: '#293037',
             colorBorder: '#F5F5F5',
             colorHover: '#F0F0F0',
-            colorUp: '#24F082',
-            colorDown: '#F82329',
+            colorUp: '#03A66D',
+            colorDown: '#CF304A',
             errorColor: '#DF4F51',
             successColor: '#21B689',
             warningColor: '#F29F39',
@@ -137,6 +139,7 @@ const UStyleProvider = defineComponent({
         --u-color-1: ${ColorOverrides.value.color1};
         --u-color-2: ${ColorOverrides.value.color2};
         --u-color-3: ${ColorOverrides.value.color3};
+        --u-color-4: ${ColorOverrides.value.color4};
         --u-color-border: ${ColorOverrides.value.colorBorder};
         --u-color-hover: ${ColorOverrides.value.colorHover};
         --u-primary-color: ${ColorOverrides.value.primaryColor};

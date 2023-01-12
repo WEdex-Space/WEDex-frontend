@@ -34,6 +34,7 @@ export default defineComponent({
     const targetActive = ref(false)
     const targetEventProp = {
       onMousedown: (e: any) => {
+        console.log(e.target.classList.contains('resize-handler'))
         if (e.target.classList.contains('resize-handler')) {
           targetMouseCache.value = {
             x: x.value,
@@ -60,10 +61,11 @@ export default defineComponent({
         if (targetMouseCache.value.y) {
           if (targetHeight.value > maxHeight.value) {
             // max height
+            targetHeight.value = maxHeight.value
           } else if (targetHeight.value < window.innerHeight * 0.2) {
             targetHeight.value = Math.ceil(window.innerHeight * 0.2)
           } else {
-            targetHeight.value += y.value - targetMouseCache.value.y
+            targetHeight.value += targetMouseCache.value.y - y.value
             targetMouseCache.value = {
               x: x.value,
               y: y.value
@@ -81,20 +83,28 @@ export default defineComponent({
     return {
       isStretch,
       Pair,
+      targetEventProp,
       targetHeight,
       targetActive
     }
   },
   render() {
     return (
-      <div class="flex flex-col relative" style={{ maxHeight: `${this.targetHeight}px` }}>
+      <div
+        class="flex flex-col relative"
+        style={{ maxHeight: `${this.targetHeight}px` }}
+        {...this.targetEventProp}
+      >
         {/* drag bar */}
         <div
-          class={`cursor-move h-3 transition-all top-0 right-0 left-0 absolute hover:opacity-60 ${
+          class={`h-3 transition-all top-0 right-0 left-0 absolute hover:opacity-60 ${
             this.targetActive ? '!bg-primary-bg' : ''
           }`}
         >
-          <span class="rounded-sm bg-bg1 h-1 -mt-0.5 -ml-8 top-[50%] left-[50%] w-16 absolute"></span>
+          <span
+            class={`rounded-sm bg-bg1 h-1 -mt-0.5 -ml-8 top-[50%] left-[50%] w-16 absolute resize-handler`}
+            style={{ cursor: 'n-resize' }}
+          ></span>
         </div>
         <div class="flex-1 overflow-y-auto">
           <div class="border-color-border flex bg-bg3 border-t-1 h-11 px-3 items-center">
