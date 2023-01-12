@@ -177,6 +177,9 @@ export default defineComponent({
         } else {
           loadingBar.finish()
         }
+      },
+      {
+        immediate: true
       }
     )
 
