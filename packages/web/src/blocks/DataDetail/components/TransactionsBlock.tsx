@@ -1,6 +1,7 @@
 import { UTable } from '@wedex/components'
 import { FilterOutlined } from '@wedex/icons'
-import { defineComponent, ref, h, Component, computed, watch } from 'vue'
+import { shortenAddress } from '@wedex/utils'
+import { defineComponent, ref, h, Component, computed, watch, onBeforeUnmount } from 'vue'
 import DateRangeFilterPopover from './DateRangeFilterPopover'
 import NumberRangeFilterPopover from './NumberRangeFilterPopover'
 import TrendTypeFilterPopover from './TrendTypeFilterPopover'
@@ -8,6 +9,7 @@ import TimeAgo from '@/components/TimeAgo'
 import { usePair } from '@/hooks'
 import { services } from '@/services'
 import type { ApiDocuments } from '@/services/a2s.namespace'
+import { useSocketStore } from '@/stores'
 import { formatCurrency, formatCurrencyWithUnit } from '@/utils/numberFormat'
 
 type TransactionsDataType = {
@@ -41,7 +43,7 @@ export default defineComponent({
   },
   setup(props, ctx) {
     const Pair = usePair()
-
+    const SocketStore = useSocketStore()
     const filterData = ref({
       date: {
         from: 0,
@@ -220,7 +222,7 @@ export default defineComponent({
                 return (
                   <div class="truncate underline">
                     <span class={data.type ? 'text-color-up' : 'text-color-down'}>
-                      {data.maker}
+                      {shortenAddress(data.maker)}
                     </span>
                   </div>
                 )
@@ -233,7 +235,9 @@ export default defineComponent({
               render: (data: TransactionsDataType, index: number) => {
                 return (
                   <div class="truncate underline">
-                    <span class={data.type ? 'text-color-up' : 'text-color-down'}>{data.txn}</span>
+                    <span class={data.type ? 'text-color-up' : 'text-color-down'}>
+                      {shortenAddress(data.txn)}
+                    </span>
                   </div>
                 )
               }
@@ -259,26 +263,30 @@ export default defineComponent({
       return !!(item.amount1In && item.amount1In > 0)
     }
 
+    const formatDataItem = (item: ApiDocuments.proto_PairTransactionResponse) => {
+      return {
+        date: item.blockTime ? item.blockTime * 1000 : 0,
+        type: transactionBuyOrSell(item),
+        usd: formatCurrencyWithUnit(
+          transactionBuyOrSell(item) ? item.amountOutUSD : item.amountInUSD
+        ),
+        price: formatCurrencyWithUnit(item.token0PriceUSD),
+        token0: formatCurrency(
+          (transactionBuyOrSell(item) ? item.amount0Out : item.amount0In) || 0
+        ),
+        token1: formatCurrency(
+          (transactionBuyOrSell(item) ? item.amount1In : item.amount1Out) || 0
+        ),
+        maker: item.from,
+        txn: item.transactionHash
+      }
+    }
+
     const fetchData = async function () {
       const { error, data } = await services['Pair@get-pair-transaction-list'](queryParam.value)
       if (!error) {
         dataList.value = data?.list.map((item: ApiDocuments.proto_PairTransactionResponse) => {
-          return {
-            date: item.blockTime ? item.blockTime * 1000 : 0,
-            type: transactionBuyOrSell(item),
-            usd: formatCurrencyWithUnit(
-              transactionBuyOrSell(item) ? item.amountOutUSD : item.amountInUSD
-            ),
-            price: formatCurrencyWithUnit(item.token0PriceUSD),
-            token0: formatCurrency(
-              (transactionBuyOrSell(item) ? item.amount0Out : item.amount0In) || 0
-            ),
-            token1: formatCurrency(
-              (transactionBuyOrSell(item) ? item.amount1In : item.amount1Out) || 0
-            ),
-            maker: item.from,
-            txn: item.transactionHash
-          }
+          return formatDataItem(item)
         })
 
         totalPage.value = data.total
@@ -294,12 +302,27 @@ export default defineComponent({
         if (props.pairId) {
           queryParam.value.pairId = props.pairId
           fetchData()
+
+          // 注册 socket 监听
+          SocketStore.init().then(socket => {
+            SocketStore.subscribe('trade-tick', [props.pairId], msg => {
+              console.log('subscribe trade-tick', msg)
+              dataList.value.unshift(formatDataItem(msg))
+            })
+          })
         }
       },
       {
         immediate: true
       }
     )
+
+    onBeforeUnmount(() => {
+      // 卸载 socket 监听
+      SocketStore.init().then(socket => {
+        SocketStore.unsubscribe('trade-tick')
+      })
+    })
 
     return {
       columns,

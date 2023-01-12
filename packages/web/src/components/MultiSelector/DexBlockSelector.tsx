@@ -128,7 +128,7 @@ export default defineComponent({
     }
   },
   render() {
-    const itemsClass = `cursor-pointer flex h-6 px-2 items-center hover:text-color1 rounded-sm`
+    const itemsClass = `cursor-pointer flex h-6 truncate px-2 items-center hover:text-color1 rounded-sm`
     const itemsHoverClass = `bg-bg3 text-color1`
 
     return (
@@ -152,7 +152,7 @@ export default defineComponent({
         )}
 
         {/* default show items */}
-        <ul class="flex flex-wrap gap-2">
+        <ul class="flex flex-1 gap-2 overflow-hidden">
           {this.defaultShowItems.map((item: any) => (
             <li
               class={`${itemsClass} ${

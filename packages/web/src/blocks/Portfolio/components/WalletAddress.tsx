@@ -1,4 +1,4 @@
-import { shortenAddress } from '@wedex/utils/src'
+import { shortenAddress } from '@wedex/utils'
 import { defineComponent, ref } from 'vue'
 import { useWalletStore } from '@/stores'
 
